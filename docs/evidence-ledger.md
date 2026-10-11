@@ -37,7 +37,7 @@ The QA-only npm audit at approximately 07:44 UTC returned zero known vulnerabili
 
 Research continuation on October 11, 07:30–07:39 UTC reviewed Blue's Appliance local pickup/delivery and conflicting reference data, DreamHome's manual unit availability, Ace Karaoke's approved affiliate access, eBay's separate application/user token flows, NZXT's qualified public crawling and unavailable agent discovery, Canon/MPB restrictions and conflicting stock extraction, and KEH's distinct open-box/used grades. Primary D1/Workers limits informed a bounded snapshot proposal. The refresh contract now distinguishes content generation from health/freshness representation revision and defines actual observed-change trace evidence. These are research findings; no application, schema, source fetch pipeline, credential, Site or schedule was created.
 
-- Implementation start UTC: NOT RUN.
+- Implementation start UTC: command began 2026-10-11 08:43:40 UTC; first application source file `lib/offer.ts` was created at 08:43:43.771311369 UTC. Gate passed before any app code. Pre-code source commit `53e4022cd367b5bca21b6715262b59824a77eefb`, tree `b304b54498cd3155781e3d168f1b1236b4727133`; no app lockfile or build existed.
 - First complete UTC/commit/build URL/catalog generation/feature inventory: NOT RUN.
 - Public Site ID/URL and matching Sites source commit/archive: NOT RUN.
 - Four final independent candidate audits and critical-finding dispositions: NOT RUN.
@@ -46,3 +46,7 @@ Research continuation on October 11, 07:30–07:39 UTC reviewed Blue's Appliance
 - Unattended fetch/write/public-readback: NOT RUN.
 
 Append immutable findings and concrete fixes/retests as work proceeds. Correct a mistakenly recorded observation explicitly; never silently alter source observation times. Release readiness must be established by the full checklist, not by elapsed wall time.
+
+Implementation interval 08:43:40–08:50:38 UTC added product/design context, typed exact offer/condition/fulfillment/freshness/reference models, cents-preserving input/formatting, inclusive filters and exact rational savings ordering, source-admission metadata with every source disabled, snapshot reconciliation and complete English/Russian UI strings. The generated desktop/mobile design concepts were inspected with view_image before app code; the first mobile concept was rejected for invented retailers, including excluded Home Depot. Concepts remain outside source and are not inventory photos.
+
+At 08:45:21 UTC five isolated offer-model tests passed. At 08:48:35 UTC seven passed after adding exact rational ordering and partial-snapshot/cross-source reconciliation cases. Artificial records exist only in `tests/offer-model.test.ts`; no application or migration imports them. These are domain tests, not browser, source acquisition or live-refresh passes. All source definitions are disabled; current catalog generation/revision is `uninitialized`, offers empty, no real offer IDs, no lockfile, build URL, Site ID, writer endpoint or saved schedule yet. Required official Sites scripts remain unavailable; current cloud template README/package.json can be read but helper script resources fail.
