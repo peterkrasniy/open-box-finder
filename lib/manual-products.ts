@@ -8,24 +8,36 @@ export interface ManualProduct {
   brand: 'Sennheiser'; model: string; category: 'audio'; condition: 'refurbished';
   observedPriceCents: number; currency: 'USD'; availability: 'unknown';
   url: string; reviewedAt: string; reviewUntil: string;
+  newModelReference: { cents: number; basis: 'observed-new-model'; url: string };
+  video: { id: string; creator: string; kind: 'manufacturer' | 'independent-review' };
 }
-const reviewedAt = '2026-10-11T17:42:00.000Z';
-const reviewUntil = '2026-10-12T17:42:00.000Z';
-/** Original concise model labels and factual notes; no descriptions, media or comparison prices.
+const reviewedAt = '2026-10-11T19:28:00.000Z';
+const reviewUntil = '2026-10-12T19:28:00.000Z';
+/** Original factual notes and new-model page comparisons, never former refurbished prices.
  * Primary product pages and sales terms manually reviewed. No recurring requests.
  */
 export const MANUAL_PRODUCTS: readonly ManualProduct[] = [
-  ['accentum-plus-refurbished', 'ACCENTUM Plus', 9995],
-  ['hd-600-refurbished', 'HD 600', 27995],
-  ['rs-120-w-refurbished', 'RS 120-W', 12995],
-  ['ambeo-soundbar-plus-refurbished', 'AMBEO Soundbar Plus', 99995],
-].map(([slug, model, price]) => ({
+  ['accentum-plus-refurbished', 'ACCENTUM Plus', 9995, 12995, 'JM0QIRfkOfs', 'Sennheiser'],
+  ['hd-600-refurbished', 'HD 600', 27995, 34995, '9gcuORhXRuI', 'askdrtk'],
+  ['rs-120-w-refurbished', 'RS 120-W', 12995, 12995, '-0MJWoXRjkc', 'Sennheiser'],
+  ['ambeo-soundbar-plus-refurbished', 'AMBEO Soundbar Plus', 99995, 119995, 'IZbFYQOjngI', 'Sennheiser'],
+].map(([slug, model, price, newPrice, videoId, creator]) => ({
   id: String(slug), model: String(model), observedPriceCents: Number(price),
   recordType: 'manual-observation', sourceId: 'sennheiser-manual', brand: 'Sennheiser',
   category: 'audio', condition: 'refurbished', currency: 'USD', availability: 'unknown',
   url: `https://us.sennheiser-hearing.com/collections/refurbished-by-sennheiser/products/${slug}`,
+  newModelReference: { cents: Number(newPrice), basis: 'observed-new-model', url: `https://us.sennheiser-hearing.com/products/${String(slug).replace(/-refurbished$/, '')}` },
+  video: { id: String(videoId), creator: String(creator), kind: creator === 'Sennheiser' ? 'manufacturer' : 'independent-review' },
   reviewedAt, reviewUntil,
 }));
+
+export function manualNewModelComparison(product: ManualProduct, now: number): { cents: number; lowerRefurbished: boolean; url: string } | null {
+  const reference = product.newModelReference;
+  if (!manualProductActive(product, now) || reference.basis !== 'observed-new-model'
+    || !Number.isSafeInteger(reference.cents) || reference.cents <= 0
+    || reference.url !== `https://us.sennheiser-hearing.com/products/${product.id.replace(/-refurbished$/, '')}`) return null;
+  return { cents: reference.cents, lowerRefurbished: reference.cents > product.observedPriceCents, url: reference.url };
+}
 
 export function manualProductActive(product: ManualProduct, now: number): boolean {
   return Number.isFinite(now) && now >= Date.parse(product.reviewedAt) && now < Date.parse(product.reviewUntil);

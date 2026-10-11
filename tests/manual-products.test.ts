@@ -1,12 +1,23 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { MANUAL_PRODUCTS, manualProductActive, manualProductsForFilters, manualSavedPointer } from '../lib/manual-products.ts';
+import { MANUAL_PRODUCTS, manualNewModelComparison, manualProductActive, manualProductsForFilters, manualSavedPointer } from '../lib/manual-products.ts';
 import { defaultPreferences, decodeSaved, savedSourceUrl } from '../lib/storage.ts';
 import { SOURCE_BY_ID } from '../lib/sources.ts';
 import { validOffer } from '../lib/validation.ts';
 
 const product = MANUAL_PRODUCTS[0];
 const reviewed = Date.parse(product.reviewedAt);
+test('new-model references have a bounded explicit basis and equal prices do not claim a discount', () => {
+  assert.equal(manualNewModelComparison(product, reviewed)?.lowerRefurbished, true);
+  const equal = MANUAL_PRODUCTS.find(note => note.observedPriceCents === note.newModelReference.cents)!;
+  assert.equal(manualNewModelComparison(equal, reviewed)?.lowerRefurbished, false);
+  assert.equal(manualNewModelComparison(product, Date.parse(product.reviewUntil)), null);
+  assert.equal(manualNewModelComparison({ ...product, newModelReference: { ...product.newModelReference, url: 'https://unrelated.test/' } }, reviewed), null);
+  assert.equal(manualNewModelComparison({ ...product, newModelReference: { ...product.newModelReference, cents: NaN } }, reviewed), null);
+  const pointer = manualSavedPointer(product, reviewed)!;
+  assert.equal('newModelReference' in pointer, false);
+  assert.equal('video' in pointer, false);
+});
 test('manual observations fail closed outside the bounded review window and never become inventory', () => {
   for (const clock of [Infinity, NaN, reviewed - 1, Date.parse(product.reviewUntil)]) assert.equal(manualProductActive(product, clock), false);
   assert.equal(manualProductActive(product, reviewed), true);
