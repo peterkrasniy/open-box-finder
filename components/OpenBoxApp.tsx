@@ -22,6 +22,7 @@ import { SavedRows } from './SavedRows';
 import { SyndicatedDeals } from './SyndicatedDeals';
 import { SourceCoverage } from './SourceCoverage';
 import { SourceStatus } from './SourceStatus';
+import { OutboundLinks } from './OutboundLinks';
 
 function filterFingerprint(value: Filters): string {
   const { retailers, categories, fulfillment, minCents, maxCents, radiusMiles } = value;
@@ -151,6 +152,7 @@ export function OpenBoxApp() {
           {(status === 'error' || status === 'offline') && <button type="button" className="text-action" onClick={refresh}>{t('refresh')}</button>}
         </div>
         {route.view === 'deals' && catalog.offers.length > 0 && <SourceCoverage catalog={catalog} language={language} now={now}/>}
+        {route.view === 'deals' && !catalog.offers.length && <OutboundLinks language={language} now={now}/>}
         {route.view === 'saved' ? <>
           <p className="saved-privacy"><Icon name="bookmark" size={18}/>{t('savedPrivacy')}</p>
           {saved.length ? <SavedRows saved={saved} catalog={catalog} status={status} language={language} now={now} onOpen={openOffer} onRemove={removeSaved}/>
@@ -160,8 +162,9 @@ export function OpenBoxApp() {
           {listings.length > visibleCount && <button type="button" className="secondary-button show-more" onClick={() => setPagination(previous => ({ filters, sort, count: (previous.filters === filters && previous.sort === sort ? previous.count : 60) + 60 }))}>{t('showMore')}</button>}
         </> : <>
           <section className="empty-state"><span className="empty-icon"><Icon name="openBox" size={42}/></span><h2>{t(catalog.offers.length ? 'noMatches' : 'noVerified')}</h2><p>{t(catalog.offers.length ? 'noMatchesHelp' : 'noVerifiedHelp')}</p>{catalog.offers.length > 0 && <button type="button" className="secondary-button" onClick={resetFilters}>{t('reset')}</button>}</section>
-          {!catalog.offers.length && <SourceStatus catalog={catalog} language={language} now={now}/>}
         </>}
+        {route.view === 'deals' && catalog.offers.length > 0 && <OutboundLinks language={language} now={now}/>}
+        {route.view === 'deals' && !catalog.offers.length && <SourceStatus catalog={catalog} language={language} now={now}/>}
         {route.view === 'deals' && <SyndicatedDeals deals={catalog.syndication} language={language} filters={filters} now={now}/>}
       </main>
     </div>

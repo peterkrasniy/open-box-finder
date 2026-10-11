@@ -24,7 +24,7 @@ export function useCatalog(enabled: boolean) {
     const timer = setTimeout(() => request.abort(), 15000);
     setStatus('loading');
     try {
-      const response = await fetch('/api/catalog', { cache: 'no-store', credentials: 'omit', signal: request.signal,
+      const response = await fetch('/api/catalog', { cache: 'no-store', credentials: 'same-origin', signal: request.signal,
         headers: etag.current ? { 'If-None-Match': etag.current } : {} });
       if (!active.current || request.signal.aborted || serial.current !== number) return;
       const anchor = serverAnchor(response.headers.get('X-Catalog-Time'), started, performance.now(), clockFloor.current);
