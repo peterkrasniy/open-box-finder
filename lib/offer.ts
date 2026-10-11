@@ -79,6 +79,7 @@ export interface SourceHealth {
   lastCompleteAt: string | null;
   lastCompleteSequence: number;
   lastSnapshotComplete?: boolean;
+  blockedAt?: string | null;
 }
 export interface Catalog {
   schemaVersion: 2;

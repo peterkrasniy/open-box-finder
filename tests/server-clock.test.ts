@@ -19,3 +19,13 @@ test('missing, malformed or invalid monotonic timing has no trusted freshness an
  assert.equal(serverAnchor('2026-10-11T10:00:00.000Z',0,60001),null);
  assert.equal(serverNow({epochMs:1000,monotonicMs:20},19),Infinity);
 });
+
+test('a faster later response or older server header cannot move evidence time backward and revive an expired claim',()=>{
+ const slow=serverAnchor('2026-10-11T10:00:00.000Z',0,2000)!;
+ const expired={observedAt:'2026-10-11T09:59:00Z',freshUntil:'2026-10-11T10:00:01Z'};
+ assert.equal(isFresh(expired,serverNow(slow,2000)),false);
+ const fast=serverAnchor('2026-10-11T10:00:00.000Z',2010,2020,slow)!;
+ assert.equal(serverNow(fast,2020),serverNow(slow,2020));
+ assert.equal(isFresh(expired,serverNow(fast,2020)),false);
+ assert.equal(serverAnchor('2026-10-11T10:00:00.000Z',100,200,slow),null);
+});

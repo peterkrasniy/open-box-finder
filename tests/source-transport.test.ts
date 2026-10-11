@@ -8,7 +8,12 @@ const fakeFetch=(response:()=>Response)=>(async(input:unknown,init?:RequestInit)
 test('source acquisition accepts only registered fixed transport and never follows redirects',async()=>{
   await assert.rejects(acquireSource({...DEALNEWS_TRANSPORT,url:'http://127.0.0.1/'},fakeFetch(()=>new Response()),now),/Unregistered/);
   const redirect=await acquireSource(DEALNEWS_TRANSPORT,fakeFetch(()=>new Response(null,{status:302,headers:{Location:'http://169.254.169.254/'}})),now);
-  assert.deepEqual(redirect,{ok:false,reason:'redirect',minimumNextCheckSeconds:900});
+  assert.deepEqual(redirect,{ok:false,reason:'redirect',stopAutomatic:true,minimumNextCheckSeconds:900});
+});
+test('a consumed acquisition budget cannot issue another upstream request',async()=>{
+ const budget=new AbortController();budget.abort();let calls=0;
+ const result=await acquireSource(DEALNEWS_TRANSPORT,(async()=>{calls++;return new Response()}) as typeof fetch,now,budget.signal);
+ assert.equal(calls,0);assert.equal(result.ok,false);if(!result.ok)assert.equal(result.reason,'timeout');
 });
 
 test('bounded transport rejects unsupported HTML, oversized payloads and invalid UTF-8',async()=>{
@@ -20,9 +25,14 @@ test('bounded transport rejects unsupported HTML, oversized payloads and invalid
   assert.equal(result.ok,false);if(!result.ok)assert.equal(result.reason,'size');
 });
 
-test('source backoff respects Retry-After/cache max-age without unbounded or negative cadence',async()=>{
-  assert.equal(retryAfterSeconds('3600',now()),3600);assert.equal(retryAfterSeconds('99999999',now()),86400);
+test('source backoff honors long Retry-After/cache max-age without shortening a permitted pause',async()=>{
+  assert.equal(retryAfterSeconds('3600',now()),3600);assert.equal(retryAfterSeconds('99999999',now()),99999999);assert.equal(retryAfterSeconds('9'.repeat(100),now()),Infinity);
   assert.equal(retryAfterSeconds('Sun, 11 Oct 2026 10:30:00 GMT',now()),3600);assert.equal(retryAfterSeconds('-5',now()),900);
   const result=await acquireSource(DEALNEWS_TRANSPORT,fakeFetch(()=>new Response('<rss/>',{headers:{'Content-Type':'text/xml; charset=utf-8','Cache-Control':'public, max-age=3600','ETag':'"test-only"'}})),now);
   assert.equal(result.ok,true);if(result.ok){assert.equal(result.text,'<rss/>');assert.equal(result.minimumNextCheckSeconds,3600);assert.equal(result.acquiredAt,'2026-10-11T09:30:00.000Z');}
+});
+test('denied/retired/redirected/challenged endpoints stop automatic acquisition; rate limits preserve their full wait',async()=>{
+ for(const status of [401,403,404,410,451]){const result=await acquireSource(DEALNEWS_TRANSPORT,fakeFetch(()=>new Response('Denied',{status})),now);assert.equal(result.ok,false);if(!result.ok)assert.equal(result.stopAutomatic,true);}
+ const limited=await acquireSource(DEALNEWS_TRANSPORT,fakeFetch(()=>new Response('Wait',{status:429,headers:{'Retry-After':'172800'}})),now);assert.equal(limited.ok,false);if(!limited.ok){assert.equal(limited.minimumNextCheckSeconds,172800);assert.equal(limited.stopAutomatic,undefined);}
+ const challenged=await acquireSource(DEALNEWS_TRANSPORT,fakeFetch(()=>new Response('<html>Challenge</html>',{headers:{'Content-Type':'text/html'}})),now);assert.equal(challenged.ok,false);if(!challenged.ok)assert.equal(challenged.stopAutomatic,true);
 });

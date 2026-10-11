@@ -37,4 +37,5 @@ export const sourcePreflight = sqliteTable('source_preflight', {
   checkedAt: integer('checked_at').notNull(),
   payload: text('payload').notNull(),
   expiresAt: integer('expires_at').notNull(),
+  nextDueAt: integer('next_due_at').notNull().default(0),
 });

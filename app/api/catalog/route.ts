@@ -10,7 +10,12 @@ export const dynamic = 'force-dynamic';
 function service() {
   if (!env.DB) return { read: async () => emptyCatalog(), maintain: async () => emptyCatalog() };
   const store = new CatalogStore(env.DB);
-  return { read: () => store.read(), maintain: async () => { const catalog = await maintainCatalog(store); await maintainPreflight(env.DB!); return catalog; } };
+  return { read: () => store.read(), maintain: async () => {
+    // A short-lived, one-shot admission review gets a turn before periodic source acquisition.
+    // Private evidence housekeeping failures must not hide an already readable public catalog.
+    try { await maintainPreflight(env.DB!); } catch { console.warn('Private source review maintenance failed'); }
+    return maintainCatalog(store);
+  } };
 }
 export function GET(request: Request) { return catalogResponse(request, service()); }
 export function HEAD(request: Request) { return catalogResponse(request, service()); }

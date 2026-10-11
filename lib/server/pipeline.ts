@@ -9,20 +9,20 @@ import { parseRss } from './rss.ts';
 import { GLOBAL_MIN_INTERVAL_MS } from './catalog-store.ts';
 
 export type AcquisitionResult = { ok: true; acquiredAt: string; complete: boolean; emptyConfirmed?: boolean; offers: Offer[]; syndication: SyndicatedDeal[]; minimumNextCheckSeconds: number }
-  | { ok: false; minimumNextCheckSeconds: number };
+  | { ok: false; stopAutomatic?: true; minimumNextCheckSeconds: number };
 export interface Adapter { sourceId: string; acquire(policy: PublicationPolicy): Promise<AcquisitionResult> }
 export interface Store {
   read(): Promise<Catalog>; claim(now: number): Promise<string | null>; publish(token: string, catalog: Catalog, now: number): Promise<boolean>;
   release(token: string, nextDueAt: number): Promise<void>;
   recordEvent(event: { sourceId: string; acquiredAt: number; outcome: 'success' | 'failure'; generation: string; added: number; changed: number; removed: number }): Promise<void>;
 }
-const minimumCadence = (seconds: number) => Math.min(86400, Math.max(900, Number.isFinite(seconds) ? Math.ceil(seconds) : 86400));
+const minimumCadence = (seconds: number) => Math.max(900, Number.isFinite(seconds) ? Math.ceil(seconds) : 86400);
 const hash = async (value: string) => [...new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(value)))].map(byte => byte.toString(16).padStart(2,'0')).join('');
 
 export function dealnewsAdapter(fetcher: typeof fetch = fetch): Adapter {
   return { sourceId: 'dealnews', async acquire(policy) {
     const response = await acquireSource(DEALNEWS_TRANSPORT, fetcher);
-    if (!response.ok) return { ok: false, minimumNextCheckSeconds: response.minimumNextCheckSeconds };
+    if (!response.ok) return { ok: false,...(response.stopAutomatic?{stopAutomatic:true as const}:{}), minimumNextCheckSeconds: response.minimumNextCheckSeconds };
     const feed = parseRss(response.text), deals: SyndicatedDeal[] = [];
     let complete = feed.complete;
     for (const entry of feed.entries) {
@@ -49,19 +49,22 @@ export async function maintainCatalog(store: Store, now = Date.now,
   const due = [...adapters.values()].filter(adapter => {
     const source = registry.get(adapter.sourceId), policy = policies.get(adapter.sourceId);
     const health = previous.sources.find(item => item.sourceId === adapter.sourceId);
+    if(health?.blockedAt&&!(policy?.resumeBlockedBefore&&Date.parse(policy.resumeBlockedBefore)<=started&&Date.parse(policy.resumeBlockedBefore)>Date.parse(health.blockedAt)))return false;
     return source?.enabled && source.admission === 'admitted' && policy && (!health?.nextCheckAt || Date.parse(health.nextCheckAt) <= started);
   }).sort((a, b) => {
     const checked = (id: string) => Date.parse(previous.sources.find(source => source.sourceId === id)?.lastAttemptAt ?? '') || 0;
     return checked(a.sourceId) - checked(b.sourceId) || a.sourceId.localeCompare(b.sourceId);
   });
   if (!due.length) return previous;
-  const token = await store.claim(started); if (!token) return previous;
+  const token = await store.claim(started); if (!token) return await store.read();
   const adapter = due[0], policy = policies.get(adapter.sourceId)!;
   let nextDueAt = started + GLOBAL_MIN_INTERVAL_MS;
+  let globalNextDueAt = nextDueAt;
   try {
     let result: AcquisitionResult;
     try { result = await adapter.acquire(policy); } catch { result = { ok: false, minimumNextCheckSeconds: 3600 }; }
     const completed = now(), time = new Date(completed).toISOString(), sequence = previous.sequence + 1;
+    globalNextDueAt = completed + GLOBAL_MIN_INTERVAL_MS;
     const minimumSeconds = minimumCadence(result.minimumNextCheckSeconds);
     nextDueAt = completed + minimumSeconds * 1000;
     let offers = previous.offers, syndication = previous.syndication;
@@ -89,7 +92,7 @@ export async function maintainCatalog(store: Store, now = Date.now,
     let generation = result.ok && delta.added.length + delta.changed.length + delta.removed.length > 0 ? `content-${sequence}` : previous.generation;
     const buildNext = () => ({ ...previous, sequence, revision: `publication-${sequence}`, generation, publishedAt: time, offers, syndication,
       sources: previous.sources.map(source => source.sourceId !== adapter.sourceId ? source : { ...source, status: result.ok ? 'ready' as const : 'error' as const,
-        lastAttemptAt: time, lastSuccessAt: result.ok ? result.acquiredAt : source.lastSuccessAt, nextCheckAt: new Date(nextDueAt).toISOString(),
+        lastAttemptAt: time, lastSuccessAt: result.ok ? result.acquiredAt : source.lastSuccessAt, nextCheckAt: new Date(nextDueAt).toISOString(),blockedAt:!result.ok&&result.stopAutomatic?time:null,
         lastCompleteAt: result.ok && result.complete ? result.acquiredAt : source.lastCompleteAt,
         lastSnapshotComplete: result.ok ? result.complete : source.lastSnapshotComplete, lastCompleteSequence: result.ok && result.complete ? sequence : source.lastCompleteSequence }) });
     let next = buildNext();
@@ -99,7 +102,7 @@ export async function maintainCatalog(store: Store, now = Date.now,
     try { await store.recordEvent({ sourceId: adapter.sourceId, acquiredAt: completed, outcome: result.ok ? 'success' : 'failure', generation,
       added: delta.added.length, changed: delta.changed.length, removed: delta.removed.length }); } catch { console.warn('Catalog published; operational event persistence failed'); }
     return next;
-  } finally { await store.release(token, nextDueAt); }
+  } finally { await store.release(token, globalNextDueAt); }
 }
 function sourcePresentation(registry: ReadonlyMap<string, SourceDefinition>, id: string) { return registry.get(id)!.presentation; }
 function feedMaterial(deal: SyndicatedDeal) { const { observedAt: _observed, freshUntil: _fresh, ...material } = deal; void _observed; void _fresh; return material; }

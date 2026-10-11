@@ -1,6 +1,6 @@
 # Performance and update evidence plan
 
-Research only. The parent retains the independent performance/security audit. No app, hosted benchmark or first-complete candidate exists. Lighthouse 13.5.0, Chromium 154 and axe tooling are available outside the public repository; a runnable CLI is not a performance result.
+Historical research plan preserved. The parent retains the independent performance/security audit. Later local compiled-Worker lab measurements are recorded in the evidence ledger; they do not establish public-hosting performance or genuine first complete. Lighthouse 13.5.0, Chromium 154 and axe tooling remain outside the public repository.
 
 ## Measurements that answer the shopping task
 

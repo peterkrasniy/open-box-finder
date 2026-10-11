@@ -4,7 +4,7 @@ Statuses: PASS, FAIL, NOT RUN, BLOCKED. A checklist assertion is not a test pass
 
 ## Release gates
 
-- [ ] Implementation begins no earlier than 2026-10-11 08:38 UTC and after parent evidence handoff.
+- [x] Implementation begins no earlier than 2026-10-11 08:38 UTC and after parent evidence handoff.
 - [ ] A genuinely complete item-deals candidate uses real permitted data. Directory, static research stock, synthetic rows, and unconnected adapters do not satisfy this gate.
 - [ ] First-complete timestamp, exact commit, build URL, catalog generation and feature inventory recorded.
 - [ ] Four independent audits review the final candidate; every critical finding has a specific disposition and retest on the final commit.
@@ -50,3 +50,7 @@ Statuses: PASS, FAIL, NOT RUN, BLOCKED. A checklist assertion is not a test pass
 - [ ] Public repository history, build/package and browser responses scanned for credentials/private profile material.
 - [ ] Production asset/bundle sizes, request counts, data/image loading, refresh behavior and source timeouts/caching measured.
 - [ ] Routine future edit/update instructions tested or bounded accurately; no promise that authentication can be removed.
+
+## Current scoped evidence
+
+The public version 2 source/URL is verified through native Sites and canonical GitHub; this executor's public HTTP is blocked before origin. Local mechanics pass 57 model/integration tests plus the compiled browser/HTTP checks recorded in the ledger. Source admission, genuine inventory, real unattended/change traces, native phone checks, first complete, the post-completion hour and final independent acceptance remain unmet. Local and synthetic passes do not tick the genuine-data release gates above.

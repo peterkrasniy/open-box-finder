@@ -1,0 +1,1 @@
+ALTER TABLE `source_preflight` ADD `next_due_at` integer DEFAULT 0 NOT NULL;

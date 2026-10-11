@@ -55,6 +55,7 @@ export function observeA4lUnit(html: string, canonicalUrl: string): UnitObservat
     || !['string','number'].includes(typeof offer.price)) throw new TypeError('Unsupported unit price or identity evidence');
   const price = parsePrice(String(offer.price));
   if (!price.ok || price.cents === null) throw new TypeError('Unsupported unit price');
+  if (product.url === undefined && offer.url === undefined) throw new TypeError('Missing canonical item-level evidence');
   for (const value of [product.url, offer.url]) if (value !== undefined && new URL(String(value), url).href !== url) throw new TypeError('Product evidence belongs to another unit');
   const availability = offer.availability === 'https://schema.org/InStock' || offer.availability === 'http://schema.org/InStock' ? 'available'
     : ['https://schema.org/OutOfStock','http://schema.org/OutOfStock','https://schema.org/SoldOut','http://schema.org/SoldOut'].includes(String(offer.availability)) ? 'unavailable' : 'unknown';

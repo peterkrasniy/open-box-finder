@@ -1,6 +1,6 @@
 /** Conservative robots path check (not an access or redistribution grant) for a fixed public path. Unsupported syntax fails closed. */
 export function robotsAllows(text: string, path: string, agent = 'OpenBoxFinder'): boolean {
-  if (text.length > 131072 || /[^\x09\x0a\x0d\x20-\x7e]/.test(text) || !path.startsWith('/') || /[%\\\u0000-\u0020]/.test(path)) return false;
+  if (text.length > 131072 || /[^\x09\x0a\x0d\x20-\x7e]/.test(text) || !path.startsWith('/') || path.length > 2000 || /[%\\\u0000-\u0020]/.test(path) || !/^[a-z_-]+$/i.test(agent)) return false;
   const groups: { agents: string[]; rules: { allow: boolean; path: string }[] }[] = [];
   let group = { agents: [] as string[], rules: [] as { allow: boolean; path: string }[] }, hasRules = false;
   for (const raw of text.split(/\r?\n/)) {
@@ -9,7 +9,7 @@ export function robotsAllows(text: string, path: string, agent = 'OpenBoxFinder'
     const field = match[1].toLowerCase(), value = match[2].trim();
     if (field === 'user-agent') {
       if (hasRules) { groups.push(group); group = { agents: [], rules: [] }; hasRules = false; }
-      if (!/^(?:\*|[a-z0-9_-]+)$/i.test(value)) return false;
+      if (!/^(?:\*|[a-z_-]+)$/i.test(value)) return false;
       group.agents.push(value.toLowerCase());
     } else if (field === 'allow' || field === 'disallow') {
       if (!group.agents.length) return false;
@@ -21,7 +21,10 @@ export function robotsAllows(text: string, path: string, agent = 'OpenBoxFinder'
     if (field === 'crawl-delay' && (!/^\d{1,6}(?:\.\d{1,3})?$/.test(value) || Number(value) > 0)) return false;
   }
   if (group.agents.length) groups.push(group);
-  const exact = groups.filter(group => group.agents.some(name => name !== '*' && agent.toLowerCase().startsWith(name)));
+  const token=agent.toLowerCase();
+  // Decline ambiguous token aliases rather than letting a prefix group's Allow override an exact denial.
+  if(groups.some(group=>group.agents.some(name=>name!=='*'&&name!==token&&(token.startsWith(name)||name.startsWith(token)))))return false;
+  const exact = groups.filter(group => group.agents.includes(token));
   const selected = exact.length ? exact : groups.filter(group => group.agents.includes('*'));
   let longest = -1, allowed = true;
   for (const group of selected) for (const rule of group.rules) {

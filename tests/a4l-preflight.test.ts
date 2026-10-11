@@ -13,6 +13,7 @@ test('actual-unit structured observation preserves cents and explicit stock with
  assert.equal(observeA4lUnit(html({...product,offers:{...product.offers,availability:'https://schema.org/PreOrder'}}),url).availability,'unknown');
  for(const value of [{...product,offers:{...product.offers,price:'200.501'}},{...product,offers:{...product.offers,priceCurrency:'CAD'}},{...product,offers:{'@type':'AggregateOffer',lowPrice:'1',priceCurrency:'USD'}},{...product,url:'https://www.appliances4less-sac.com/p/OTHER/u/OTHER'},[product,product],{...product,offers:[product.offers,product.offers]}])assert.throws(()=>observeA4lUnit(html(value),url));
  assert.throws(()=>observeA4lUnit('<button>Add to Cart</button><p>$200.50 In Stock</p>',url));
+ assert.throws(()=>observeA4lUnit(html({...product,url:undefined,offers:{...product.offers,url:undefined}}),url));
 });
 test('robots transport distinguishes a denied HTTP status without accepting arbitrary developer-configured URLs',async()=>{
  const result=await acquireSource(A4L_ROBOTS_TRANSPORT,(async()=>new Response('Forbidden',{status:403})) as typeof fetch);assert.equal(result.ok,false);if(!result.ok)assert.equal(result.httpStatus,403);

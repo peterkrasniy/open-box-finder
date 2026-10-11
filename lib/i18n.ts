@@ -2,7 +2,7 @@ import type { Category, Condition, Language, ReferenceBasis, Sort } from './offe
 
 const en = {
   brand: 'Open Box Finder', deals: 'Deals', saved: 'Saved', search: 'Search deals', searchHint: 'Product, brand, or keyword',
-  editorialDeals: 'Deals from DealNews', editorialHelp: 'Original editorial listings. Feed membership does not verify current price or stock. Inventory filters and deal sorting do not apply to this section.', providedBy: 'Provided by',
+  editorialDeals: 'Deals from DealNews', editorialHelp: 'Original editorial listings. Feed membership does not verify current price or stock. Inventory filters and deal sorting do not apply to this section.', providedBy: 'Provided by', sourceDescription:'Source description',sourceFullContent:'Full source content',
   filtersChanged: 'Filters changed in another tab. Choose which to keep.', useUpdatedFilters: 'Use updated filters', keepMyEdits: 'Keep my edits', sourcesReady: 'Checked', sourcesAttention: 'Needs attention', sourcesDisconnected: 'Not connected', partialCatalog: 'Partial catalog check', sourceCoverage: 'Source coverage and check status',
   filters: 'Filters', sort: 'Sort', all: 'All', clear: 'Clear', retailers: 'Retailers', categories: 'Categories',
   fulfillment: 'Fulfillment', both: 'Both', pickup: 'Pickup', shipped: 'Shipped', price: 'Price (USD)',
@@ -13,7 +13,7 @@ const en = {
   noSaved: 'Your saved list starts here', noSavedHelp: 'Save a listing to find it again on this device.',
   sources: 'Sources', sourceStatus: 'Source status', awaitingSource: 'Awaiting source verification',
   permissionRequired: 'Permission required', credentialsRequired: 'Approved access required',
-  currentListings: 'Current listings', noSourceConnected: 'No source is connected yet.',
+  currentListings: 'Current listings', noSourceConnected: 'No source is connected yet.',accessUnavailable:'Source access unavailable',
   sourceHelp: 'Source access and availability are checked separately. These links are not inventory.',
   openRetailer: 'Visit retailer', details: 'View details', retailer: 'Retailer', condition: 'Condition',
   cosmeticGrade: 'Cosmetic condition', availability: 'Availability', available: 'Retailer reports available',
@@ -52,7 +52,7 @@ const en = {
 
 const ru: Record<keyof typeof en, string> = {
   brand: 'Open Box Finder', deals: 'Предложения', saved: 'Сохранённое', search: 'Поиск предложений', searchHint: 'Товар, бренд или слово',
-  editorialDeals: 'Предложения от DealNews', editorialHelp: 'Исходные редакционные объявления. Публикация в ленте не подтверждает текущую цену или наличие. Фильтры наличия и сортировка скидок не применяются к этому разделу.', providedBy: 'Источник:',
+  editorialDeals: 'Предложения от DealNews', editorialHelp: 'Исходные редакционные объявления. Публикация в ленте не подтверждает текущую цену или наличие. Фильтры наличия и сортировка скидок не применяются к этому разделу.', providedBy: 'Источник:', sourceDescription:'Описание источника',sourceFullContent:'Полный текст источника',
   filtersChanged: 'Фильтры изменены в другой вкладке. Выберите, какие сохранить.', useUpdatedFilters: 'Использовать новые фильтры', keepMyEdits: 'Сохранить мои правки', sourcesReady: 'Проверено', sourcesAttention: 'Требуют проверки', sourcesDisconnected: 'Не подключено', partialCatalog: 'Проверена часть каталога', sourceCoverage: 'Источники и состояние проверок',
   filters: 'Фильтры', sort: 'Сортировка', all: 'Все', clear: 'Очистить', retailers: 'Магазины', categories: 'Категории',
   fulfillment: 'Получение', both: 'Любое', pickup: 'Самовывоз', shipped: 'Доставка', price: 'Цена (USD)',
@@ -63,7 +63,7 @@ const ru: Record<keyof typeof en, string> = {
   noSaved: 'Здесь будут сохранённые товары', noSavedHelp: 'Сохраните предложение, чтобы вернуться к нему на этом устройстве.',
   sources: 'Источники', sourceStatus: 'Состояние источников', awaitingSource: 'Источник ожидает проверки',
   permissionRequired: 'Требуется разрешение', credentialsRequired: 'Требуется одобренный доступ',
-  currentListings: 'Текущие предложения', noSourceConnected: 'Источники пока не подключены.',
+  currentListings: 'Текущие предложения', noSourceConnected: 'Источники пока не подключены.',accessUnavailable:'Источник недоступен',
   sourceHelp: 'Доступ к источнику и наличие проверяются отдельно. Эти ссылки не являются каталогом товаров.',
   openRetailer: 'Открыть магазин', details: 'Подробнее', retailer: 'Магазин', condition: 'Состояние',
   cosmeticGrade: 'Внешнее состояние', availability: 'Наличие', available: 'Магазин сообщает о наличии',

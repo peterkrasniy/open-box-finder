@@ -10,6 +10,8 @@ export interface PublicationPolicy {
   sourceId: string; retailerId: string; products: readonly UrlScope[]; references: readonly UrlScope[];
   images: readonly UrlScope[]; contentLinks: readonly UrlScope[]; referenceBases: readonly ReferenceBasis[];
   maxFreshSeconds: number;
+  /** Only a new accepted source review may permit a retry after a recorded access denial. */
+  resumeBlockedBefore?: string;
 }
 /** No source has passed the hosted transport, facts/media and presentation gate yet. */
 export const APPROVED_POLICIES: ReadonlyMap<string, PublicationPolicy> = new Map();
@@ -17,7 +19,7 @@ export const APPROVED_POLICIES: ReadonlyMap<string, PublicationPolicy> = new Map
 export function withinScope(value: string, scopes: readonly UrlScope[], base?: string): boolean {
   try {
     const url = new URL(value, base);
-    if (url.protocol !== 'https:' || url.username || url.password || url.port || /%2f|%5c|%2e|\\/i.test(url.pathname)) return false;
+    if (url.protocol !== 'https:' || url.username || url.password || url.port || /%2f|%5c|%2e|%25|%00|%0a|%0d|\\/i.test(url.pathname)) return false;
     return scopes.some(scope => url.origin === scope.origin && url.pathname.startsWith(scope.pathPrefix));
   } catch { return false; }
 }
