@@ -46,3 +46,5 @@ Use a calm original interface with large readable price typography, restrained s
 | Audit interval | First complete UTC timestamp and commit; >= one hour of actual later audit/improvement work with later commits and test evidence; parent findings reconciled. |
 
 Use synthetic data only in clearly separated test fixtures, never as a production inventory fallback. Prefer testing observable behavior and important invariants over tests that mirror implementation details.
+
+Savings fixtures agreed with the accountability reviewer: A current $80 / current-new $100 yields $20 and 20%; B $150 / current-new $300 yields $150 and 50%; C $90 / exact-variant sourced MSRP $300 yields $210 and 70%. Current-new-only order is B,A and excludes C; a declared advertised-reference order is C,B,A with visible actual bases. To distinguish percent from dollar ranking, use $50/$100 (50%, $50) against $300/$500 (40%, $200). Include missing, stale, unmatched, zero, equal and below-current comparison cases. These are test specifications, not executed tests or production records.

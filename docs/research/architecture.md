@@ -13,7 +13,7 @@ Status: research only. No application implementation or Site registration has be
 
 ## Source admission
 
-A source needs all of: documented permission for the intended redistribution; an authorized access path; actual item data; an explicit availability interpretation; usable item identity; a supported freshness policy; and verified price/comparison semantics. An accessible outlet page or search result is not an admitted inventory adapter.
+A source needs applicable-use review, a permitted/authenticated acquisition path, actual item data, an explicit availability interpretation, usable item identity, a supported freshness policy, and verified price/comparison semantics. Separate facts (model/price/availability) from protected photographs, descriptions, logos and payloads. Lack of an affirmative feed license is not automatically a ban on factual comparisons. Actual access/automation/contract restrictions still apply and must not be bypassed. An accessible outlet page or search result is not an admitted inventory adapter.
 
 Separate source states: permitted item feed, credential/approval required, permission unclear, redistribution restricted, and manual retailer browsing only. An unavailable research fetch is not proof that the retailer has no inventory. Never use guessed prices, photographs, discounts, stock, store associations, or fabricated demonstration listings in production.
 
@@ -23,7 +23,11 @@ DealNews's permitted unmodified syndication is distinct from retailer unit inven
 
 Use a small Sites-hosted Worker for server-side, fixed-allowlist source fetching and a mobile-first client. The Worker can cache permitted reads for the source's supported lifetime, deduplicate simultaneous fetches, use conditional requests when supported, and return explicit source health and observation times. Public endpoints are GET/HEAD only. No browser-supplied URL fetching or public ingestion/write endpoint.
 
-A regular browser poll can show new permitted listings without a reload. Pause while hidden, resume on visibility/online, prevent overlapping requests, back off on failure, and avoid replacing newer data with a late older response. Initial loading, successful empty results, source failure, stale data, filtered-empty, offline state, and source-not-connected need distinct copy. A browser poll is not an unattended background update; any requirement for updates while the app is closed needs a separately verified supported update path.
+A regular browser poll can show new permitted listings without a reload. Pause while hidden, resume on visibility/online, prevent overlapping requests, back off on failure, and avoid replacing newer data with a late older response. Initial loading, successful empty results, source failure, stale data, filtered-empty, offline state, and source-not-connected need distinct copy. A browser poll is not an unattended background update. The hard original goal requires an actual unattended acquisition job, protected persistence, generation readback and client appearance without a reload. Source-supported five-minute/hourly latency may be disclosed honestly; never promise instant internal return events.
+
+Keep expiring retailer data outside permanent public Git history. The canonical repository stores acquisition code, source configuration, schema, and evidence summaries; live observations belong in bounded runtime storage. Sites D1 is the documented structured-data option. A scheduler and any updater must use supported authorization; no public administrative writer or arbitrary-source endpoint is acceptable. Follow Sites' recurring-update workflow and verify actual acquisition, protected persistence, atomic generation publication and client readback. Do not casually substitute republishing or a static checked-in catalog for durable updates.
+
+One candidate worth reviewing is source-controlled read-through caching: a fixed read route fetches only the approved source, atomically persists source facts when its cache is due, and exposes a public generation. A native scheduled read could trigger the same acquisition unattended. This is not an implemented or approved writer design. Confirm with security/accountability audits whether deterministic server-owned cache refresh on a public read meets the no-anonymous-write boundary; it must never accept client-supplied catalog changes. Otherwise a supported protected update path is required, and new authorization remains subject to specific approval.
 
 Each normalized inventory offer, where normalization is licensed, needs source ID, item/offer identity, canonical item URL, condition, current price in integer cents, currency, availability scope, image authorization, fetched/observed times, and optional supported comparison metadata. Comparison metadata needs price, basis (current new / retailer regular / MSRP / former price), exact matched model/variant, and its source/time. Unknown fulfillment is neither shipped nor local.
 
@@ -34,6 +38,7 @@ The saved/interested list and preferences are per-browser/device storage. No acc
 - A comparison must be supported, same currency/model/variant, and strictly greater than the current price. Otherwise show no discount badge and exclude the offer from biggest-savings rankings.
 - Do not promote a historic MSRP as a current-new price. A red struck-through comparison must have a visible basis.
 - Percent discount = (comparison cents - current cents) / comparison cents; dollar savings = comparison cents - current cents. Use unrounded values for ranking, consistent displayed rounding, and stable tie-breaking.
+- Rankings may use supported exact-variant MSRP/list/was/typical/comparable references if every card names its actual basis and the sort explicitly means advertised-reference savings. Current-new-only ranking is an optional stricter mode, not a required limitation. Unknown, stale, unmatched, zero and nonpositive comparisons are excluded.
 - Local offers require actual offer-level pickup/store evidence and an exact store destination. Ordinary SKU stock or a retailer's store directory cannot establish open-box availability.
 - Radius is miles, measured from the user-selected location to the verified pickup destination. Default location is Rocklin/Sacramento. Square source area searches require a true-distance postfilter.
 - Never use a user's current location as the Navigate destination. If a store is not established, do not show a pickup Navigate action.
@@ -41,6 +46,8 @@ The saved/interested list and preferences are per-browser/device storage. No acc
 ## Experience requirements
 
 Retailer multi-select; categories; search; local/shipped/both; editable location/radius; min/max price; percent/dollar savings sorting; persistent English/Russian UI toggle at the top; per-phone saved/interested list; usable official product photographs and small retailer logos only where licensed; polished responsive iPhone-like presentation; accessible names, focus, keyboard operation, contrast, and reduced-motion support.
+
+Retailer selections are OR within the selected retailers and AND across filter dimensions. None selected means none, not all. Price boundaries are inclusive; invalid ranges show an explicit error. Catalog replacement is atomic and a fetch failure must not create false sellout states. Source observation timestamps are immutable and separate from server fetch/cache times.
 
 Every detail/page/sheet has a clear Back or Close. Maintain one active layer, preserve filter state/scroll, restore focus on close, avoid repeated-tap races, and use accessible modal semantics. Design empty/error states with the same care as populated results. Use restrained transitions and readable simple copy.
 
