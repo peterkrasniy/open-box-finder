@@ -28,6 +28,10 @@ Paginated or multi-page acquisition must establish completeness before replacing
 
 Construct and validate the entire new snapshot, then atomically replace the active snapshot and advance its monotonic generation. Keep content generation distinct from a successful unchanged check. A conditional 304 can confirm the same upstream representation, with its semantics documented; it must not claim an item-level source event timestamp. A fetch attempt never makes old prices newly observed.
 
+Keep content generation distinct from representation revision as well. A successful unchanged check or a new failure can change check times, freshness or health without creating a newly listed offer. The public response validator must cover those exposed fields; an ETag containing only content generation could incorrectly leave a browser's health/freshness state unchanged forever. A client accepts newer metadata for unchanged content without reordering cards or announcing new offers. Per-request serving time belongs in response metadata rather than a volatile content hash that disables every conditional response.
+
+Expiry must still work while a phone is offline or its wall clock is wrong. Treat server observation/expiry times as authoritative, test client clock skew and suspension/resume, and revalidate on return. A failed/offline check must not extend freshness. Distinguish an item actually observed again in a validated successful response from a retained value after a failed request.
+
 Per-source failures do not erase healthy source results. Responses expose the active generation, source check time, original observation time, freshness deadline and simple source health. Expired offers leave current availability/savings results even if the last snapshot remains available to explain failure. Saved items may retain a minimal last-known observation with an explicit unavailable/stale status; source retention rules still apply to that local copy.
 
 Persist only the necessary bounded licensed/factual snapshot, not a growing event history or raw payload archive. Runtime data must never enter the permanent public Git history. Review the storage platform's automatic backups and retention as well as deletion in active tables; erasing a row does not by itself prove every retained copy has expired. If source rules demand a shorter retention than supported storage provides, select an allowed storage approach or keep that source blocked.
@@ -37,6 +41,16 @@ Persist only the necessary bounded licensed/factual snapshot, not a growing even
 The visible client periodically revalidates the catalog with a lightweight conditional request. Its timer is independent of the source fetch TTL, so many browser polls do not cause many origin fetches. Pause while hidden, revalidate on visibility/online, avoid overlap, back off on errors, and ignore older/out-of-order responses. Maintain filters, saves, open detail state and scroll when a newer generation arrives.
 
 Announce newly available results politely and once. Do not steal focus or suddenly move the card the shopper is reading. New source generations can appear while the user remains on the page. Derive the disclosed latency from the actual source-exposure delay, cache TTL, unattended hourly check phase, acquisition time and client revalidation delay. A job that fires just before the TTL expires may defer acquisition until the next scheduled read, so do not casually promise a one-hour maximum when TTL/schedule phase can extend it. No promise of instant retailer return events or background execution by a sleeping iPhone app.
+
+## Free operating budget to verify
+
+These are underlying-platform research limits, not an assertion about the billing or quotas of ChatGPT Sites. Confirm the actual supported deployment before treating them as applicable. No Cloudflare account, subscription, limit increase or billing change is authorized here.
+
+[D1 pricing](https://developers.cloudflare.com/d1/platform/pricing/) documents free daily limits of 5 million rows read and 100,000 written, counts scanned rows rather than returned rows, and says row size does not change that count. [D1 limits](https://developers.cloudflare.com/d1/platform/limits/) bound a string/blob/table row to 2,000,000 bytes and free database size to 500 MB. A compact bounded source snapshot keyed by source can reduce reads relative to returning hundreds of individually scanned offer rows on every browser poll; it still needs atomic generation/lease correctness and a strict serialized-byte cap. This is a proposal, not a measured optimization.
+
+As an illustrative calculation, 100 continuously visible clients polling each minute generate 144,000 daily dynamic reads. Scanning 360 offers each time would scan 51.84 million rows; reading one bounded snapshot would read 144,000 snapshot rows, plus coordination/metadata operations. Hidden-client pauses and short sessions change the load. Measure actual query metadata, bytes, CPU and requests on the eventual candidate.
+
+[Workers limits](https://developers.cloudflare.com/workers/platform/limits/) separately document free request, CPU, subrequest and connection bounds. [Workers pricing](https://developers.cloudflare.com/workers/platform/pricing/) distinguishes static-asset requests from dynamic Worker requests and explains that Worker cache hits still count as requests. A small conditional response reduces bytes; it does not prove that public polling is free at arbitrary traffic. Prefer one shared client subscription, bounded visible polling and error backoff, with no paid fallback silently enabled.
 
 ## Required evidence before a live-update claim
 
@@ -48,3 +62,9 @@ Announce newly available results politely and once. Do not steal focus or sudden
 6. Cross-source partial failure, valid empty inventory, sold/absent units, unchanged responses, stale comparisons, and delayed source exposure are exercised separately.
 
 All these checks are currently NOT RUN. A successful manual request alone does not prove unattended operation, and a created schedule alone does not prove that it executed.
+
+## Actual change trace required by the parent
+
+Record a baseline and a subsequent actual source addition, plus an actual disappearance or material change of a previously seen source identity. Capture the exact source identity and supported public observation facts, source-acquisition start/end, protected publication revision, public readback revision, and already-open browser appearance time. Record acquisition-to-publication and publication-to-client latency separately; where an independent source observation exists, report observation-to-client delay. Keep permissible evidence outside permanent catalog data in Git and follow source retention rules.
+
+A retailer's private return/listing event time is generally unknown. Bound the publicly observed change between the last successful prior observation and the first successful changed observation; never substitute first-seen time for an internal event timestamp. A complete catalog absence means no longer listed, not necessarily sold. Cached research counts from separate crawls cannot establish a source change trace. If no natural qualifying event is observed, mark that criterion NOT OBSERVED, even if isolated synthetic generation/race tests pass.

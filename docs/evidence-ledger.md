@@ -23,6 +23,8 @@ This ledger records actual evidence. PASS applies only to the exact operation na
 
 ## Pending candidate evidence
 
+Research continuation on October 11, 07:30–07:39 UTC reviewed Blue's Appliance local pickup/delivery and conflicting reference data, DreamHome's manual unit availability, Ace Karaoke's approved affiliate access, eBay's separate application/user token flows, NZXT's qualified public crawling and unavailable agent discovery, Canon/MPB restrictions and conflicting stock extraction, and KEH's distinct open-box/used grades. Primary D1/Workers limits informed a bounded snapshot proposal. The refresh contract now distinguishes content generation from health/freshness representation revision and defines actual observed-change trace evidence. These are research findings; no application, schema, source fetch pipeline, credential, Site or schedule was created.
+
 - Implementation start UTC: NOT RUN.
 - First complete UTC/commit/build URL/catalog generation/feature inventory: NOT RUN.
 - Public Site ID/URL and matching Sites source commit/archive: NOT RUN.
