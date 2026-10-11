@@ -1,6 +1,7 @@
 import type { Filters, Language, Offer } from '../lib/offer.ts';
 import { displayDiscount, isFresh } from '../lib/offer.ts';
 import { pickupDistance } from '../lib/filter.ts';
+import { shippingEligibility } from '../lib/shipping.ts';
 import { conditionLabel, text } from '../lib/i18n.ts';
 import { SOURCE_BY_ID } from '../lib/sources.ts';
 import { Icon } from './Icon';
@@ -12,6 +13,7 @@ export function OfferCard({ offer, language, filters, now, saved, onSave, onOpen
   onSave: (offer: Offer) => void; onOpen: (offer: Offer) => void; priority?: boolean;
 }) {
   const distance = pickupDistance(offer, filters);
+  const shipping = shippingEligibility(offer.shipping, filters.origin);
   const discount = displayDiscount(offer, now);
   const retailer = SOURCE_BY_ID.get(offer.retailerId)?.name ?? SOURCE_BY_ID.get(offer.sourceId)?.name ?? offer.retailerId;
   return <article className="offer-card">
@@ -25,7 +27,9 @@ export function OfferCard({ offer, language, filters, now, saved, onSave, onOpen
       {discount !== null && <p className="saving-text">{discount}% · {text(language, 'advertisedSavings')}</p>}
       <div className="fulfillment-lines">
         {offer.pickup?.pickupVerified && <p><Icon name="pin" size={17}/><span>{offer.pickup.name}{distance !== null && ` · ${new Intl.NumberFormat(language === 'ru' ? 'ru-RU' : 'en-US', { maximumFractionDigits: 1 }).format(distance)} ${text(language, 'miles')}`}</span></p>}
-        {offer.shipping && <p><Icon name="truck" size={17}/><span>{text(language, 'shipping')}</span></p>}
+        {offer.shipping && <p><Icon name="truck" size={17}/><span>{text(language, shipping === 'eligible' ? 'shipping' : shipping === 'ineligible' ? 'shippingIneligible' : 'shippingEligibilityUnknown')}</span></p>}
+        {offer.pickup?.pickupVerified && distance === null && <p>{text(language, 'distanceUnknown')}</p>}
+        {offer.shipping?.restrictions && <p>{offer.shipping.restrictions}</p>}
         {!offer.pickup?.pickupVerified && !offer.shipping && <p>{text(language, offer.localDelivery ? 'localDelivery' : 'fulfillmentUnknown')}</p>}
       </div>
       <p className={`availability${offer.availability === 'unknown' || !isFresh(offer, now) ? ' muted' : ''}`}>{!isFresh(offer, now) ? text(language, 'stale') : text(language, offer.availability === 'available' ? 'available' : 'unknownStock')}</p>

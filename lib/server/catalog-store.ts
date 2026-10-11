@@ -1,5 +1,6 @@
 import type { Catalog } from '../offer.ts';
 import { emptyCatalog } from '../catalog.ts';
+import { validatePublication } from './publication.ts';
 import { decodeCatalog } from '../validation.ts';
 
 export const GLOBAL_MIN_INTERVAL_MS = 15 * 60 * 1000;
@@ -13,9 +14,9 @@ export const CLAIM_SQL = `UPDATE acquisition_control SET lease_token=?, lease_un
   daily_attempts=CASE WHEN quota_day=? THEN daily_attempts+1 ELSE 1 END
   WHERE id=1 AND lease_until<=? AND next_due_at<=? AND (quota_day<>? OR daily_attempts<?)
   RETURNING lease_token`;
-export const PUBLISH_SQL = `INSERT INTO catalog_state (id,payload,revision,updated_at)
-  SELECT 1,?,?,? WHERE EXISTS (SELECT 1 FROM acquisition_control WHERE id=1 AND lease_token=? AND lease_until>?)
-  ON CONFLICT(id) DO UPDATE SET payload=excluded.payload,revision=excluded.revision,updated_at=excluded.updated_at`;
+export const PUBLISH_SQL = `INSERT INTO catalog_state (id,payload,revision,updated_at,sequence)
+  SELECT 1,?,?,?,? WHERE ?=COALESCE((SELECT sequence FROM catalog_state WHERE id=1),0)+1 AND EXISTS (SELECT 1 FROM acquisition_control WHERE id=1 AND lease_token=? AND lease_until>?)
+  ON CONFLICT(id) DO UPDATE SET payload=excluded.payload,revision=excluded.revision,updated_at=excluded.updated_at,sequence=excluded.sequence WHERE catalog_state.sequence+1=excluded.sequence`;
 export const RELEASE_SQL = 'UPDATE acquisition_control SET lease_token=NULL,lease_until=0,next_due_at=? WHERE id=1 AND lease_token=?';
 
 /** Only the server receives DB; the public route never accepts payloads, lease tokens or SQL. */
@@ -36,9 +37,9 @@ export class CatalogStore {
     return row?.lease_token === token ? token : null;
   }
   async publish(token: string, catalog: Catalog, now: number): Promise<boolean> {
-    const publicCatalog = decodeCatalog(catalog), payload = JSON.stringify(publicCatalog);
+    const publicCatalog = validatePublication(catalog, now), payload = JSON.stringify(publicCatalog);
     if (new TextEncoder().encode(payload).byteLength > CATALOG_MAX_BYTES) throw new TypeError('Public catalog exceeds limit');
-    const result = await this.database.prepare(PUBLISH_SQL).bind(payload, publicCatalog.revision, now, token, now).run();
+    const result = await this.database.prepare(PUBLISH_SQL).bind(payload, publicCatalog.revision, now, publicCatalog.sequence, publicCatalog.sequence, token, now).run();
     return result.meta.changes === 1;
   }
   async release(token: string, nextDueAt: number): Promise<void> {

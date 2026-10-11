@@ -15,7 +15,7 @@ const makeOffer = (id: string, current: number, comparison: number): Offer => ({
   reference: { cents: comparison, currency: 'USD', basis: 'retailer-list', variantKey: id,
     observedAt: '2026-10-11T08:59:00Z', maxAgeSeconds: 300, sourceUrl: 'https://example.test/product' },
   url: 'https://example.test/product', imageUrl: null, imageAlt: null,
-  pickup: null, shipping: { country: 'US', costCents: null, restrictions: null }, localDelivery: null,
+  pickup: null, shipping: { country: 'US', costCents: null, restrictions: null, eligibility: { scope: 'all-us', states: [], excludedStates: [] } }, localDelivery: null,
   observedAt: '2026-10-11T08:59:00Z', freshUntil: '2026-10-11T09:04:00Z',
 });
 

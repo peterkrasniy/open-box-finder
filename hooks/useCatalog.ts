@@ -3,13 +3,14 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { emptyCatalog } from '../lib/catalog.ts';
 import { serverAnchor, serverNow } from '../lib/server-clock.ts';
 import type { ClockAnchor } from '../lib/server-clock.ts';
-import { decodeCatalog } from '../lib/validation.ts';
+import { acceptPublication, decodeCatalog } from '../lib/validation.ts';
 
 export function useCatalog(enabled: boolean) {
   const [catalog, setCatalog] = useState(emptyCatalog);
   const [status, setStatus] = useState<'idle' | 'loading' | 'ready' | 'error' | 'offline'>('idle');
   const [now, setNow] = useState(Infinity);
   const clockAnchor = useRef<ClockAnchor | null>(null);
+  const catalogRef = useRef(catalog);
   const active = useRef(false), controller = useRef<AbortController | null>(null);
   const serial = useRef(0), etag = useRef<string | null>(null);
   const refresh = useCallback(async () => {
@@ -25,7 +26,7 @@ export function useCatalog(enabled: boolean) {
       if (!active.current || request.signal.aborted || serial.current !== number) return;
       const anchor = serverAnchor(response.headers.get('X-Catalog-Time'), started, performance.now());
       if (!anchor) throw new Error('Catalog server time unavailable');
-      if (response.status === 304) { clockAnchor.current = anchor; setNow(serverNow(anchor, performance.now())); setStatus('ready'); return; }
+      if (response.status === 304) { if (!etag.current) throw new Error('Unexpected not-modified response'); clockAnchor.current = anchor; setNow(serverNow(anchor, performance.now())); setStatus('ready'); return; }
       if (!response.ok || !response.headers.get('content-type')?.includes('application/json') || !response.body) throw new Error('Catalog unavailable');
       const reader = response.body.getReader(), chunks: Uint8Array[] = [];
       let bytes = 0;
@@ -39,11 +40,11 @@ export function useCatalog(enabled: boolean) {
       const data = new Uint8Array(bytes);
       let offset = 0;
       for (const chunk of chunks) { data.set(chunk, offset); offset += chunk.byteLength; }
-      const next = decodeCatalog(JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(data)));
+      const next = acceptPublication(catalogRef.current, decodeCatalog(JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(data))));
       if (!active.current || request.signal.aborted || serial.current !== number) return;
       const value = response.headers.get('etag');
       etag.current = value && value.length <= 256 ? value : null;
-      clockAnchor.current = anchor; setCatalog(next); setNow(serverNow(anchor, performance.now())); setStatus('ready');
+      clockAnchor.current = anchor; catalogRef.current = next; setCatalog(next); setNow(serverNow(anchor, performance.now())); setStatus('ready');
     } catch { if (active.current && serial.current === number) setStatus(navigator.onLine ? 'error' : 'offline'); }
     finally { clearTimeout(timer); if (controller.current === request) controller.current = null; }
   }, []);

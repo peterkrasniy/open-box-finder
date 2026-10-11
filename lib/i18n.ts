@@ -2,6 +2,8 @@ import type { Category, Condition, Language, ReferenceBasis, Sort } from './offe
 
 const en = {
   brand: 'Open Box Finder', deals: 'Deals', saved: 'Saved', search: 'Search deals', searchHint: 'Product, brand, or keyword',
+  editorialDeals: 'Deals from DealNews', editorialHelp: 'Original editorial listings. Feed membership does not verify current price or stock. Inventory filters and deal sorting do not apply to this section.', providedBy: 'Provided by',
+  filtersChanged: 'Filters changed in another tab. Choose which to keep.', useUpdatedFilters: 'Use updated filters', keepMyEdits: 'Keep my edits', sourceCoverage: 'Source coverage and check status',
   filters: 'Filters', sort: 'Sort', all: 'All', clear: 'Clear', retailers: 'Retailers', categories: 'Categories',
   fulfillment: 'Fulfillment', both: 'Both', pickup: 'Pickup', shipped: 'Shipped', price: 'Price (USD)',
   minPrice: 'Min price', maxPrice: 'Max price', radius: 'Radius (miles)', miles: 'miles', location: 'Location',
@@ -40,10 +42,18 @@ const en = {
   saveUnavailable: 'Saving is unavailable for this source.', saveLimit: 'Your saved list is full. Remove a listing to save another.',
   lastObservedPrice: 'Last observed price',
   showMore: 'Show more listings', electronics: 'Electronics',
+  shippingState: 'Shipping state', shippingStateUnknown: 'Check with retailer', shippingStateHint: 'Shipping eligibility uses the state you choose.',
+  shippingEligibilityUnknown: 'Confirm shipping to your state', shippingIneligible: 'Does not ship to your selected state', distanceUnknown: 'Distance unavailable',
+  estimatedListReference: 'Estimated retail reference', estimatedListHelp: 'BuyDig’s List Price is an estimated comparison and may differ from prevailing prices.',
+  referenceEvidence: 'Comparison source', referenceChecked: 'Comparison checked',
+  checkingListing: 'Checking this listing…', listingUnmatched: 'This exact listing is not matched', listingUnmatchedHelp: 'The current catalog cannot verify this exact unit. Check the original retailer listing. Another unit may differ.',
+  checkingSaved: 'Checking saved listing…', savedUnknown: 'This saved listing has not been checked.', savedCheckFailed: 'Could not check this saved listing.', notInCatalog: 'Not in the latest complete source catalog', savedListing: 'Saved listing',
 } as const;
 
 const ru: Record<keyof typeof en, string> = {
   brand: 'Open Box Finder', deals: 'Предложения', saved: 'Сохранённое', search: 'Поиск предложений', searchHint: 'Товар, бренд или слово',
+  editorialDeals: 'Предложения от DealNews', editorialHelp: 'Исходные редакционные объявления. Публикация в ленте не подтверждает текущую цену или наличие. Фильтры наличия и сортировка скидок не применяются к этому разделу.', providedBy: 'Источник:',
+  filtersChanged: 'Фильтры изменены в другой вкладке. Выберите, какие сохранить.', useUpdatedFilters: 'Использовать новые фильтры', keepMyEdits: 'Сохранить мои правки', sourceCoverage: 'Источники и состояние проверок',
   filters: 'Фильтры', sort: 'Сортировка', all: 'Все', clear: 'Очистить', retailers: 'Магазины', categories: 'Категории',
   fulfillment: 'Получение', both: 'Любое', pickup: 'Самовывоз', shipped: 'Доставка', price: 'Цена (USD)',
   minPrice: 'Цена от', maxPrice: 'Цена до', radius: 'Радиус (мили)', miles: 'миль', location: 'Местоположение',
@@ -82,6 +92,12 @@ const ru: Record<keyof typeof en, string> = {
   saveUnavailable: 'Сохранение недоступно для этого источника.', saveLimit: 'Список сохранённого заполнен. Удалите предложение, чтобы сохранить другое.',
   lastObservedPrice: 'Последняя наблюдаемая цена',
   showMore: 'Показать ещё', electronics: 'Электроника',
+  shippingState: 'Штат для доставки', shippingStateUnknown: 'Уточнить в магазине', shippingStateHint: 'Доступность доставки определяется по выбранному штату.',
+  shippingEligibilityUnknown: 'Уточните доставку в ваш штат', shippingIneligible: 'Доставка в выбранный штат недоступна', distanceUnknown: 'Расстояние не определено',
+  estimatedListReference: 'Оценочная цена для сравнения', estimatedListHelp: 'List Price в BuyDig — оценочная цена для сравнения, которая может отличаться от рыночной.',
+  referenceEvidence: 'Источник цены для сравнения', referenceChecked: 'Цена для сравнения проверена',
+  checkingListing: 'Проверяем это предложение…', listingUnmatched: 'Этот экземпляр не найден', listingUnmatchedHelp: 'Текущий каталог не подтверждает именно этот экземпляр. Проверьте исходное объявление магазина. Другой экземпляр может отличаться.',
+  checkingSaved: 'Проверяем сохранённое предложение…', savedUnknown: 'Это сохранённое предложение ещё не проверено.', savedCheckFailed: 'Не удалось проверить сохранённое предложение.', notInCatalog: 'Нет в последнем полном каталоге источника', savedListing: 'Сохранённое предложение',
 };
 
 export type TextKey = keyof typeof en;

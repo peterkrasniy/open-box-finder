@@ -1,5 +1,6 @@
 import type { Filters, Offer, Point, Selection, Sort } from './offer.ts';
 import { savings } from './offer.ts';
+import { shippingEligibility, hasUnknownFulfillment } from './shipping.ts';
 import { validateRange } from './money.ts';
 
 export function selected(selection: Selection, id: string): boolean {
@@ -37,11 +38,11 @@ export function matches(offer: Offer, filters: Filters): boolean {
   if (query && !`${offer.title} ${offer.sourceOfferId} ${offer.retailerId}`.normalize('NFKC').toLocaleLowerCase().includes(query)) return false;
   const distance = pickupDistance(offer, filters);
   const pickup = distance !== null && distance <= filters.radiusMiles;
-  const shipped = offer.shipping?.country === 'US';
+  const shipped = shippingEligibility(offer.shipping, filters.origin) === 'eligible';
   if (filters.fulfillment === 'pickup') return pickup;
   if (filters.fulfillment === 'shipped') return shipped;
   // Unknown fulfillment remains visible in Both, explicitly labelled by the UI.
-  return pickup || shipped || (!offer.pickup && !offer.shipping);
+  return pickup || shipped || hasUnknownFulfillment(offer, filters.origin);
 }
 
 export function filterAndSort(offers: readonly Offer[], filters: Filters, sort: Sort, now: number): Offer[] {

@@ -1,3 +1,4 @@
+import { US_STATES } from './shipping.ts';
 import { CATEGORIES } from './i18n.ts';
 import { DEFAULT_FILTERS } from './offer.ts';
 import type { Filters, Language, Offer, Selection, Sort } from './offer.ts';
@@ -8,18 +9,20 @@ import { SOURCE_BY_ID } from './sources.ts';
 
 export const PREFERENCES_KEY = 'open-box-finder:preferences:v1';
 export const SAVED_KEY = 'open-box-finder:saved:v1';
+export const SAVED_ENTRY_PREFIX = 'open-box-finder:saved:v2:';
 export interface Preferences { version: 1; language: Language; filters: Filters; sort: Sort }
 /** Store only identity/link pointers; price, image and offer payload are not cached. */
 export interface SavedListing {
   offerId: string; sourceId: string; variantKey: string; storeId: string | null; url: string; savedAt: string;
+  sourceOfferId?: string; condition?: Offer['condition']; title?: string; savedAgainstSequence?: number;
 }
-export function savedIdentity(record: Pick<SavedListing, 'offerId' | 'sourceId' | 'variantKey' | 'storeId'>): string {
-  return JSON.stringify([record.offerId, record.sourceId, record.variantKey, record.storeId]);
+export function savedIdentity(record: Pick<SavedListing, 'offerId' | 'sourceId' | 'variantKey' | 'storeId' | 'sourceOfferId' | 'condition'>): string {
+  return JSON.stringify([record.offerId, record.sourceId, record.sourceOfferId ?? null, record.variantKey, record.storeId, record.condition ?? null]);
 }
 export function offerIdentity(offer: Offer): string {
-  return savedIdentity({ offerId: offer.id, sourceId: offer.sourceId, variantKey: offer.variantKey, storeId: offer.pickup?.id ?? null });
+  return savedIdentity({ offerId: offer.id, sourceId: offer.sourceId, variantKey: offer.variantKey, storeId: offer.pickup?.id ?? null, sourceOfferId: offer.sourceOfferId, condition: offer.condition });
 }
-export interface StorageLike { getItem(key: string): string | null; setItem(key: string, value: string): void }
+export interface StorageLike { getItem(key: string): string | null; setItem(key: string, value: string): void; readonly length?: number; key?(index: number): string | null }
 const plain = (value: unknown): value is Record<string, unknown> => Boolean(value) && typeof value === 'object' && !Array.isArray(value);
 const smallText = (value: unknown, max: number): value is string => typeof value === 'string' && value.length <= max && !/[\u0000-\u001f]/.test(value);
 
@@ -53,7 +56,7 @@ export function decodePreferences(raw: string | null): Preferences {
       || validateRange(f.minCents as number | null, f.maxCents as number | null)) return fallback;
     return { version: 1, language: value.language as Language, sort: value.sort as Sort,
       filters: { retailers, categories, query: f.query, fulfillment: f.fulfillment as Filters['fulfillment'],
-        origin: { label: f.origin.label, latitude: f.origin.latitude, longitude: f.origin.longitude },
+        origin: { label: f.origin.label, latitude: f.origin.latitude, longitude: f.origin.longitude, shippingState: typeof f.origin.shippingState === 'string' && US_STATES.has(f.origin.shippingState) ? f.origin.shippingState : null },
         radiusMiles: f.radiusMiles, minCents: f.minCents as number | null, maxCents: f.maxCents as number | null } };
   } catch { return fallback; }
 }
@@ -64,7 +67,7 @@ export function safeExternalUrl(value: unknown): string | null {
     const url = new URL(value);
     if (url.protocol !== 'https:' || url.username || url.password || (url.port && url.port !== '443')) return null;
     const host = url.hostname.toLowerCase();
-    if (host === 'localhost' || !host.includes('.') || host.endsWith('.local')
+    if (host.replace(/\.$/, '') === 'localhost' || host.replace(/\.$/, '').endsWith('.localhost') || !host.includes('.') || host.replace(/\.$/, '').endsWith('.local')
       || /^\d+(?:\.\d+){3}$/.test(host) || host.startsWith('[')) return null;
     // Preserve the original link and its attribution/query spelling after validation.
     return value;
@@ -82,25 +85,29 @@ export function decodeSaved(raw: string | null): SavedListing[] {
         || !smallText(record.variantKey, 200) || !record.variantKey || !(record.storeId === null || smallText(record.storeId, 160))
         || !smallText(record.savedAt, 40) || !Number.isFinite(Date.parse(record.savedAt))) continue;
       const url = safeExternalUrl(record.url);
-      const identity = savedIdentity({ offerId: record.offerId, sourceId: record.sourceId, variantKey: record.variantKey, storeId: record.storeId });
+      const metadata = { ...(smallText(record.sourceOfferId, 200) && record.sourceOfferId ? { sourceOfferId: record.sourceOfferId } : {}),
+        ...(['open-box', 'refurbished', 'used', 'scratch-and-dent', 'new-clearance', 'unspecified'].includes(String(record.condition)) ? { condition: record.condition as Offer['condition'] } : {}),
+        ...(smallText(record.title, 240) && record.title ? { title: record.title } : {}),
+        ...(typeof record.savedAgainstSequence === 'number' && Number.isSafeInteger(record.savedAgainstSequence) && record.savedAgainstSequence >= 0 ? { savedAgainstSequence: record.savedAgainstSequence } : {}) };
+      const identity = savedIdentity({ offerId: record.offerId, sourceId: record.sourceId, variantKey: record.variantKey, storeId: record.storeId, ...metadata });
       if (!url || ids.has(identity)) continue;
       ids.add(identity);
-      result.push({ offerId: record.offerId, sourceId: record.sourceId, variantKey: record.variantKey, storeId: record.storeId, url, savedAt: record.savedAt });
+      result.push({ offerId: record.offerId, sourceId: record.sourceId, variantKey: record.variantKey, storeId: record.storeId, url, savedAt: record.savedAt, ...metadata });
     }
     return result;
   } catch { return []; }
 }
 
-export function savedPointer(offer: Offer, now: number): SavedListing | null {
+export function savedPointer(offer: Offer, now: number, sequence = 0): SavedListing | null {
   // Shopify's no-cache permission is unverified; do not persist even a pointer through this path.
   if (offer.sourceId === 'shopify-catalog' || !SOURCE_BY_ID.has(offer.sourceId) || !Number.isFinite(now)) return null;
   const url = safeExternalUrl(offer.url);
-  return url ? { offerId: offer.id, sourceId: offer.sourceId, variantKey: offer.variantKey, storeId: offer.pickup?.id ?? null, url, savedAt: new Date(now).toISOString() } : null;
+  return url ? { offerId: offer.id, sourceId: offer.sourceId, variantKey: offer.variantKey, storeId: offer.pickup?.id ?? null, url, savedAt: new Date(now).toISOString(), sourceOfferId: offer.sourceOfferId, condition: offer.condition, title: offer.title, savedAgainstSequence: sequence } : null;
 }
 
 export function readStorage(store: StorageLike | null): { preferences: Preferences; saved: SavedListing[]; available: boolean } {
   if (!store) return { preferences: defaultPreferences(), saved: [], available: false };
-  try { return { preferences: decodePreferences(store.getItem(PREFERENCES_KEY)), saved: decodeSaved(store.getItem(SAVED_KEY)), available: true }; }
+  try { return { preferences: decodePreferences(store.getItem(PREFERENCES_KEY)), saved: readSavedEntries(store), available: true }; }
   catch { return { preferences: defaultPreferences(), saved: [], available: false }; }
 }
 
@@ -109,4 +116,26 @@ export function writePreferences(store: StorageLike | null, preferences: Prefere
 }
 export function writeSaved(store: StorageLike | null, saved: SavedListing[]): boolean {
   try { if (!store) return false; store.setItem(SAVED_KEY, JSON.stringify({ version: 1, listings: saved.slice(0, 100) })); return true; } catch { return false; }
+}
+
+/** Each identity owns one atomic entry, so unrelated tabs never overwrite a shared array. */
+export function readSavedEntries(store: StorageLike): SavedListing[] {
+  const records = new Map(decodeSaved(store.getItem(SAVED_KEY)).map(record => [savedIdentity(record), record]));
+  if (store.key && typeof store.length === 'number') {
+    if (store.length > 5000) throw new Error('Storage exceeds supported entry limit');
+    for (let index = 0; index < store.length; index++) {
+      const key = store.key(index);
+      if (!key?.startsWith(SAVED_ENTRY_PREFIX)) continue;
+      const identity = key.slice(SAVED_ENTRY_PREFIX.length), raw = store.getItem(key);
+      if (raw === 'null') { records.delete(identity); continue; }
+      const entry = decodeSaved(raw)[0];
+      if (entry && savedIdentity(entry) === identity) records.set(identity, entry);
+    }
+  }
+  return [...records.values()].sort((a, b) => b.savedAt.localeCompare(a.savedAt) || savedIdentity(a).localeCompare(savedIdentity(b)));
+}
+export function writeSavedEntry(store: StorageLike | null, identity: string, value: SavedListing | null): boolean {
+  try { if (!store || (value && savedIdentity(value) !== identity)) return false;
+    store.setItem(SAVED_ENTRY_PREFIX + identity, value ? JSON.stringify({ version: 1, listings: [value] }) : 'null'); return true;
+  } catch { return false; }
 }

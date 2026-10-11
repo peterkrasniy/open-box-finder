@@ -4,7 +4,7 @@ import { SOURCES } from '../lib/sources.ts';
 import { Icon } from './Icon';
 
 export function SourceStatus({ catalog, language }: { catalog: Catalog; language: Language }) {
-  return <section className="source-status" aria-labelledby="source-status-heading"><h3 id="source-status-heading">{text(language, 'sources')}</h3>
+  return <section className="source-status" aria-labelledby="source-status-heading"><h2 id="source-status-heading">{text(language, 'sources')}</h2>
     <div className="source-rows">{SOURCES.map(source => {
       const state = catalog.sources.find(health => health.sourceId === source.id);
       const status = state?.status === 'ready' ? text(language, 'checked')

@@ -44,3 +44,16 @@ test('saved identity keeps distinct variants and branches when a source reuses a
   assert.equal(new Set(result.map(savedIdentity)).size, 3);
   assert.deepEqual(result.map(record => record.variantKey), ['qa-only-unit-a', 'qa-only-unit-b', 'qa-only-unit-a']);
 });
+
+test('independent saved entries preserve two interleaved tabs without Web Locks and tombstone removal does not resurrect legacy saves', async () => {
+ const { readSavedEntries, writeSavedEntry, savedIdentity, SAVED_KEY } = await import('../lib/storage.ts');
+ const data=new Map<string,string>();const store={get length(){return data.size},key:(index:number)=>[...data.keys()][index]??null,getItem:(key:string)=>data.get(key)??null,setItem:(key:string,value:string)=>{data.set(key,value)}};
+ const a={offerId:'QA-only-a',sourceId:'buydig',sourceOfferId:'QA-only-a',condition:'open-box' as const,variantKey:'QA-only-a',storeId:null,title:'QA ONLY A',url:'https://www.buydig.com/shop/product/QA-only-a',savedAt:'2026-10-11T10:00:00Z'};
+ const b={...a,offerId:'QA-only-b',sourceOfferId:'QA-only-b',variantKey:'QA-only-b',title:'QA ONLY B'};
+ assert.deepEqual(readSavedEntries(store),[]);assert.deepEqual(readSavedEntries(store),[]);
+ assert.equal(writeSavedEntry(store,savedIdentity(a),a),true);assert.equal(writeSavedEntry(store,savedIdentity(b),b),true);
+ assert.equal(readSavedEntries(store).length,2);
+ store.setItem(SAVED_KEY,JSON.stringify({version:1,listings:[a]}));writeSavedEntry(store,savedIdentity(a),null);
+ assert.deepEqual(readSavedEntries(store),[b]);
+ const replacement={...b,condition:'used' as const};assert.notEqual(savedIdentity(b),savedIdentity(replacement));
+});

@@ -1,11 +1,11 @@
-export type Admission = 'transport-unverified' | 'permission-required' | 'credentials-required';
+export type Admission = 'transport-unverified' | 'permission-required' | 'credentials-required' | 'admitted';
 export interface SourceDefinition {
   id: string;
   name: string;
   website: string;
   catalogUrl: string | null;
   admission: Admission;
-  enabled: false;
+  enabled: boolean;
   presentation: 'normalized-inventory' | 'unmodified-syndication';
 }
 

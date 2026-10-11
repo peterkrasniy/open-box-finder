@@ -5,6 +5,7 @@ export const catalogState = sqliteTable('catalog_state', {
   id: integer('id').primaryKey(),
   payload: text('payload').notNull(),
   revision: text('revision').notNull(),
+  sequence: integer('sequence').notNull(),
   updatedAt: integer('updated_at').notNull(),
 });
 

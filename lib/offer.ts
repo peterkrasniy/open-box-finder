@@ -5,6 +5,11 @@ export type Availability = 'available' | 'unavailable' | 'unknown';
 export type ReferenceBasis = 'current-new' | 'msrp' | 'retailer-list' | 'retailer-regular' | 'retailer-was';
 
 export interface Point { latitude: number; longitude: number }
+export interface Origin extends Point { label: string; shippingState: string | null }
+export interface Shipping {
+  country: 'US'; costCents: number | null; restrictions: string | null;
+  eligibility?: { scope: 'all-us' | 'states'; states: string[]; excludedStates: string[] };
+}
 export interface Store {
   id: string;
   name: string;
@@ -27,7 +32,7 @@ export interface Offer {
   retailerId: string;
   sourceOfferId: string;
   variantKey: string;
-  recordType: 'inventory' | 'syndicated-deal';
+  recordType: 'inventory';
   title: string;
   category: Category;
   condition: Condition;
@@ -40,10 +45,17 @@ export interface Offer {
   imageUrl: string | null;
   imageAlt: string | null;
   pickup: Store | null;
-  shipping: { country: 'US'; costCents: number | null; restrictions: string | null } | null;
+  shipping: Shipping | null;
   localDelivery: { description: string; costCents: number | null } | null;
   observedAt: string;
   freshUntil: string;
+}
+
+/** Editorial feed membership, never stock, current price, pickup or shipping evidence. */
+export interface SyndicatedDeal {
+  id: string; sourceId: string; sourceGuid: string; title: string; url: string;
+  description: string; content: string | null; publishedAt: string | null;
+  observedAt: string; freshUntil: string;
 }
 
 export interface Selection { mode: 'all' | 'selected'; ids: string[] }
@@ -52,7 +64,7 @@ export interface Filters {
   categories: Selection;
   query: string;
   fulfillment: 'both' | 'pickup' | 'shipped';
-  origin: Point & { label: string };
+  origin: Origin;
   radiusMiles: number;
   minCents: number | null;
   maxCents: number | null;
@@ -64,13 +76,17 @@ export interface SourceHealth {
   lastAttemptAt: string | null;
   lastSuccessAt: string | null;
   nextCheckAt: string | null;
+  lastCompleteAt: string | null;
+  lastCompleteSequence: number;
 }
 export interface Catalog {
-  schemaVersion: 1;
+  schemaVersion: 2;
+  sequence: number;
   generation: string;
   revision: string;
   publishedAt: string | null;
   offers: Offer[];
+  syndication: SyndicatedDeal[];
   sources: SourceHealth[];
 }
 
@@ -78,7 +94,7 @@ export const DEFAULT_FILTERS: Filters = {
   retailers: { mode: 'all', ids: [] },
   categories: { mode: 'all', ids: [] },
   query: '', fulfillment: 'both',
-  origin: { label: 'Rocklin, CA', latitude: 38.7907, longitude: -121.2358 },
+  origin: { label: 'Rocklin, CA', latitude: 38.7907, longitude: -121.2358, shippingState: 'CA' },
   radiusMiles: 50, minCents: null, maxCents: null,
 };
 

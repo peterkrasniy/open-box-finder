@@ -13,7 +13,7 @@ const offer: Offer = {
 };
 
 test('public catalog projection strips nested adapter fields and rejects malformed identities',()=>{
-  const catalog=decodeCatalog({...emptyCatalog(),offers:[{...offer,privateToken:'test-only-secret',pickup:{...offer.pickup,privateContact:'test-only-private',point:{...offer.pickup!.point,privatePrecision:'test-only-private'}}}],sources:[{sourceId:'buydig',status:'ready',lastAttemptAt:null,lastSuccessAt:null,nextCheckAt:null,privateError:'test-only-private'}],privateOwner:'test-only-private'});
+  const catalog=decodeCatalog({...emptyCatalog(),offers:[{...offer,privateToken:'test-only-secret',pickup:{...offer.pickup,privateContact:'test-only-private',point:{...offer.pickup!.point,privatePrecision:'test-only-private'}}}],sources:[{sourceId:'buydig',status:'unconnected',lastAttemptAt:null,lastSuccessAt:null,nextCheckAt:null,lastCompleteAt:null,lastCompleteSequence:0,privateError:'test-only-private'}],privateOwner:'test-only-private'});
   const json=JSON.stringify(catalog);assert.equal(json.includes('test-only-private'),false);assert.equal(json.includes('test-only-secret'),false);
   assert.equal(catalog.offers[0].url,offer.url);
   for(const invalid of [{...offer,url:'javascript:alert(1)'},{...offer,sourceId:'unregistered'},{...offer,priceCents:20.5},{...offer,pickup:{...offer.pickup,point:{latitude:Infinity,longitude:-121}}}])assert.throws(()=>decodeCatalog({...emptyCatalog(),offers:[invalid]}),/Invalid catalog offer/);
@@ -21,7 +21,7 @@ test('public catalog projection strips nested adapter fields and rejects malform
 });
 
 test('only one overlay route is selected and serialization preserves exact identity',()=>{
-  const route={view:'saved' as const,offerId:'buydig:unit/a+b',panel:null};
+  const route={view:'saved' as const,offerId:'buydig:unit/a+b',offerIdentity:'["test-only-unit"]',panel:null};
   assert.deepEqual(readRoute(new URL(routeUrl(route),'https://example.test').href),route);
   assert.equal(readRoute('https://example.test/?offer=unit&panel=filters').panel,null);
   assert.equal(readRoute('https://example.test/?offer=bad%20id').offerId,null);
