@@ -29,3 +29,12 @@ All four independent retests of `6e39453904759920cd9f36a65f18b5b5915644e1` finis
 | Security braces | Investigated compatible registry versions and official advisory; no published patch | Eight high development advisories remain disclosed; production-declaration audit zero known |
 
 Current model count is 62. Native iPhone/VoiceOver/install, inner-frame Axe and field INP remain NOT RUN. Parent acceptance of the new revision is pending.
+
+
+## Targeted final retest follow-up
+
+The parent final retest of dd873d9601e53c7e8c359bd75924840586c3a2ec resolved previous data findings and identified D3-R1: clearing localStorage in one tab left IndexedDB capacity at 100. Startup now reads surviving pointers and replaces capacity inside the same read/write guard transaction as saves. The compiled single-tab clear/reload and partial-deletion regressions pass; twenty third-tab startup races against two last-slot writers preserve 99 prior saves, admit exactly one and release its slot.
+
+UX U2 now retains intentional filter focus before CSS can hide the rail, while explicit outside focus/pointer actions clear that intent. MC1 scrolls/focuses the conflict notice when Apply is blocked, keeping both choices above the sheet footer. EN/RU compiled checks and thirteen prior regressions pass. These are local browser results pending parent narrow acceptance.
+
+Parent source acceptance permits a separate one-shot private A4L hosted research grant after primary access/terms review. Production sources stay disabled and publication policies empty. No schedule or retailer credential is created.

@@ -1,10 +1,10 @@
 # Current status
 
-Updated October 11, 2026, 13:30 UTC. The research gate passed at 08:38 UTC; application implementation began at 08:43:40 UTC.
+Updated October 11, 2026, 13:54 UTC. The research gate passed at 08:38 UTC; application implementation began at 08:43:40 UTC.
 
 The last recorded publication before this asset follow-up is Sites version 5, deployed at https://open-box-finder.peter-krasniy.chatgpt.site on October 11 at 13:26:52.021504 UTC. Its source is `db40980bf8bc4f371731dde3406c52d87bbc6e4a`, matching canonical GitHub main and the supported Sites source repository. Native Sites confirms public version 5 and no attached schedules; parent acceptance of the latest source revision remains pending. This executor's configured proxy rejects public root/catalog with CONNECT 403 before origin; local execution cannot establish the public HTTP/browser journey.
 
-The bilingual responsive UI, filters, exact-unit details, local pointer saves, client polling, original PWA assets, and inactive database/transport/XML foundations are implemented. Native Sites database reads confirm binding `DB`, four operational tables and zero rows. All seven source candidates remain disabled; publication and private preflight approval maps are empty. No production source request, real offer publication, unattended writer, natural source-change trace or native schedule has been verified. The empty public app is incomplete and is not first complete or live inventory completion.
+The bilingual responsive UI, filters, exact-unit details, local pointer saves, client polling, original PWA assets, and inactive database/transport/XML foundations are implemented. Native Sites database reads confirm binding `DB`, four operational tables and zero rows. All seven source candidates remain disabled; the publication map remains empty. Parent source acceptance now permits one timestamped private A4L research preflight, prepared separately from inventory admission. At this handoff preparation no hosted preflight outcome, real offer publication, unattended writer, natural source-change trace or native schedule has been verified. The empty public app is incomplete and is not first complete or live inventory completion.
 
 All four parent-owned retests of `6e39453904759920cd9f36a65f18b5b5915644e1` finished. The published version-4 batch addresses their remaining draft-conflict, Saved capacity, legacy-tombstone, unknown-stock, permitted-image and duplicate-unit findings. Parent retains independent acceptance and admission ownership. Sources stay disabled.
 

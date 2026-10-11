@@ -53,9 +53,12 @@ export function OpenBoxApp() {
   const previousPanel = useRef(route.panel);
   useEffect(() => {
     const media = window.matchMedia('(min-width: 1024px)');
+    // CSS can blur a hidden rail before matchMedia fires. Retain intentional filter focus.
+    let priorFilterFocus = false;
+    const isFilterTarget = (target: HTMLElement) => Boolean(target.closest('.filter-rail, .filter-dialog') || target.matches('[data-filter-opener]'));
     const changed = () => {
       const active = document.activeElement as HTMLElement | null;
-      const hadFilterFocus = Boolean(active?.closest('.filter-rail, .filter-dialog') || active?.matches('[data-filter-opener]'));
+      const hadFilterFocus = priorFilterFocus || Boolean(active && isFilterTarget(active));
       setWide(media.matches);
       if (hadFilterFocus) requestAnimationFrame(() => requestAnimationFrame(() => {
         if (document.querySelector('dialog[open]')) return;
@@ -65,10 +68,12 @@ export function OpenBoxApp() {
     };
     const focused = (event: FocusEvent) => {
       const target = event.target as HTMLElement;
+      if (target !== document.body) priorFilterFocus = isFilterTarget(target);
       if (target.dataset?.filterControl) lastFilterFocus.current = target.dataset.filterControl;
     };
-    changed(); media.addEventListener('change', changed); document.addEventListener('focusin', focused);
-    return () => { media.removeEventListener('change', changed); document.removeEventListener('focusin', focused); };
+    const pointed = (event: PointerEvent) => { if (event.target instanceof HTMLElement && !isFilterTarget(event.target)) priorFilterFocus = false; };
+    changed(); media.addEventListener('change', changed); document.addEventListener('focusin', focused); document.addEventListener('pointerdown', pointed);
+    return () => { media.removeEventListener('change', changed); document.removeEventListener('focusin', focused); document.removeEventListener('pointerdown', pointed); };
   }, []);
   useEffect(() => {
     if (previousPanel.current === 'filters' && route.panel !== 'filters') { setEdited(null); setError(null); }
@@ -94,7 +99,13 @@ export function OpenBoxApp() {
   };
   const resetFilters = () => { const next = { ...structuredClone(DEFAULT_FILTERS), origin: filters.origin, radiusMiles: filters.radiusMiles }; setPreferences(previous => ({ ...previous, filters: next })); setEdited(null); };
   const applyFilters = () => {
-    if (conflict) return;
+    if (conflict) {
+      requestAnimationFrame(() => {
+        const notice = document.querySelector<HTMLElement>(`${route.panel === 'filters' ? 'dialog' : '.filter-rail'} [data-filter-conflict]`);
+        notice?.scrollIntoView({ block: 'center', behavior: 'instant' }); notice?.focus({ preventScroll: true });
+      });
+      return;
+    }
     const minimum = parsePrice(draft.min), maximum = parsePrice(draft.max);
     if (!minimum.ok || !maximum.ok) { showFilterError('invalidPrice', !minimum.ok ? 'min' : 'max'); return; }
     const range = validateRange(minimum.cents, maximum.cents);
@@ -124,7 +135,7 @@ export function OpenBoxApp() {
     </header>
     <div className="search-location" role="search" aria-label={t('search')}><label className="search-field"><Icon name="search"/><span className="sr-only">{t('search')}</span><input type="search" value={filters.query} placeholder={t('searchHint')} maxLength={160} onChange={event => updateFilters({ query: event.target.value })}/></label><button type="button" className="location-button" onClick={() => openPanel('location')}><Icon name="pin"/><span><strong>{filters.origin.label}</strong><small>{filters.radiusMiles} {t('miles')}</small></span><Icon name="down" size={18}/></button></div>
     <div className="shopping-layout">
-      {route.view === 'deals' && <aside className="filter-rail" aria-label={t('filters')}>{route.panel !== 'filters' && <><FilterFields draft={draft} language={language} onChange={setDraft} error={filterError} errorField={errorField} idPrefix="rail"/>{conflict && <div className="notice" role="alert"><p>{t('filtersChanged')}</p><button type="button" className="text-action" onClick={() => resolveConflict(false)}>{t('useUpdatedFilters')}</button><button type="button" className="text-action" onClick={() => resolveConflict(true)}>{t('keepMyEdits')}</button></div>}<div className="filter-actions"><button type="button" className="secondary-button" onClick={cancelFilters}>{t('cancel')}</button><button type="button" className="primary-button" onClick={applyFilters}>{t('apply')}</button></div></>}</aside>}
+      {route.view === 'deals' && <aside className="filter-rail" aria-label={t('filters')}>{route.panel !== 'filters' && <><FilterFields draft={draft} language={language} onChange={setDraft} error={filterError} errorField={errorField} idPrefix="rail"/>{conflict && <div className="notice" role="alert" data-filter-conflict tabIndex={-1}><p>{t('filtersChanged')}</p><button type="button" className="text-action" onClick={() => resolveConflict(false)}>{t('useUpdatedFilters')}</button><button type="button" className="text-action" onClick={() => resolveConflict(true)}>{t('keepMyEdits')}</button></div>}<div className="filter-actions"><button type="button" className="secondary-button" onClick={cancelFilters}>{t('cancel')}</button><button type="button" className="primary-button" onClick={applyFilters}>{t('apply')}</button></div></>}</aside>}
       <main id="listings" className={`listing-main${route.view === 'saved' ? ' saved-main' : ''}`} tabIndex={-1}>
         {route.view === 'deals' && <div className="mobile-controls"><button type="button" className="secondary-button" data-filter-opener onClick={() => openPanel('filters')}><Icon name="filters" size={20}/>{t('filters')}</button><label className="sort-mobile"><span className="sr-only">{t('sort')}</span><Icon name="sort" size={20}/><select value={sort} onChange={event => setPreferences(previous => ({ ...previous, sort: event.target.value as typeof sort }))}>{SORTS.map(value => <option key={value} value={value}>{sortLabel(language, value)}</option>)}</select></label></div>}
         <div className="listing-toolbar"><h1>{t(route.view === 'saved' ? 'saved' : 'deals')}</h1>{route.view === 'deals' && <label className="sort-desktop">{t('sort')}<select value={sort} onChange={event => setPreferences(previous => ({ ...previous, sort: event.target.value as typeof sort }))}>{SORTS.map(value => <option key={value} value={value}>{sortLabel(language, value)}</option>)}</select></label>}</div>
@@ -156,7 +167,7 @@ export function OpenBoxApp() {
     </div>
     <nav className="bottom-nav" aria-label={t('deals')}>{(['deals', 'saved'] as const).map(view => <button type="button" key={view} aria-current={route.view === view ? 'page' : undefined} onClick={() => navigate({ view, offerId: null, panel: null })}><Icon name={view === 'deals' ? 'box' : 'bookmark'}/><span>{t(view)}</span>{view === 'saved' && saved.length > 0 && <span className="nav-count">{saved.length}</span>}</button>)}</nav>
     <Dialog open={ready && Boolean(route.offerId || route.panel)} title={t(route.panel === 'filters' ? 'filters' : route.panel === 'location' ? 'location' : 'details')} language={language} onDismiss={route.panel === 'filters' ? cancelFilters : route.panel === 'location' ? cancelLocation : dismiss} className={route.offerId ? 'detail-dialog' : 'filter-dialog'}>
-      {route.panel === 'filters' ? <div className="dialog-content"><FilterFields draft={draft} language={language} onChange={setDraft} error={filterError} errorField={errorField} idPrefix="sheet"/>{conflict && <div className="notice" role="alert"><p>{t('filtersChanged')}</p><button type="button" className="text-action" onClick={() => resolveConflict(false)}>{t('useUpdatedFilters')}</button><button type="button" className="text-action" onClick={() => resolveConflict(true)}>{t('keepMyEdits')}</button></div>}<div className="filter-actions"><button type="button" className="secondary-button" onClick={cancelFilters}>{t('cancel')}</button><button type="button" className="primary-button" onClick={applyFilters}>{t('apply')}</button></div></div>
+      {route.panel === 'filters' ? <div className="dialog-content"><FilterFields draft={draft} language={language} onChange={setDraft} error={filterError} errorField={errorField} idPrefix="sheet"/>{conflict && <div className="notice" role="alert" data-filter-conflict tabIndex={-1}><p>{t('filtersChanged')}</p><button type="button" className="text-action" onClick={() => resolveConflict(false)}>{t('useUpdatedFilters')}</button><button type="button" className="text-action" onClick={() => resolveConflict(true)}>{t('keepMyEdits')}</button></div>}<div className="filter-actions"><button type="button" className="secondary-button" onClick={cancelFilters}>{t('cancel')}</button><button type="button" className="primary-button" onClick={applyFilters}>{t('apply')}</button></div></div>
         : route.panel === 'location' ? <div className="dialog-content"><LocationFields draft={location} language={language} onChange={value=>{setLocation(value);setError(null);setLocationErrorField(null);}} error={error ? t(error) : null} errorField={locationErrorField}/><div className="filter-actions"><button type="button" className="secondary-button" onClick={cancelLocation}>{t('cancel')}</button><button type="button" className="primary-button" onClick={applyLocation}>{t('apply')}</button></div></div>
           : <OfferDetail loading={status === 'idle' || status === 'loading'} origin={filters.origin} savedView={route.view === 'saved'} offer={detail} language={language} now={now} saved={detail ? savedIds.has(offerIdentity(detail)) : false} onSave={() => { if (detail) void toggleSaved(detail, catalog.sequence); }} onBack={dismiss}/>}
     </Dialog>

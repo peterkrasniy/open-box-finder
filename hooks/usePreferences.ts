@@ -18,7 +18,18 @@ export function usePreferences() {
     setPreferences(value.preferences); savedRef.current = value.saved; setSaved(value.saved); setStorageAvailable(value.available); setReady(true);
     let mounted=true;
     try {guard.current=openSavedGuard(window.indexedDB).catch(()=>null);}catch{guard.current=Promise.resolve(null);}
-    void guard.current.then(async database=>{if(database&&store.current&&mounted){try{const current=await withSavedGuard(database,()=>{compactSavedTombstones(store.current!);return readSavedEntries(store.current!);},value.saved.map(savedIdentity));if(mounted){savedRef.current=current;setSaved(current);}}catch{if(mounted)setStorageAvailable(false);}}});
+    void guard.current.then(async database=>{if(database&&store.current&&mounted){try{
+      const current=await withSavedGuard(database,capacity=>{
+        compactSavedTombstones(store.current!);
+        const surviving=readSavedEntries(store.current!);
+        // Capacity is coordination metadata: repair it from surviving pointers on startup.
+        // Read and replace inside the same guard transaction used by concurrent saves.
+        capacity.clear();
+        for(const pointer of surviving)capacity.add(savedIdentity(pointer));
+        return surviving;
+      },value.saved.map(savedIdentity));
+      if(mounted){savedRef.current=current;setSaved(current);}
+    }catch{if(mounted)setStorageAvailable(false);}}});
     const changed = (event: StorageEvent) => {
       if (event.storageArea !== store.current) return;
       if (event.key === null) { const next = readStorage(store.current); savedRef.current = next.saved; setSaved(next.saved); setPreferences(next.preferences);void guard.current.then(database=>database?withSavedGuard(database,capacity=>capacity.clear()):undefined).catch(()=>setStorageAvailable(false)); }

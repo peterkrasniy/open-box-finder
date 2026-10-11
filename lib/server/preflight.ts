@@ -7,8 +7,10 @@ import { CatalogStore,GLOBAL_MIN_INTERVAL_MS } from './catalog-store.ts';
 
 export type PreflightSource = 'a4l-sac' | 'dealnews';
 export interface PreflightGrant {sourceId:PreflightSource;reviewedAt:string}
-/** Parent-owned admission review must accept the concrete boundary before any entry is added. */
-export const APPROVED_PREFLIGHTS: readonly PreflightGrant[] = [];
+/** Accepted private research boundary only; this does not authorize publication or recurring reads. */
+export const APPROVED_PREFLIGHTS: readonly PreflightGrant[] = [
+  { sourceId: 'a4l-sac', reviewedAt: '2026-10-11T13:50:00.000Z' },
+];
 export interface PreflightObservation {
   sourceId: PreflightSource; checkedAt: string; outcome: 'observed' | 'blocked' | 'unsupported' | 'failure';
   httpStatus: number | null; catalogComplete: false; discoveredUnits: number; units: UnitObservation[];

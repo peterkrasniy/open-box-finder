@@ -1,9 +1,10 @@
-import assert from 'node:assert/strict';import {test} from 'node:test';import {preflightSource,maintainPreflight,APPROVED_PREFLIGHTS} from '../lib/server/preflight.ts';
+import assert from 'node:assert/strict';import {test} from 'node:test';import {preflightSource,maintainPreflight} from '../lib/server/preflight.ts';
 import {DatabaseSync} from 'node:sqlite';import {readFileSync} from 'node:fs';
 const time=()=>Date.parse('2026-10-11T11:00:00Z');
-test('source preflight is disabled by default and a robots denial stops before catalog/item acquisition',async()=>{
- assert.deepEqual(APPROVED_PREFLIGHTS,[]);let requests=0;
+test('an empty private research grant list acquires nothing, and robots denial stops before catalog/item acquisition',async()=>{
+ let requests=0;
  const fetcher=(async(input:unknown,init?:RequestInit)=>{requests++;assert.equal(input,'https://www.appliances4less-sac.com/robots.txt');assert.equal(init?.credentials,'omit');return new Response('User-agent: *\nDisallow: /',{headers:{'Content-Type':'text/plain'}})}) as typeof fetch;
+ const {db,d1}=database();await maintainPreflight(d1,time,[],fetcher);assert.equal(requests,0);db.close();
  const result=await preflightSource('a4l-sac',fetcher,time);assert.equal(requests,1);assert.equal(result.outcome,'blocked');assert.equal(result.units.length,0);
 });
 
