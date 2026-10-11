@@ -33,7 +33,7 @@ export function ManualProductVisual({ product, language }: { product: ManualProd
   const video = product.video;
   return <div className="manual-visual" ref={target}>
     <div className="manual-player">{load ? <iframe title={`${text(language, 'modelVideo')}: ${product.brand} ${product.model} · ${video.creator}`} src={`https://www.youtube-nocookie.com/embed/${video.id}?autoplay=0&playsinline=1&cc_load_policy=1&cc_lang_pref=${language}&hl=${language}`} loading="lazy" referrerPolicy="strict-origin-when-cross-origin" allow="encrypted-media; picture-in-picture; fullscreen" allowFullScreen/> : <span className="manual-player-loading">{text(language, 'modelVideo')}</span>}</div>
-    <div className="manual-video-caption"><span>{text(language, video.kind === 'manufacturer' ? 'manufacturerVideo' : 'independentVideo')} · {video.creator}</span><a href={`https://www.youtube.com/watch?v=${video.id}`} target="_blank" rel="noopener noreferrer">YouTube<Icon name="external" size={13}/><span className="sr-only"> · {text(language, 'watchOnYouTube')}</span></a></div>
+    <div className="manual-video-caption"><span>{text(language, video.kind === 'manufacturer' ? 'manufacturerVideo' : video.kind === 'retailer-review' ? 'retailerVideo' : 'independentVideo')} · {video.creator}</span><a href={`https://www.youtube.com/watch?v=${video.id}`} target="_blank" rel="noopener noreferrer">YouTube<Icon name="external" size={13}/><span className="sr-only"> · {text(language, 'watchOnYouTube')}</span></a></div>
     <p className="manual-video-note">{text(language, 'modelVideoNote')}</p>
   </div>;
 }

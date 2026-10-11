@@ -10,7 +10,7 @@ export interface ManualProduct {
   url: string; reviewedAt: string; reviewUntil: string;
   newModelReference: { cents: number; basis: 'observed-new-model'; url: string };
   retailerComparison: { cents: number; basis: 'retailer-comparison'; url: string };
-  video: { id: string; creator: string; kind: 'manufacturer' | 'independent-review' };
+  video: { id: string; creator: string; kind: 'manufacturer' | 'retailer-review' | 'independent-review' };
 }
 const reviewedAt = '2026-10-11T19:28:00.000Z';
 const reviewUntil = '2026-10-12T19:28:00.000Z';
@@ -20,8 +20,8 @@ const reviewUntil = '2026-10-12T19:28:00.000Z';
 export const MANUAL_PRODUCTS: readonly ManualProduct[] = [
   ['accentum-plus-refurbished', 'ACCENTUM Plus', 9995, 12995, 'JM0QIRfkOfs', 'Sennheiser', 24995],
   ['hd-600-refurbished', 'HD 600', 27995, 34995, '9gcuORhXRuI', 'askdrtk', 49995],
-  ['rs-120-w-refurbished', 'RS 120-W', 12995, 12995, '-0MJWoXRjkc', 'Sennheiser', 15995],
-  ['ambeo-soundbar-plus-refurbished', 'AMBEO Soundbar Plus', 99995, 119995, 'IZbFYQOjngI', 'Sennheiser', 179995],
+  ['rs-120-w-refurbished', 'RS 120-W', 12995, 12995, 'clMbbm0UIno', 'Best Buy Canada Product Videos', 15995],
+  ['ambeo-soundbar-plus-refurbished', 'AMBEO Soundbar Plus', 99995, 119995, '0sbHEii2rCs', 'Taps Das (@0102studio)', 179995],
 ].map(([slug, model, price, newPrice, videoId, creator, retailerPrice]) => ({
   id: String(slug), model: String(model), observedPriceCents: Number(price),
   recordType: 'manual-observation', sourceId: 'sennheiser-manual', brand: 'Sennheiser',
@@ -29,7 +29,7 @@ export const MANUAL_PRODUCTS: readonly ManualProduct[] = [
   url: `https://us.sennheiser-hearing.com/collections/refurbished-by-sennheiser/products/${slug}`,
   newModelReference: { cents: Number(newPrice), basis: 'observed-new-model', url: `https://us.sennheiser-hearing.com/products/${String(slug).replace(/-refurbished$/, '')}` },
   retailerComparison: { cents: Number(retailerPrice), basis: 'retailer-comparison', url: `https://us.sennheiser-hearing.com/collections/refurbished-by-sennheiser/products/${slug}` },
-  video: { id: String(videoId), creator: String(creator), kind: creator === 'Sennheiser' ? 'manufacturer' : 'independent-review' },
+  video: { id: String(videoId), creator: String(creator), kind: creator === 'Sennheiser' ? 'manufacturer' : creator === 'Best Buy Canada Product Videos' ? 'retailer-review' : 'independent-review' },
   reviewedAt, reviewUntil,
 }));
 
