@@ -26,6 +26,8 @@ Use a calm original interface with large readable price typography, restrained s
 
 [MDN localStorage guidance](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) documents SecurityError when persistence is blocked. Wrap reads and writes, validate/migrate stored data, and use an explicit in-memory fallback if storage is unavailable. Store no private profiles or credentials.
 
+[WebKit Safari 17.2 guidance](https://webkit.org/blog/14787/webkit-features-in-safari-17-2/) describes Add to Home Screen copying cookies, with other storage remaining separate. [Safari 26 guidance](https://webkit.org/blog/17333/webkit-features-in-safari-26-0/) describes the user-controlled Open as Web App option and default web-app behavior for Home Screen additions. Product copy should say saves/preferences remain in this browser/app, not imply automatic migration or shared Safari/installed-app state. When native iPhone access exists, test save-before-install, installed app launch, independent save changes and reopen in both contexts. Keep these native checks NOT RUN when only browser emulation is available. A missing service worker alone is not an iPhone installation blocker; manifest and icon assets still require meaningful verification.
+
 ## Meaningful verification after implementation
 
 | Area | Required evidence |

@@ -31,7 +31,7 @@ One candidate worth reviewing is source-controlled read-through caching: a fixed
 
 Each normalized inventory offer, where normalization is licensed, needs source ID, item/offer identity, canonical item URL, condition, current price in integer cents, currency, availability scope, image authorization, fetched/observed times, and optional supported comparison metadata. Comparison metadata needs price, basis (current new / retailer regular / MSRP / former price), exact matched model/variant, and its source/time. Unknown fulfillment is neither shipped nor local.
 
-The saved/interested list and preferences are per-browser/device storage. No account is required. Handle blocked storage, malformed/old versions, and quota errors gracefully. Do not imply synchronization across phones. Saved missing/stale items retain their last observation and a clear status instead of appearing freshly available.
+The saved/interested list and preferences belong to this browser/app context. No account is required. Handle blocked storage, malformed/old versions, and quota errors gracefully. Do not imply synchronization across phones or automatic migration/sharing between Safari and an installed Home Screen app. Saved missing/stale items retain their last observation and a clear status instead of appearing freshly available.
 
 ## Savings and location invariants
 

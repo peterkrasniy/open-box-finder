@@ -33,6 +33,7 @@ Statuses: PASS, FAIL, NOT RUN, BLOCKED. A checklist assertion is not a test pass
 - [ ] At most one intended overlay; focus/scroll restore; keyboard/Escape usable; no trapped layers.
 - [ ] Repeated taps, stale asynchronous responses, in-flight refresh/navigation and rapid language/filter changes are safe.
 - [ ] Saved/interested state is per browser, not a public shared anonymous profile.
+- [ ] Copy specifies this browser/app; no automatic Safari-to-Home-Screen localStorage migration or sharing implied. Native save-before-install and independent-context reopen checks are NOT RUN unless actually performed.
 - [ ] Storage denial, malformed/old/corrupt state, quota failure, stale/expired/missing offers and empty saves handled.
 - [ ] English/Russian covers controls, states, errors and accessible labels and persists. Licensed original source content is not silently translated.
 - [ ] Pickup Navigate uses each exact verified store destination; absence of offer/store evidence disables that claim.
