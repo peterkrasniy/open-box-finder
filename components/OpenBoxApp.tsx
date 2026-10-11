@@ -23,6 +23,8 @@ import { SyndicatedDeals } from './SyndicatedDeals';
 import { SourceCoverage } from './SourceCoverage';
 import { SourceStatus } from './SourceStatus';
 import { OutboundLinks } from './OutboundLinks';
+import { ManualProducts } from './ManualProducts';
+import { MANUAL_PRODUCTS, manualProductActive, manualProductsForFilters } from '../lib/manual-products.ts';
 
 function filterFingerprint(value: Filters): string {
   const { retailers, categories, fulfillment, minCents, maxCents, radiusMiles } = value;
@@ -33,10 +35,12 @@ function makeFilterDraft(value: Filters, language: Language): FilterDraft {
 }
 
 export function OpenBoxApp() {
-  const { preferences, setPreferences, saved, ready, storageAvailable, saveError, toggleSaved, removeSaved } = usePreferences();
+  const { preferences, setPreferences, saved, ready, storageAvailable, saveError, toggleSaved, toggleManualSaved, removeSaved } = usePreferences();
   const { route, navigate, dismiss } = useRoute();
   const { catalog, status, now, refresh } = useCatalog(ready);
   const { language, filters, sort } = preferences;
+  const manualProducts = useMemo(() => manualProductsForFilters(filters, sort, now), [filters, sort, now]);
+  const hasReviewedProducts = MANUAL_PRODUCTS.some(product => manualProductActive(product, now));
   const t = (key: TextKey) => text(language, key);
   const [edited, setEdited] = useState<{ value: FilterDraft; base: string } | null>(null);
   const fingerprint = filterFingerprint(filters);
@@ -148,11 +152,11 @@ export function OpenBoxApp() {
         {!storageAvailable && <p className="notice" role="status">{t('storageUnavailable')}</p>}
         {saveError && <p className="notice error" role="alert">{t(saveError)}</p>}
         <div className="catalog-status" role="status" aria-live="polite" aria-atomic="true">
-          {status === 'loading' ? t('updating') : status === 'offline' ? t('offline') : status === 'error' ? t('updateFailed') : catalog.sequence === 0 ? t('noSourceConnected') : `${route.view === 'saved' ? saved.length : listings.length} ${t('count')}`}
+          {status === 'loading' ? t('updating') : status === 'offline' ? t('offline') : status === 'error' ? t('updateFailed') : route.view === 'deals' && !catalog.offers.length && manualProducts.length ? `${manualProducts.length} ${t('manualProductCount')}` : route.view === 'saved' ? `${saved.length} ${t('count')}` : catalog.sequence === 0 ? t('noSourceConnected') : `${listings.length} ${t('count')}`}
           {(status === 'error' || status === 'offline') && <button type="button" className="text-action" onClick={refresh}>{t('refresh')}</button>}
         </div>
         {route.view === 'deals' && catalog.offers.length > 0 && <SourceCoverage catalog={catalog} language={language} now={now}/>}
-        {route.view === 'deals' && !catalog.offers.length && <OutboundLinks language={language} now={now}/>}
+        {route.view === 'deals' && <ManualProducts products={manualProducts} language={language} now={now} savedIds={savedIds} onSave={product => toggleManualSaved(product, now)}/>}
         {route.view === 'saved' ? <>
           <p className="saved-privacy"><Icon name="bookmark" size={18}/>{t('savedPrivacy')}</p>
           {saved.length ? <SavedRows saved={saved} catalog={catalog} status={status} language={language} now={now} onOpen={openOffer} onRemove={removeSaved}/>
@@ -161,9 +165,9 @@ export function OpenBoxApp() {
           <div className="offer-grid">{listings.slice(0, visibleCount).map((offer, index) => <OfferCard key={offer.id} offer={offer} language={language} now={now} filters={filters} saved={savedIds.has(offerIdentity(offer))} priority={index === 0} onOpen={openOffer} onSave={saveOffer}/>)}</div>
           {listings.length > visibleCount && <button type="button" className="secondary-button show-more" onClick={() => setPagination(previous => ({ filters, sort, count: (previous.filters === filters && previous.sort === sort ? previous.count : 60) + 60 }))}>{t('showMore')}</button>}
         </> : <>
-          <section className="empty-state"><span className="empty-icon"><Icon name="openBox" size={42}/></span><h2>{t(catalog.offers.length ? 'noMatches' : 'noVerified')}</h2><p>{t(catalog.offers.length ? 'noMatchesHelp' : 'noVerifiedHelp')}</p>{catalog.offers.length > 0 && <button type="button" className="secondary-button" onClick={resetFilters}>{t('reset')}</button>}</section>
+          {!manualProducts.length && <section className="empty-state"><span className="empty-icon"><Icon name="openBox" size={42}/></span><h2>{t(catalog.offers.length || hasReviewedProducts ? 'noMatches' : 'noVerified')}</h2><p>{t(catalog.offers.length || hasReviewedProducts ? 'noMatchesHelp' : 'noVerifiedHelp')}</p>{(catalog.offers.length > 0 || hasReviewedProducts) && <button type="button" className="secondary-button" onClick={resetFilters}>{t('reset')}</button>}</section>}
         </>}
-        {route.view === 'deals' && catalog.offers.length > 0 && <OutboundLinks language={language} now={now}/>}
+        {route.view === 'deals' && <details className="browse-more"><summary>{t('browseMoreLinks')}</summary><OutboundLinks language={language} now={now}/></details>}
         {route.view === 'deals' && !catalog.offers.length && <SourceStatus catalog={catalog} language={language} now={now}/>}
         {route.view === 'deals' && <SyndicatedDeals deals={catalog.syndication} language={language} filters={filters} now={now}/>}
       </main>

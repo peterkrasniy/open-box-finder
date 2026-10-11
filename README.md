@@ -2,7 +2,7 @@
 
 A responsive English/Russian app for open-box deal discovery, local pickup, shipping, and device-local saves. Canonical source: https://github.com/peterkrasniy/open-box-finder.
 
-**Current milestone:** the UI and tested domain/refresh foundation are implemented. All retailer adapters are disabled. The catalog is empty; this is not live inventory completion. The public UI is deployed at https://open-box-finder.peter-krasniy.chatgpt.site. The executor cannot verify its public HTTP surface because the configured proxy denies the connection before origin. Real permitted source acquisition and unattended refresh remain pending.
+**Current milestone:** four individually reviewed Sennheiser refurbished products appear as factual product cards with observed page prices, conditions, direct retailer links and device-local saves. These are manual observations with a 24-hour review window, not verified live inventory. All automated retailer adapters remain disabled. The Site at https://open-box-finder.peter-krasniy.chatgpt.site is owner-private; the canonical GitHub source remains public. Automatic permitted acquisition and fresh stock remain pending.
 
 ## Run and edit
 
@@ -31,3 +31,11 @@ Do not add retailer credentials, enroll in affiliate programs, purchase services
 ## Interim outbound navigation
 
 The app provides human-reviewed links to Best Buy Outlet, its open-box category pages and outlet locations, plus a short-lived community discussion link. These are navigation bookmarks outside the catalog and filters; they establish no stock, current price or savings. The app makes no requests to those destinations until a visitor clicks. No provider titles, offer descriptions, images or logos are imported. Dated community leads automatically hide after their manual review window; evergreen category links remain available. Edit `lib/outbound-links.ts` and the original UI labels to maintain this section; review destination state and provider restrictions before adding any lead. A private audience does not create syndication permission. The Slickdeals partner API remains unavailable pending a licensed agreement.
+
+## Individual product curation
+
+`lib/manual-products.ts` contains four original model labels and manually reviewed US Sennheiser product-page facts. Each card names its condition, observation time and unknown availability/fulfillment. Retailer, audio category, query and observed-price filters apply. Pickup-only and shipped-only filters exclude these records because neither mode is verified. Savings sorts do not fabricate comparisons or savings rankings. No product marketing descriptions, images, logos or retailer inventory payloads are copied. Cards link to exact product pages and the app does not fetch those pages.
+
+A trusted catalog server clock hides these cards after the 24-hour review window. Saved entries retain only identity, model label and product link; they show an expired-review message without the old price after expiry. To refresh the small curated set, manually review the exact product pages and relevant terms, update factual notes and review timestamps, then test and publish the exact source commit. This is deliberate manual maintenance, not an automatic inventory adapter. Sennheiser's reviewed consumer-sales terms revealed no specific manual factual-reuse restriction; this is not a media or bulk-feed license. Source-specific restrictions and access failures still apply to other retailers.
+
+The manifest link uses `crossorigin="use-credentials"` so private Sites sessions accompany manifest requests. Platform access controls remain unchanged. Signed-in Chrome validation of the deployed manifest and logged-out protection remain separate browser checks.

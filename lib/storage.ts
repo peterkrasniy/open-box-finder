@@ -80,7 +80,7 @@ export function savedSourceUrl(sourceId: string, value: unknown): string | null 
   try {
     const parsed = new URL(url);
     if (parsed.origin !== new URL(source.website).origin) return null;
-    const prefixes: Record<string, string> = { 'a4l-sac': '/p/', 'buydig': '/shop/product/', 'blues-appliance': '/collections/', 'outdoor-speaker-depot': '/', 'best-buy': '/site/' };
+    const prefixes: Record<string, string> = { 'sennheiser-manual': '/collections/refurbished-by-sennheiser/products/', 'a4l-sac': '/p/', 'buydig': '/shop/product/', 'blues-appliance': '/collections/', 'outdoor-speaker-depot': '/', 'best-buy': '/site/' };
     return prefixes[sourceId] && parsed.pathname.startsWith(prefixes[sourceId]) ? url : null;
   } catch { return null; }
 }

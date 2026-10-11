@@ -4,7 +4,6 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Open Box Finder",
   description: "Find open-box deals near Rocklin and Sacramento, or available to ship. Save exact listings on your device.",
-  manifest: "/manifest.webmanifest",
   appleWebApp: { capable: true, title: "Open Box Finder", statusBarStyle: "default" },
   icons: {
     icon: "/favicon.svg",
@@ -22,6 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head><link rel="manifest" href="/manifest.webmanifest" crossOrigin="use-credentials"/></head>
       <body className="antialiased">{children}</body>
     </html>
   );

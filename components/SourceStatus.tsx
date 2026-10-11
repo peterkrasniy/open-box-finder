@@ -10,7 +10,7 @@ export function SourceStatus({ catalog, language, now }: { catalog: Catalog; lan
       const overdue = state?.nextCheckAt && Number.isFinite(now) && Date.parse(state.nextCheckAt) < now;
       const status = state?.blockedAt?text(language,'accessUnavailable'):state?.status === 'ready' ? text(language, overdue ? 'stale' : state.lastSnapshotComplete === false ? 'partialCatalog' : 'checked')
         : state?.status === 'stale' ? text(language, 'stale') : state?.status === 'error' ? text(language, 'updateFailed')
-        : text(language, source.admission === 'credentials-required' ? 'credentialsRequired' : source.admission === 'permission-required' ? 'permissionRequired' : 'awaitingSource');
+        : text(language, source.admission === 'manual-only' ? 'manualOnly' : source.admission === 'credentials-required' ? 'credentialsRequired' : source.admission === 'permission-required' ? 'permissionRequired' : 'awaitingSource');
       return <div className="source-row" key={source.id}><a href={source.website} target="_blank" rel="noopener noreferrer">{source.name}</a><span className="muted"><Icon name="clock" size={18}/>{status}</span></div>;
     })}</div><p className="muted small">{text(language, 'sourceHelp')}</p>
   </section>;
