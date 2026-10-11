@@ -8,7 +8,7 @@ const fakeFetch=(response:()=>Response)=>(async(input:unknown,init?:RequestInit)
 test('source acquisition accepts only registered fixed transport and never follows redirects',async()=>{
   await assert.rejects(acquireSource({...DEALNEWS_TRANSPORT,url:'http://127.0.0.1/'},fakeFetch(()=>new Response()),now),/Unregistered/);
   const redirect=await acquireSource(DEALNEWS_TRANSPORT,fakeFetch(()=>new Response(null,{status:302,headers:{Location:'http://169.254.169.254/'}})),now);
-  assert.deepEqual(redirect,{ok:false,reason:'redirect',stopAutomatic:true,minimumNextCheckSeconds:900});
+  assert.deepEqual(redirect,{httpStatus:302,contentType:null,bytesRead:0,ok:false,reason:'redirect',stopAutomatic:true,minimumNextCheckSeconds:900});
 });
 test('a consumed acquisition budget cannot issue another upstream request',async()=>{
  const budget=new AbortController();budget.abort();let calls=0;

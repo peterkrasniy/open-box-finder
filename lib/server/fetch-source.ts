@@ -2,8 +2,9 @@
 export interface SourceTransport {
   id: string; url: string; allowedContentTypes: readonly string[]; maxBytes: number; timeoutMs: number;
 }
-export type FetchOutcome = { ok: true; text: string; acquiredAt: string; etag: string | null; modified: string | null; minimumNextCheckSeconds: number }
-  | { ok: false; httpStatus?: number; stopAutomatic?: true; reason: 'http' | 'redirect' | 'content-type' | 'size' | 'encoding' | 'timeout' | 'transport'; minimumNextCheckSeconds: number };
+export interface TransportEvidence { httpStatus: number | null; contentType: string | null; bytesRead: number }
+export type FetchOutcome = TransportEvidence & ({ ok: true; text: string; acquiredAt: string; etag: string | null; modified: string | null; minimumNextCheckSeconds: number }
+  | { ok: false; stopAutomatic?: true; reason: 'http' | 'redirect' | 'content-type' | 'size' | 'encoding' | 'timeout' | 'transport'; minimumNextCheckSeconds: number });
 export const DEALNEWS_TRANSPORT: Readonly<SourceTransport> = Object.freeze({
   id: 'dealnews', url: 'https://www.dealnews.com/?rss=1&sort=time',
   allowedContentTypes: ['application/rss+xml', 'application/xml', 'text/xml'], maxBytes: 1024 * 1024, timeoutMs: 8000,
@@ -35,23 +36,27 @@ export async function acquireSource(source: Readonly<SourceTransport>, fetcher: 
   budget?.addEventListener('abort',abortBudget,{once:true});
   if(budget?.aborted)controller.abort();
   let phase: 'transport' | 'encoding' = 'transport';
+  const evidence: TransportEvidence = { httpStatus: null, contentType: null, bytesRead: 0 };
   try {
     controller.signal.throwIfAborted();
     const response = await fetcher(source.url, { redirect: 'manual', signal: controller.signal, credentials: 'omit',
       headers: { Accept: source.allowedContentTypes.join(', '), 'User-Agent': 'OpenBoxFinder/0.1 (+https://github.com/peterkrasniy/open-box-finder)' } });
+    evidence.httpStatus = response.status;
+    const contentType = response.headers.get('content-type')?.split(';')[0].trim().toLowerCase();
+    // A MIME token only: never retain arbitrary headers, cookies or response bodies here.
+    evidence.contentType = contentType && contentType.length <= 80 && /^[a-z0-9!#$&^_.+-]+\/[a-z0-9!#$&^_.+-]+$/.test(contentType) ? contentType : null;
     const backoff = retryAfterSeconds(response.headers.get('retry-after'), now());
     const rejected = async (reason: 'redirect' | 'http' | 'content-type') => {
       await response.body?.cancel();
       const stop=reason==='redirect'||reason==='content-type'||!Number.isFinite(backoff)||(reason==='http'&&[401,403,404,410,451].includes(response.status));
-      return { ok: false as const, reason, ...(reason === 'http' ? { httpStatus: response.status } : {}), ...(stop?{stopAutomatic:true as const}:{}), minimumNextCheckSeconds: Number.isFinite(backoff)?backoff:900 };
+      return { ...evidence, ok: false as const, reason, ...(stop?{stopAutomatic:true as const}:{}), minimumNextCheckSeconds: Number.isFinite(backoff)?backoff:900 };
     };
     if(!Number.isFinite(backoff))return await rejected('http');
     if (response.status >= 300 && response.status < 400) return await rejected('redirect');
     if (!response.ok || !response.body) return await rejected('http');
-    const contentType = response.headers.get('content-type')?.split(';')[0].trim().toLowerCase();
     if (!contentType || !source.allowedContentTypes.includes(contentType)) return await rejected('content-type');
     const length = response.headers.get('content-length');
-    if (length && /^\d+$/.test(length) && Number(length) > source.maxBytes) { await response.body.cancel(); return { ok: false, reason: 'size', minimumNextCheckSeconds: backoff }; }
+    if (length && /^\d+$/.test(length) && Number(length) > source.maxBytes) { await response.body.cancel(); return { ...evidence, ok: false, reason: 'size', minimumNextCheckSeconds: backoff }; }
     const reader = response.body.getReader(), decoder = new TextDecoder('utf-8', { fatal: true });
     let bytes = 0, text = '';
     try {
@@ -59,15 +64,16 @@ export async function acquireSource(source: Readonly<SourceTransport>, fetcher: 
         const chunk = await reader.read();
         if (chunk.done) break;
         bytes += chunk.value.byteLength;
-        if (bytes > source.maxBytes) { await reader.cancel(); return { ok: false, reason: 'size', minimumNextCheckSeconds: backoff }; }
+        evidence.bytesRead = Math.min(bytes, source.maxBytes + 1);
+        if (bytes > source.maxBytes) { await reader.cancel(); return { ...evidence, ok: false, reason: 'size', minimumNextCheckSeconds: backoff }; }
         phase = 'encoding'; text += decoder.decode(chunk.value, { stream: true }); phase = 'transport';
       }
       phase = 'encoding'; text += decoder.decode();
     } finally { try { await reader.cancel(); } finally { reader.releaseLock(); } }
     const cacheAge = response.headers.get('cache-control')?.match(/(?:^|,)\s*max-age=(\d{1,8})(?:\s*,|$)/i);
-    return { ok: true, text, acquiredAt: new Date(now()).toISOString(), etag: boundedHeader(response.headers.get('etag')),
+    return { ...evidence, ok: true, text, acquiredAt: new Date(now()).toISOString(), etag: boundedHeader(response.headers.get('etag')),
       modified: boundedHeader(response.headers.get('last-modified')), minimumNextCheckSeconds: clampBackoff(Math.max(backoff, cacheAge ? Number(cacheAge[1]) : 900)) };
-  } catch { return { ok: false, reason: controller.signal.aborted ? 'timeout' : phase, minimumNextCheckSeconds: 900 }; }
+  } catch { return { ...evidence, ok: false, reason: controller.signal.aborted ? 'timeout' : phase, minimumNextCheckSeconds: 900 }; }
   finally { clearTimeout(timeout);budget?.removeEventListener('abort',abortBudget); }
 }
 function boundedHeader(value: string | null): string | null { return value && value.length <= 256 && !/[\u0000-\u001f]/.test(value) ? value : null; }

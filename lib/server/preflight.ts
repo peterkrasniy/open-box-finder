@@ -4,56 +4,75 @@ import type { UnitObservation } from './a4l-preflight.ts';
 import { robotsAllows } from './robots.ts';
 import { parseRss } from './rss.ts';
 import { CatalogStore,GLOBAL_MIN_INTERVAL_MS } from './catalog-store.ts';
+import { inspectFeed } from './feed-evidence.ts';
+import type { FeedEvidence } from './feed-evidence.ts';
+import { parseReason } from './parse-evidence.ts';
+import type { ParseReason } from './parse-evidence.ts';
+import type { FetchOutcome } from './fetch-source.ts';
 
 export type PreflightSource = 'a4l-sac' | 'dealnews';
 export interface PreflightGrant {sourceId:PreflightSource;reviewedAt:string}
 /** Accepted private research boundary only; this does not authorize publication or recurring reads. */
 export const APPROVED_PREFLIGHTS: readonly PreflightGrant[] = [
   { sourceId: 'a4l-sac', reviewedAt: '2026-10-11T14:20:00.000Z' },
+  { sourceId: 'dealnews', reviewedAt: '2026-10-11T14:40:00.000Z' },
 ];
+export interface PreflightDiagnostic {
+  stage: 'robots' | 'catalog' | 'unit' | 'feed'; httpStatus: number | null; contentType: string | null; bytesRead: number;
+  transportReason: Extract<FetchOutcome, { ok: false }>['reason'] | null;
+  robotsAllowed: boolean | null; parserReason: ParseReason | null;
+}
 export interface PreflightObservation {
   sourceId: PreflightSource; checkedAt: string; outcome: 'observed' | 'blocked' | 'unsupported' | 'failure';
   httpStatus: number | null; catalogComplete: false; discoveredUnits: number; units: UnitObservation[];
-  feed: { entries: number; rejected: number; complete: boolean; linkOrigins: string[] } | null;
+  feed: FeedEvidence | null; diagnostics: PreflightDiagnostic[];
   notBefore:string;
 }
-const fail = (sourceId: PreflightSource, checkedAt: string, outcome: PreflightObservation['outcome'], httpStatus: number | null = null, delay=900): PreflightObservation => ({ sourceId, checkedAt, outcome, httpStatus, catalogComplete: false, discoveredUnits: 0, units: [], feed: null,notBefore:new Date(Date.parse(checkedAt)+delay*1000).toISOString() });
+const fail = (sourceId: PreflightSource, checkedAt: string, outcome: PreflightObservation['outcome'], httpStatus: number | null = null, delay=900): PreflightObservation => ({ sourceId, checkedAt, outcome, httpStatus, catalogComplete: false, discoveredUnits: 0, units: [], feed: null, diagnostics: [],notBefore:new Date(Date.parse(checkedAt)+delay*1000).toISOString() });
 
 /** Fixed candidates, 1 feed request or at most robots + catalog + 2 exact public unit reads. */
 export async function preflightSource(sourceId: PreflightSource, fetcher: typeof fetch = fetch, now = Date.now): Promise<PreflightObservation> {
   // One entire admission probe shares the transport's eight-second budget; four reads do not multiply it.
   const budget=new AbortController(),timeout=setTimeout(()=>budget.abort(),8000);
-  const acquire=(transport:Parameters<typeof acquireSource>[0])=>acquireSource(transport,fetcher,now,budget.signal);
+  const diagnostics: PreflightDiagnostic[] = []; let discoveredUnits = 0;
+  const acquire=async(transport:Parameters<typeof acquireSource>[0],stage:PreflightDiagnostic['stage'])=>{
+    const response=await acquireSource(transport,fetcher,now,budget.signal);
+    diagnostics.push({ stage, httpStatus: response.httpStatus, contentType: response.contentType, bytesRead: response.bytesRead,
+      transportReason: response.ok ? null : response.reason, robotsAllowed: null, parserReason: null });
+    return response;
+  };
+  const finish=(observation:PreflightObservation):PreflightObservation=>({...observation,diagnostics,discoveredUnits});
   const time = () => new Date(now()).toISOString();
   try {
   if (sourceId === 'dealnews') {
-    const response = await acquire(DEALNEWS_TRANSPORT);
-    if (!response.ok) return fail(sourceId, time(), response.stopAutomatic ? 'blocked' : 'failure', response.httpStatus ?? null,response.minimumNextCheckSeconds);
+    const response = await acquire(DEALNEWS_TRANSPORT,'feed');
+    if (!response.ok) return finish(fail(sourceId, time(), response.stopAutomatic ? 'blocked' : 'failure', response.httpStatus,response.minimumNextCheckSeconds));
     try {
       const feed = parseRss(response.text);
-      return { ...fail(sourceId, time(), 'observed',null,response.minimumNextCheckSeconds), feed: { entries: feed.entries.length, rejected: feed.rejected, complete: feed.complete,
-        linkOrigins: [...new Set(feed.entries.map(entry => new URL(entry.link).origin))].sort() } };
-    } catch { return fail(sourceId, time(), 'unsupported',null,response.minimumNextCheckSeconds); }
+      return finish({ ...fail(sourceId, time(), 'observed',response.httpStatus,response.minimumNextCheckSeconds), feed: inspectFeed(feed) });
+    } catch (error) { diagnostics.at(-1)!.parserReason=parseReason(error,'rss-xml-syntax');return finish(fail(sourceId, time(), 'unsupported',response.httpStatus,response.minimumNextCheckSeconds)); }
   }
   if (sourceId !== 'a4l-sac') throw new TypeError('Unregistered preflight source');
-  const robots = await acquire(A4L_ROBOTS_TRANSPORT);
-  if (!robots.ok) return fail(sourceId, time(), robots.stopAutomatic ? 'blocked' : 'failure', robots.httpStatus ?? null,robots.minimumNextCheckSeconds);
-  if (!robotsAllows(robots.text, '/products')) return fail(sourceId, time(), 'blocked',null,robots.minimumNextCheckSeconds);
-  const catalog = await acquire(A4L_CATALOG_TRANSPORT);
-  if (!catalog.ok) return fail(sourceId, time(), catalog.stopAutomatic ? 'blocked' : 'failure', catalog.httpStatus ?? null,Math.max(robots.minimumNextCheckSeconds,catalog.minimumNextCheckSeconds));
+  const robots = await acquire(A4L_ROBOTS_TRANSPORT,'robots');
+  if (!robots.ok) return finish(fail(sourceId, time(), robots.stopAutomatic ? 'blocked' : 'failure', robots.httpStatus,robots.minimumNextCheckSeconds));
+  const catalogAllowed=robotsAllows(robots.text, '/products');diagnostics.at(-1)!.robotsAllowed=catalogAllowed;
+  if (!catalogAllowed) return finish(fail(sourceId, time(), 'blocked',robots.httpStatus,robots.minimumNextCheckSeconds));
+  const catalog = await acquire(A4L_CATALOG_TRANSPORT,'catalog');
+  if (!catalog.ok) return finish(fail(sourceId, time(), catalog.stopAutomatic ? 'blocked' : 'failure', catalog.httpStatus,Math.max(robots.minimumNextCheckSeconds,catalog.minimumNextCheckSeconds)));
   let urls: string[];
-  try { urls = discoverA4lUnits(catalog.text); } catch { return fail(sourceId, time(), 'unsupported',null,Math.max(robots.minimumNextCheckSeconds,catalog.minimumNextCheckSeconds)); }
-  if (!urls.length) return fail(sourceId, time(), 'unsupported',null,Math.max(robots.minimumNextCheckSeconds,catalog.minimumNextCheckSeconds));
+  try { urls = discoverA4lUnits(catalog.text); } catch (error) { diagnostics.at(-1)!.parserReason=parseReason(error,'parser-unclassified');return finish(fail(sourceId, time(), 'unsupported',catalog.httpStatus,Math.max(robots.minimumNextCheckSeconds,catalog.minimumNextCheckSeconds))); }
+  discoveredUnits=urls.length;
+  if (!urls.length) {diagnostics.at(-1)!.parserReason='catalog-no-canonical-units';return finish(fail(sourceId, time(), 'unsupported',catalog.httpStatus,Math.max(robots.minimumNextCheckSeconds,catalog.minimumNextCheckSeconds)));}
   const units: UnitObservation[] = [];
   let delay=Math.max(robots.minimumNextCheckSeconds,catalog.minimumNextCheckSeconds);
   for (const url of urls.slice(0, 2)) {
-    if (!robotsAllows(robots.text, new URL(url).pathname)) return fail(sourceId, time(), 'blocked',null,delay);
-    const page = await acquire(a4lUnitTransport(url));
-    if (!page.ok) return fail(sourceId, time(), page.stopAutomatic ? 'blocked' : 'failure', page.httpStatus ?? null,Math.max(delay,page.minimumNextCheckSeconds));
+    if (!robotsAllows(robots.text, new URL(url).pathname)) { diagnostics.push({stage:'unit',httpStatus:null,contentType:null,bytesRead:0,transportReason:null,robotsAllowed:false,parserReason:null});return finish(fail(sourceId, time(), 'blocked',robots.httpStatus,delay)); }
+    const page = await acquire(a4lUnitTransport(url),'unit');diagnostics.at(-1)!.robotsAllowed=true;
+    if (!page.ok) return finish(fail(sourceId, time(), page.stopAutomatic ? 'blocked' : 'failure', page.httpStatus,Math.max(delay,page.minimumNextCheckSeconds)));
     delay=Math.max(delay,page.minimumNextCheckSeconds);
-    try { units.push(observeA4lUnit(page.text, url)); } catch { return fail(sourceId, time(), 'unsupported',null,delay); }
+    try { units.push(observeA4lUnit(page.text, url)); } catch (error) {diagnostics.at(-1)!.parserReason=parseReason(error,'parser-unclassified');return finish(fail(sourceId, time(), 'unsupported',page.httpStatus,delay));}
   }
-  return { ...fail(sourceId, time(), 'observed',null,delay), discoveredUnits: urls.length, units };
+  return finish({ ...fail(sourceId, time(), 'observed',diagnostics.at(-1)!.httpStatus,delay), units });
   } finally {clearTimeout(timeout);}
 }
 
