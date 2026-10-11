@@ -1,6 +1,6 @@
 # Public data boundary (research contract)
 
-This is a proposed boundary for the post-gate implementation, not a security audit pass. The parent owns the independent security/performance review. No endpoint, credential, policy change or deployment exists yet.
+Historical research contract preserved. Implementation and public Sites deployment now exist; current evidence is recorded in the evidence ledger. This document is not a security audit pass. The parent owns the independent security/performance review, and all production source/publication/preflight grants remain disabled.
 
 ## Acquisition and publication
 

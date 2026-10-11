@@ -17,7 +17,7 @@ export function OfferCard({ offer, language, filters, now, saved, onSave, onOpen
   const discount = displayDiscount(offer, now);
   const retailer = SOURCE_BY_ID.get(offer.retailerId)?.name ?? SOURCE_BY_ID.get(offer.sourceId)?.name ?? offer.retailerId;
   return <article className="offer-card">
-    <button type="button" className="media-action" aria-label={`${text(language, 'details')}: ${offer.title}`} onClick={() => onOpen(offer)}><OfferMedia offer={offer} language={language} priority={priority}/></button>
+    <button type="button" className="media-action" aria-label={`${text(language, 'details')}: ${offer.title}`} onClick={() => onOpen(offer)}><OfferMedia offer={offer} language={language} priority={priority} actionLabel={text(language,'details')}/></button>
     <div className="offer-card-body">
       <div className="offer-source"><span>{retailer}</span><button type="button" className={`icon-button save-button${saved ? ' is-saved' : ''}`} aria-label={`${text(language, saved ? 'unsave' : 'save')}: ${offer.title}`} aria-pressed={saved} onClick={() => onSave(offer)}><Icon name="heart"/></button></div>
       <h2><button type="button" className="text-action" onClick={() => onOpen(offer)}>{offer.title}</button></h2>

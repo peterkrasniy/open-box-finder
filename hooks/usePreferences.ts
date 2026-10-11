@@ -2,7 +2,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Offer } from '../lib/offer.ts';
 import type { Preferences, SavedListing, StorageLike } from '../lib/storage.ts';
-import { defaultPreferences, PREFERENCES_KEY, readStorage, SAVED_KEY, savedIdentity, savedPointer, writePreferences, writeSavedEntry, readSavedEntries, SAVED_ENTRY_PREFIX } from '../lib/storage.ts';
+import { defaultPreferences, PREFERENCES_KEY, readStorage, SAVED_KEY, savedIdentity, savedPointer, writePreferences, writeSavedEntry, readSavedEntries, SAVED_ENTRY_PREFIX,compactSavedTombstones } from '../lib/storage.ts';
+import {openSavedGuard,withSavedGuard} from '../lib/saved-guard.ts';
 
 export function usePreferences() {
   const [preferences, setPreferences] = useState<Preferences>(defaultPreferences);
@@ -10,43 +11,54 @@ export function usePreferences() {
   const [ready, setReady] = useState(false), [storageAvailable, setStorageAvailable] = useState(true);
   const [saveError, setSaveError] = useState<'saveUnavailable' | 'saveLimit' | null>(null);
   const store = useRef<StorageLike | null>(null), savedRef = useRef(saved);
+  const guard=useRef<Promise<IDBDatabase|null>>(Promise.resolve(null));
   useEffect(() => {
     try { store.current = window.localStorage; } catch { store.current = null; }
     const value = readStorage(store.current);
     setPreferences(value.preferences); savedRef.current = value.saved; setSaved(value.saved); setStorageAvailable(value.available); setReady(true);
+    let mounted=true;
+    try {guard.current=openSavedGuard(window.indexedDB).catch(()=>null);}catch{guard.current=Promise.resolve(null);}
+    void guard.current.then(async database=>{if(database&&store.current&&mounted){try{const current=await withSavedGuard(database,()=>{compactSavedTombstones(store.current!);return readSavedEntries(store.current!);},value.saved.map(savedIdentity));if(mounted){savedRef.current=current;setSaved(current);}}catch{if(mounted)setStorageAvailable(false);}}});
     const changed = (event: StorageEvent) => {
       if (event.storageArea !== store.current) return;
-      if (event.key === null) { const next = readStorage(store.current); savedRef.current = next.saved; setSaved(next.saved); setPreferences(next.preferences); }
+      if (event.key === null) { const next = readStorage(store.current); savedRef.current = next.saved; setSaved(next.saved); setPreferences(next.preferences);void guard.current.then(database=>database?withSavedGuard(database,capacity=>capacity.clear()):undefined).catch(()=>setStorageAvailable(false)); }
       else if (event.key === SAVED_KEY || event.key.startsWith(SAVED_ENTRY_PREFIX)) { const next = readStorage(store.current); savedRef.current = next.saved; setSaved(next.saved); }
       else if (event.key === PREFERENCES_KEY) setPreferences(readStorage(store.current).preferences);
     };
     window.addEventListener('storage', changed);
-    return () => window.removeEventListener('storage', changed);
+    return () => {mounted=false;window.removeEventListener('storage', changed);void guard.current.then(database=>database?.close());};
   }, []);
   useEffect(() => {
     if (!ready) return;
     document.documentElement.lang = preferences.language;
     if (!writePreferences(store.current, preferences)) setStorageAvailable(false);
   }, [ready, preferences]);
-  const mutateEntry = useCallback((identity: string, pointer: SavedListing | null, toggle = false) => {
-    let current = savedRef.current;
-    if (store.current && storageAvailable) {
-      try { current = readSavedEntries(store.current); } catch { setStorageAvailable(false); }
-    }
-    const exists = current.some(item => savedIdentity(item) === identity);
+  const mutateEntry = useCallback(async(identity: string, pointer: SavedListing | null, toggle = false) => {
+    const mutate=(current:SavedListing[],persistent:StorageLike|null,capacity?:Set<string>)=>{
+    const exists = capacity?.has(identity)||current.some(item => savedIdentity(item) === identity);
     const nextPointer = toggle && exists ? null : pointer;
-    if (nextPointer && !exists && current.length >= 100) { setSaveError('saveLimit'); return; }
+    if (nextPointer && !exists && (capacity?.size??current.length) >= 100) return {saved:current,limited:true,persisted:true};
     const next = current.filter(item => savedIdentity(item) !== identity);
     if (nextPointer) next.unshift(nextPointer);
-    savedRef.current = next; setSaved(next);
-    if (!writeSavedEntry(store.current, identity, nextPointer)) setStorageAvailable(false);
+    const persisted=writeSavedEntry(persistent,identity,nextPointer);if(persisted&&capacity){if(nextPointer)capacity.add(identity);else capacity.delete(identity);}
+    return {saved:next,limited:false,persisted};
+    };
+    if(store.current&&storageAvailable){
+      try{const database=await guard.current;if(!database)throw new Error('Saved coordination unavailable');
+        const result=await withSavedGuard(database,capacity=>{compactSavedTombstones(store.current!);return mutate(readSavedEntries(store.current!),store.current,capacity);},savedRef.current.map(savedIdentity));
+        if(result.limited)setSaveError('saveLimit');
+        if(!result.persisted)setStorageAvailable(false);
+        const current=result.persisted?readSavedEntries(store.current):result.saved;savedRef.current=current;setSaved(current);return;
+      }catch{setStorageAvailable(false);}
+    }
+    const result=mutate(savedRef.current,null);if(result.limited)setSaveError('saveLimit');savedRef.current=result.saved;setSaved(result.saved);
   }, [storageAvailable]);
   const toggleSaved = useCallback((offer: Offer, sequence = 0) => {
     setSaveError(null);
     const pointer = savedPointer(offer, Date.now(), sequence);
     if (!pointer) { setSaveError('saveUnavailable'); return; }
-    mutateEntry(savedIdentity(pointer), pointer, true);
+    void mutateEntry(savedIdentity(pointer), pointer, true);
   }, [mutateEntry]);
-  const removeSaved = useCallback((identity: string) => mutateEntry(identity, null), [mutateEntry]);
+  const removeSaved = useCallback((identity: string) => {setSaveError(null);void mutateEntry(identity, null);}, [mutateEntry]);
   return { preferences, setPreferences, saved, ready, storageAvailable, saveError, toggleSaved, removeSaved };
 }

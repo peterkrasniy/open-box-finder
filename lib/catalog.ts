@@ -1,4 +1,5 @@
 import type { Catalog, Offer } from './offer.ts';
+import {inventoryUnitIdentity} from './offer.ts';
 import { SOURCES } from './sources.ts';
 import { publicOffer } from './validation.ts';
 
@@ -24,9 +25,13 @@ export function reconcileSnapshot(previous: readonly Offer[], incoming: SourceSn
   const latest = Math.max(lastSuccessAt ? Date.parse(lastSuccessAt) : 0, ...previous.filter(offer => offer.sourceId === incoming.sourceId).map(offer => Date.parse(offer.observedAt)));
   if (!Number.isFinite(latest) || acquired < latest) throw new TypeError('Stale source snapshot');
   const prior = new Map(previous.map(offer => [offer.id, offer]));
-  const next = new Map<string, Offer>();
+  const priorUnits=new Map(previous.map(offer=>[inventoryUnitIdentity(offer),offer.id]));
+  const next = new Map<string, Offer>(),units=new Set<string>();
   for (const offer of incoming.offers) {
     if (offer.sourceId !== incoming.sourceId || next.has(offer.id)) throw new TypeError('Source identity or duplicate offer mismatch');
+    const unit=inventoryUnitIdentity(offer);
+    if(units.has(unit)||(priorUnits.has(unit)&&priorUnits.get(unit)!==offer.id))throw new TypeError('Duplicate or aliased source-unit identity');
+    units.add(unit);
     if (prior.has(offer.id) && prior.get(offer.id)!.sourceId !== incoming.sourceId) throw new TypeError('Cross-source offer identity collision');
     if (prior.has(offer.id) && Date.parse(offer.observedAt) < Date.parse(prior.get(offer.id)!.observedAt)) throw new TypeError('Stale source offer observation');
     next.set(offer.id, offer);

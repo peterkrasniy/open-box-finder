@@ -21,3 +21,10 @@ The supported production acquisition path is the deployed Sites Worker with fixe
 The research refresh contract requires parent confirmation of this concrete maintenance boundary before enabling it. Keep both approval maps empty until the parent security/source owners accept it and actual permitted hosted responses are reviewed. No new retailer credential, enrollment, paid service, anonymous production workaround or authorization grant is part of this batch.
 
 Required remaining evidence: independently permitted public HTTP/browser checks; accepted hosted transport/terms/media and actual units; durable real acquisition/write/readback; a Sites-native scheduled run that actually executes; a real added/changed/removed source trace adopted by an already-open browser; native iPhone/VoiceOver and final independent candidate reviews. A successful Sites deploy, directory, empty catalog or synthetic generation test is not first complete.
+
+
+### Remaining retest boundary
+
+Syndicated fragments preserve the whole original description/content and use the exact source entry URL as their escaped base, including its path and query. Approved media directories must match the server policy exactly before publication. The fragment CSP allows only those reviewed HTTPS directories; the default is img-src none. The sandbox still excludes script execution and same-origin authority. The isolated browser checks use synthetic permitted media, not a retailer license or production image. All source policies remain empty.
+
+Normalized unit uniqueness uses source/unit/variant/condition/branch tuples, independent of mutable price. Decoder and reconciliation reject aliases; future adapters can use the canonical SHA-256 ID helper. No enabled adapter or real inventory is implied.

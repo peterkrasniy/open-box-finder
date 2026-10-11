@@ -30,6 +30,7 @@ export function dealnewsAdapter(fetcher: typeof fetch = fetch): Adapter {
         || (entry.content !== null && !safeSyndicatedHtml(entry.content, entry.link, policy))) { complete = false; continue; }
       deals.push({ id: `dealnews:${await hash(entry.guid)}`, sourceId: 'dealnews', sourceGuid: entry.guid, title: entry.title, url: entry.link,
         description: entry.description, content: entry.content, publishedAt: entry.publishedAt, observedAt: response.acquiredAt,
+        imageScopes:policy.images.map(scope=>({origin:scope.origin,pathPrefix:scope.pathPrefix})),
         freshUntil: new Date(Date.parse(response.acquiredAt) + policy.maxFreshSeconds * 1000).toISOString() });
     }
     // A new empty or wholly rejected response cannot erase a previously populated feed.

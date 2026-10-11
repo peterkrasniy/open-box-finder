@@ -63,3 +63,14 @@ test('saved pointers cannot label an unrelated hostname as an official retailer 
  for(const url of ['https://unrelated.test/shop/product/QA','https://www.buydig.com.evil.test/shop/product/QA','https://www.buydig.com/not-a-product'])assert.equal(savedSourceUrl('buydig',url),null);
  assert.equal(savedSourceUrl('buydig','https://www.buydig.com/shop/product/QA-ONLY'),'https://www.buydig.com/shop/product/QA-ONLY');
 });
+test('five thousand save/remove operations do not grow own tombstones or reset a remaining pointer/preferences',async()=>{
+ const {writeSavedEntry,readSavedEntries,compactSavedTombstones,savedIdentity,PREFERENCES_KEY,SAVED_ENTRY_PREFIX}=await import('../lib/storage.ts');
+ const data=new Map<string,string>(),store={get length(){return data.size},key:(index:number)=>[...data.keys()][index]??null,getItem:(key:string)=>data.get(key)??null,setItem:(key:string,value:string)=>{data.set(key,value)},removeItem:(key:string)=>{data.delete(key)}};
+ const base={offerId:'QA-only',sourceId:'buydig',variantKey:'QA-only',storeId:null,url:'https://www.buydig.com/shop/product/QA-ONLY',savedAt:'2026-10-11T10:00:00Z'};
+ for(let index=0;index<5000;index++){const pointer={...base,offerId:`QA-only-${index}`,variantKey:`QA-only-${index}`};assert.equal(writeSavedEntry(store,savedIdentity(pointer),pointer),true);assert.equal(writeSavedEntry(store,savedIdentity(pointer),null),true);}
+ assert.equal(store.length,0);
+ const preferences={...defaultPreferences(),language:'ru' as const};store.setItem(PREFERENCES_KEY,JSON.stringify(preferences));writeSavedEntry(store,savedIdentity(base),base);
+ for(let index=0;index<5000;index++)store.setItem(SAVED_ENTRY_PREFIX+`QA-only-old-tombstone-${index}`,'null');
+ assert.equal(readStorage(store).preferences.language,'ru');assert.equal(readSavedEntries(store).length,1);
+ compactSavedTombstones(store);assert.equal(store.length,2);assert.deepEqual(readSavedEntries(store),[base]);assert.equal(readStorage(store).preferences.language,'ru');
+});

@@ -22,7 +22,7 @@ export function savedIdentity(record: Pick<SavedListing, 'offerId' | 'sourceId' 
 export function offerIdentity(offer: Offer): string {
   return savedIdentity({ offerId: offer.id, sourceId: offer.sourceId, variantKey: offer.variantKey, storeId: offer.pickup?.id ?? null, sourceOfferId: offer.sourceOfferId, condition: offer.condition });
 }
-export interface StorageLike { getItem(key: string): string | null; setItem(key: string, value: string): void; readonly length?: number; key?(index: number): string | null }
+export interface StorageLike { getItem(key: string): string | null; setItem(key: string, value: string): void; removeItem?(key:string):void; readonly length?: number; key?(index: number): string | null }
 const plain = (value: unknown): value is Record<string, unknown> => Boolean(value) && typeof value === 'object' && !Array.isArray(value);
 const smallText = (value: unknown, max: number): value is string => typeof value === 'string' && value.length <= max && !/[\u0000-\u001f]/.test(value);
 
@@ -118,8 +118,9 @@ export function savedPointer(offer: Offer, now: number, sequence = 0): SavedList
 
 export function readStorage(store: StorageLike | null): { preferences: Preferences; saved: SavedListing[]; available: boolean } {
   if (!store) return { preferences: defaultPreferences(), saved: [], available: false };
-  try { return { preferences: decodePreferences(store.getItem(PREFERENCES_KEY)), saved: readSavedEntries(store), available: true }; }
-  catch { return { preferences: defaultPreferences(), saved: [], available: false }; }
+  let preferences=defaultPreferences();
+  try {preferences=decodePreferences(store.getItem(PREFERENCES_KEY));return {preferences,saved:readSavedEntries(store),available:true};}
+  catch {return {preferences,saved:[],available:false};}
 }
 
 export function writePreferences(store: StorageLike | null, preferences: Preferences): boolean {
@@ -133,7 +134,7 @@ export function writeSaved(store: StorageLike | null, saved: SavedListing[]): bo
 export function readSavedEntries(store: StorageLike): SavedListing[] {
   const records = new Map(decodeSaved(store.getItem(SAVED_KEY)).map(record => [savedIdentity(record), record]));
   if (store.key && typeof store.length === 'number') {
-    if (store.length > 5000) throw new Error('Storage exceeds supported entry limit');
+    if (store.length > 50000) throw new Error('Storage exceeds supported entry limit');
     for (let index = 0; index < store.length; index++) {
       const key = store.key(index);
       if (!key?.startsWith(SAVED_ENTRY_PREFIX)) continue;
@@ -147,6 +148,15 @@ export function readSavedEntries(store: StorageLike): SavedListing[] {
 }
 export function writeSavedEntry(store: StorageLike | null, identity: string, value: SavedListing | null): boolean {
   try { if (!store || (value && savedIdentity(value) !== identity)) return false;
-    store.setItem(SAVED_ENTRY_PREFIX + identity, value ? JSON.stringify({ version: 1, listings: [value] }) : 'null'); return true;
+    if(!value&&store.removeItem&&!decodeSaved(store.getItem(SAVED_KEY)).some(record=>savedIdentity(record)===identity))store.removeItem(SAVED_ENTRY_PREFIX+identity);
+    else store.setItem(SAVED_ENTRY_PREFIX + identity, value ? JSON.stringify({ version: 1, listings: [value] }) : 'null'); return true;
   } catch { return false; }
+}
+
+/** Call under the shared saved guard. Keep only tombstones still needed to suppress a legacy pointer. */
+export function compactSavedTombstones(store:StorageLike):void{
+ if(!store.removeItem||!store.key||typeof store.length!=='number'||store.length>50000)return;
+ const legacy=new Set(decodeSaved(store.getItem(SAVED_KEY)).map(savedIdentity)),keys:string[]=[];
+ for(let index=0;index<store.length;index++){const key=store.key(index);if(key?.startsWith(SAVED_ENTRY_PREFIX))keys.push(key);}
+ for(const key of keys)if(!legacy.has(key.slice(SAVED_ENTRY_PREFIX.length))&&store.getItem(key)==='null')store.removeItem(key);
 }

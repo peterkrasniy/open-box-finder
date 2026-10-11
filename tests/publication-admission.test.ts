@@ -23,3 +23,14 @@ test('complete feed HTML is inspected without rewriting; active content and unre
  for(const html of ['<script>alert(1)</script>','<img src="https://unlicensed.test/image.jpg">','<p onclick="x()">Text</p>','<iframe src="https://www.buydig.com/shop/item"></iframe>','<a href="javascript:alert(1)">Text</a>','<div style="background:url(https://unreviewed.test/x)">Text</div>','<svg><a href="https://www.buydig.com/shop/item">X</a></svg>']) assert.equal(safeSyndicatedHtml(html,offer.url,policy),false);
  for(const url of ['https://localhost./shop/x','https://admin.localhost./shop/x','https://www.buydig.com.evil.test/shop/x','https://www.buydig.com/shop/product/%2fadmin','https://www.buydig.com/shop/product/%2e%2e/admin','https://www.buydig.com/shop/product/%252e%252e/admin','https://www.buydig.com/shop/product/unit%00','https://www.buydig.com/shop/product/unit%0a','https://www.buydig.com/shop/product/unit%0d']) assert.equal(withinScope(url,policy.products),false);
 });
+test('editorial rendering receives exactly the reviewed original-image scopes, never an adapter-expanded media grant',()=>{
+ const media=[{origin:'https://images.example.test',pathPrefix:'/approved/'}];
+ const feedPolicy:PublicationPolicy={...policy,sourceId:'dealnews',retailerId:'dealnews',products:[{origin:'https://www.dealnews.com',pathPrefix:'/'}],images:media};
+ const grants=new Map([['dealnews',feedPolicy]]),sources=new Map(SOURCE_BY_ID);sources.set('dealnews',{...sources.get('dealnews')!,enabled:true,admission:'admitted'});
+ const deal={id:'QA-only-feed',sourceId:'dealnews',sourceGuid:'QA-only-feed',title:'QA ONLY original',url:'https://www.dealnews.com/item/QA-ONLY',description:'<img src="https://images.example.test/approved/QA-ONLY.png" alt="QA ONLY">',content:null,publishedAt:null,observedAt:stamp,freshUntil:'2026-10-11T10:05:00Z',imageScopes:media};
+ const feed={...catalog,offers:[],syndication:[deal],sources:[{...catalog.sources[0],sourceId:'dealnews'}]};
+ assert.equal(validatePublication(feed,now,grants,sources).syndication.length,1);
+ for(const imageScopes of [[],[{origin:'https://images.example.test',pathPrefix:'/'}],[{origin:'https://unreviewed.test',pathPrefix:'/'}]])assert.throws(()=>validatePublication({...feed,syndication:[{...deal,imageScopes}]},now,grants,sources),/Unreviewed syndication image policy/);
+ const projection=validatePublication({...feed,syndication:[{...deal,imageScopes:media.map(scope=>({...scope,privateToken:'QA-only-private'}))}]},now,grants,sources);
+ assert.equal(JSON.stringify(projection).includes('privateToken'),false);
+});

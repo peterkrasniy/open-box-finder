@@ -16,4 +16,16 @@ The four parent-owned reviews concern baseline `713b35608080b2cfdd4529700cd5ebc5
 
 Current protocol is version 2. Existing test-only records remain outside runtime imports, source adapters, migrations and deployment payloads. Generated migrations contain schema only. Neither passing tests nor an empty public app constitutes first complete. Parent retains independent audit and source admission ownership.
 
-The parent has started all four independent retests against `6e39453904759920cd9f36a65f18b5b5915644e1`. The later separate timing/denial batch passes 57 model/integration tests and compiled local browser journeys; it does not substitute for their retests or grant source admission. Actual desktop Chromium 200% zoom passes in EN/RU; native iPhone/VoiceOver/install remain NOT RUN.
+All four independent retests of `6e39453904759920cd9f36a65f18b5b5915644e1` finished. The timing/denial batch was published separately as `654896682d0f169512618cd3b180db03ceaef73e`. The following coherent revision is ready for targeted parent retests; local checks do not grant acceptance or source admission.
+
+| Remaining finding | Change | Verification |
+|---|---|---|
+| UX draft conflict and focus | Preserve the draft base through Search until an explicit choice; restore focus to a surviving control | Compiled two-tab browser passes |
+| UX Saved image name; data unknown stock | Matching visible View details labels in EN/RU; retailer-check copy beside fresh unknown-stock prices | Browser checks and outer Axe pass |
+| Security legacy tombstone overflow | Remove unnecessary keys, compact obsolete tombstones under the guard, decode preferences independently | 5,000-tombstone model/browser checks preserve the remaining save and Russian preferences |
+| Data concurrent last Saved slot | Authoritative browser-local capacity claims inside serialized IndexedDB read/write transactions; visible in-memory fallback on coordination/storage failure | Twenty repeated two-tab races preserve 99 prior saves, admit one and release the slot; reload passes |
+| Data duplicate unit aliases | Reject repeated source/unit/variant/condition/branch tuples within and across snapshots; canonical SHA-256 helper for future adapters | Model cases cover aliases, mutable prices and branch/variant differences |
+| Source exact links and permitted images | Exact entry URL base; reviewed public image scopes must equal server policy; default CSP remains img-src none | Four compiled EN/RU checks use unchanged QA HTML and synthetic permitted media; no real retailer media/source admitted |
+| Security braces | Investigated compatible registry versions and official advisory; no published patch | Eight high development advisories remain disclosed; production-declaration audit zero known |
+
+Current model count is 62. Native iPhone/VoiceOver/install, inner-frame Axe and field INP remain NOT RUN. Parent acceptance of the new revision is pending.

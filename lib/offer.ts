@@ -50,12 +50,19 @@ export interface Offer {
   observedAt: string;
   freshUntil: string;
 }
+/** The source unit is independent of an adapter's display/publication ID or changing price. */
+export function inventoryUnitIdentity(offer:Pick<Offer,'sourceId'|'sourceOfferId'|'variantKey'|'condition'|'pickup'>):string{
+ return JSON.stringify([offer.sourceId,offer.sourceOfferId,offer.variantKey,offer.condition,offer.pickup?.id??null]);
+}
 
 /** Editorial feed membership, never stock, current price, pickup or shipping evidence. */
+export interface SyndicationImageScope {origin:string;pathPrefix:string}
 export interface SyndicatedDeal {
   id: string; sourceId: string; sourceGuid: string; title: string; url: string;
   description: string; content: string | null; publishedAt: string | null;
   observedAt: string; freshUntil: string;
+  /** Public rendering boundary copied from the accepted server policy; missing means no images. */
+  imageScopes?: SyndicationImageScope[];
 }
 
 export interface Selection { mode: 'all' | 'selected'; ids: string[] }

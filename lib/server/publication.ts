@@ -3,6 +3,7 @@ import { decodeCatalog } from '../validation.ts';
 import { SOURCE_BY_ID } from '../sources.ts';
 import type { SourceDefinition } from '../sources.ts';
 import { parseFragment } from 'parse5';
+import { validImageScopes } from '../syndication-document.ts';
 
 export interface UrlScope { origin: string; pathPrefix: string }
 /** An explicit reviewed grant: never inferred from a successful HTTP response. */
@@ -71,6 +72,7 @@ export function validatePublication(value: unknown, now: number,
   }
   for (const deal of catalog.syndication) {
     const policy = admitted(deal.sourceId, 'unmodified-syndication'); freshness(deal, policy);
+    if(!validImageScopes(policy.images)||JSON.stringify(deal.imageScopes??[])!==JSON.stringify(policy.images))throw new TypeError('Unreviewed syndication image policy');
     if (!withinScope(deal.url, policy.products) || !safeSyndicatedHtml(deal.description, deal.url, policy) || (deal.content !== null && !safeSyndicatedHtml(deal.content, deal.url, policy))) throw new TypeError('Unreviewed syndication content');
   }
   return catalog;

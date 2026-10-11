@@ -53,4 +53,4 @@ Statuses: PASS, FAIL, NOT RUN, BLOCKED. A checklist assertion is not a test pass
 
 ## Current scoped evidence
 
-The public version 2 source/URL is verified through native Sites and canonical GitHub; this executor's public HTTP is blocked before origin. Local mechanics pass 57 model/integration tests plus the compiled browser/HTTP checks recorded in the ledger. Source admission, genuine inventory, real unattended/change traces, native phone checks, first complete, the post-completion hour and final independent acceptance remain unmet. Local and synthetic passes do not tick the genuine-data release gates above.
+The public version 3 source/URL is verified through native Sites and canonical GitHub; this executor's public HTTP is blocked before origin. Local mechanics pass 62 model/integration tests plus the compiled browser/HTTP checks recorded in the ledger. Source admission, genuine inventory, real unattended/change traces, native phone checks, first complete, the post-completion hour and final independent acceptance remain unmet. Local and synthetic passes do not tick the genuine-data release gates above.

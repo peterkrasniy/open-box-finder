@@ -18,6 +18,7 @@ test('public catalog projection strips nested adapter fields and rejects malform
   assert.equal(catalog.offers[0].url,offer.url);
   for(const invalid of [{...offer,url:'javascript:alert(1)'},{...offer,sourceId:'unregistered'},{...offer,priceCents:20.5},{...offer,pickup:{...offer.pickup,point:{latitude:Infinity,longitude:-121}}}])assert.throws(()=>decodeCatalog({...emptyCatalog(),offers:[invalid]}),/Invalid catalog offer/);
   assert.throws(()=>decodeCatalog({...emptyCatalog(),offers:[offer,offer]}),/Invalid catalog offer/);
+  assert.throws(()=>decodeCatalog({...emptyCatalog(),offers:[offer,{...offer,id:'QA-only-alias'}]}),/Invalid catalog offer/);
 });
 
 test('only one overlay route is selected and serialization preserves exact identity',()=>{

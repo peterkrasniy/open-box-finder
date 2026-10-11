@@ -39,3 +39,10 @@ Keep card identity, committed filters, local saves, editing drafts and open deta
 Announce useful new-result/availability changes once and politely. Preserve keyboard focus and the reading position, including when sorting admits new higher-ranked offers. A failed or older response cannot overwrite a newer catalog/health revision. Metadata-only revalidation does not announce newly listed offers. Resume/reconnect revalidation is required because sleeping browser/app timers do not establish background freshness.
 
 All behavioral, cross-tab, responsive and assistive-technology checks remain NOT RUN until an implemented candidate is exercised.
+
+
+### Saved capacity after independent retest
+
+Browser-local IndexedDB read/write transactions serialize authoritative minimal identity capacity claims across tabs, including when Web Locks is absent. LocalStorage retains the version-2 pointer entries and preferences. A successful pointer write precedes claiming/releasing capacity; failed coordination/storage gives a visible in-memory fallback. The two stores are not one atomic durable transaction. No prices, photos or full inventory payloads enter this coordination store. Obsolete null tombstones are compacted under the guard; required legacy suppression stays bounded. Preference decoding is independent of Saved decoding.
+
+The scheduling boundary follows the primary [IndexedDB transaction specification](https://www.w3.org/TR/IndexedDB/#transaction-scheduling) and [MDN transaction documentation](https://developer.mozilla.org/en-US/docs/Web/API/IDBTransaction). Twenty repeated compiled-browser last-slot races and a 5,000-tombstone regression pass. Native Safari and cross-device syncing are not established.

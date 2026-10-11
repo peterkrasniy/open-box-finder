@@ -1,10 +1,11 @@
 import type { Catalog, Offer, SourceHealth, SyndicatedDeal } from './offer.ts';
-import { validCents } from './offer.ts';
+import { validCents,inventoryUnitIdentity } from './offer.ts';
 import { CATEGORIES } from './i18n.ts';
 import { validPoint } from './filter.ts';
 import { safeExternalUrl } from './storage.ts';
 import { SOURCE_BY_ID } from './sources.ts';
 import { US_STATES } from './shipping.ts';
+import { validImageScopes } from './syndication-document.ts';
 
 const object=(v:unknown):v is Record<string,unknown>=>Boolean(v)&&typeof v==='object'&&!Array.isArray(v);
 const string=(v:unknown,max:number):v is string=>typeof v==='string'&&v.length>0&&v.length<=max&&!/[\u0000-\u001f]/.test(v);
@@ -28,7 +29,7 @@ export function publicOffer(offer:Offer):Offer {
  };
 }
 export function publicSyndication(deal:SyndicatedDeal):SyndicatedDeal {
- return {id:deal.id,sourceId:deal.sourceId,sourceGuid:deal.sourceGuid,title:deal.title,url:deal.url,description:deal.description,content:deal.content,publishedAt:deal.publishedAt,observedAt:deal.observedAt,freshUntil:deal.freshUntil};
+ return {id:deal.id,sourceId:deal.sourceId,sourceGuid:deal.sourceGuid,title:deal.title,url:deal.url,description:deal.description,content:deal.content,publishedAt:deal.publishedAt,observedAt:deal.observedAt,freshUntil:deal.freshUntil,imageScopes:(deal.imageScopes??[]).map(scope=>({origin:scope.origin,pathPrefix:scope.pathPrefix}))};
 }
 export function validOffer(v:unknown):v is Offer {
  if(!object(v)||!string(v.id,200)||/\s/.test(v.id)||!string(v.sourceId,80)||SOURCE_BY_ID.get(v.sourceId)?.presentation!=='normalized-inventory'
@@ -48,14 +49,14 @@ export function validOffer(v:unknown):v is Offer {
 export function validSyndication(v:unknown):v is SyndicatedDeal {
  return object(v)&&string(v.id,200)&&!/\s/.test(v.id)&&string(v.sourceId,80)&&SOURCE_BY_ID.get(v.sourceId)?.presentation==='unmodified-syndication'
   &&string(v.sourceGuid,2048)&&string(v.title,240)&&Boolean(safeExternalUrl(v.url))&&html(v.description)&&(v.content===null||html(v.content))
-  &&Boolean(v.description||v.content)&&(v.publishedAt===null||date(v.publishedAt))&&date(v.observedAt)&&date(v.freshUntil)&&Date.parse(v.freshUntil)>=Date.parse(v.observedAt);
+  &&Boolean(v.description||v.content)&&(v.publishedAt===null||date(v.publishedAt))&&date(v.observedAt)&&date(v.freshUntil)&&Date.parse(v.freshUntil)>=Date.parse(v.observedAt)&&(v.imageScopes===undefined||validImageScopes(v.imageScopes));
 }
 export function decodeCatalog(value:unknown):Catalog {
  if(!object(value)||value.schemaVersion!==2||!sequence(value.sequence)||!string(value.generation,128)||!string(value.revision,128)
   ||!(value.publishedAt===null||date(value.publishedAt))||!Array.isArray(value.offers)||value.offers.length>2000
   ||!Array.isArray(value.syndication)||value.syndication.length>100||!Array.isArray(value.sources)||value.sources.length>100)throw new TypeError('Invalid catalog envelope');
- const ids=new Set<string>();
- for(const offer of value.offers){if(!validOffer(offer)||ids.has(offer.id))throw new TypeError('Invalid catalog offer');ids.add(offer.id);}
+ const ids=new Set<string>(),units=new Set<string>();
+ for(const offer of value.offers){if(!validOffer(offer)||ids.has(offer.id)||units.has(inventoryUnitIdentity(offer)))throw new TypeError('Invalid catalog offer');ids.add(offer.id);units.add(inventoryUnitIdentity(offer));}
  for(const deal of value.syndication){if(!validSyndication(deal)||ids.has(deal.id))throw new TypeError('Invalid syndicated deal');ids.add(deal.id);}
  const sources=new Set<string>(),health:SourceHealth[]=[];
  for(const source of value.sources){
