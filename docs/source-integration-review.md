@@ -24,6 +24,12 @@ On October 11 after 13:48 UTC, the owner reviewed the actual A4L footer-linked p
 
 Required remaining evidence: independently permitted public HTTP/browser checks; accepted hosted transport/terms/media and actual units; durable real acquisition/write/readback; a Sites-native scheduled run that actually executes; a real added/changed/removed source trace adopted by an already-open browser; native iPhone/VoiceOver and final independent candidate reviews. A successful Sites deploy, directory, empty catalog or synthetic generation test is not first complete.
 
+On October 11 at 13:57:09.087 UTC, the A4L grant was consumed before I/O. Hosting recorded GET /api/catalog as canceled after 895 ms, without an exception, upstream status or persisted observation. This does not establish retailer denial, request delivery to the retailer, or a reason for cancellation. No replay is authorized by the null payload.
+
+The local lifecycle follow-up captures only the trusted Worker waitUntil hook in request-scoped AsyncLocalStorage and registers the exact maintenance promise before it starts. GET still awaits that promise; HEAD and rejected methods/queries register nothing. The existing eight-second acquisition budget, fixed endpoints, one-shot marker, lease and conditional result write remain. Unexpected completed probe errors produce bounded failure metadata without raw error/body retention. No marker is cleared or grant timestamp changed. Cloudflare documents at most thirty seconds of waitUntil extension after disconnect; this is a best-effort runtime extension, not guaranteed execution or retry. [Worker context lifecycle](https://developers.cloudflare.com/workers/runtime-apis/context/#waituntil)
+
+Local validation covers simulated client abandonment, separate concurrent request contexts, SQLite private-result persistence/lease release/no replay, and the compiled Worker with an actual local HTTP abort and fully intercepted synthetic upstreams. Miniflare completed the compiled abort case on both version 7 and the follow-up, so that case verifies fixture persistence but does not reproduce the hosted cancellation. The registration regression fails on the prior route and passes on the local fix. A renewed timestamped research grant still needs separate parent review; publication and all production sources stay disabled.
+
 
 ### Remaining retest boundary
 

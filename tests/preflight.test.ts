@@ -1,5 +1,8 @@
 import assert from 'node:assert/strict';import {test} from 'node:test';import {preflightSource,maintainPreflight} from '../lib/server/preflight.ts';
 import {DatabaseSync} from 'node:sqlite';import {readFileSync} from 'node:fs';
+import {catalogResponse} from '../lib/server/catalog-route.ts';
+import {runWithWorkerLifetime} from '../lib/server/worker-lifecycle.ts';
+import {emptyCatalog} from '../lib/catalog.ts';
 const time=()=>Date.parse('2026-10-11T11:00:00Z');
 test('an empty private research grant list acquires nothing, and robots denial stops before catalog/item acquisition',async()=>{
  let requests=0;
@@ -51,4 +54,35 @@ test('blocked/challenged feed transport is not empty inventory, and licensed fee
  const denied=await preflightSource('dealnews',(async()=>new Response('Denied',{status:403})) as typeof fetch,time);assert.equal(denied.outcome,'blocked');assert.equal(denied.httpStatus,403);assert.equal(denied.feed,null);
  const xml='<rss version="2.0"><channel><item><guid>QA-only</guid><title>QA ONLY private-body-test</title><link>https://www.dealnews.com/QA-ONLY?ref=x</link><description>QA ONLY original full body</description></item></channel></rss>';
  const observed=await preflightSource('dealnews',(async()=>new Response(xml,{headers:{'Content-Type':'text/xml'}})) as typeof fetch,time);assert.equal(observed.feed?.entries,1);assert.equal(JSON.stringify(observed).includes('original full body'),false);assert.equal(JSON.stringify(observed).includes('private-body-test'),false);assert.equal(observed.units.length,0);assert.equal(observed.catalogComplete,false);
+});
+
+test('retained one-shot preflight persists a denial and releases its lease after a simulated client disconnect',async()=>{
+ const{db,d1}=database();let clock=time(),calls=0;const retained:Promise<unknown>[]=[];
+ let respond!:(response:Response)=>void;const upstream=new Promise<Response>(resolve=>{respond=resolve});
+ const fetcher=(async(input:unknown,init?:RequestInit)=>{calls++;assert.equal(String(input),'https://www.appliances4less-sac.com/robots.txt');assert.equal(init?.signal?.aborted,false);return upstream;}) as typeof fetch;
+ const grant={sourceId:'a4l-sac' as const,reviewedAt:new Date(clock-1).toISOString()},client=new AbortController();
+ const service={read:async()=>emptyCatalog(),maintain:async()=>{await maintainPreflight(d1,()=>clock,[grant],fetcher);return emptyCatalog();}};
+ const response=runWithWorkerLifetime({waitUntil:task=>{retained.push(task);}},()=>catalogResponse(new Request('https://app.test/api/catalog',{signal:client.signal}),service,()=>clock));
+ assert.equal(retained.length,1);await new Promise<void>(resolve=>setImmediate(resolve));assert.equal(calls,1);
+ assert.equal(db.prepare('SELECT payload FROM source_preflight').get()!.payload,'null');
+ client.abort();await maintainPreflight(d1,()=>clock,[grant],fetcher);assert.equal(calls,1);
+ respond(new Response('User-agent: *\nDisallow: /',{headers:{'Content-Type':'text/plain'}}));await Promise.all(retained);
+ const row=db.prepare('SELECT * FROM source_preflight').get()!;
+ assert.equal(JSON.parse(row.payload as string).outcome,'blocked');assert.equal(JSON.parse(row.payload as string).httpStatus,null);
+ assert.equal(String(row.payload).includes('Disallow'),false);assert.equal(Number(row.checked_at),clock);
+ const control=db.prepare('SELECT lease_token,lease_until,daily_attempts FROM acquisition_control').get()!;
+ assert.equal(control.lease_token,null);assert.equal(control.lease_until,0);assert.equal(control.daily_attempts,1);
+ assert.equal((await response).status,200);clock+=3600000;await maintainPreflight(d1,()=>clock,[grant],fetcher);assert.equal(calls,1);
+ assert.equal(db.prepare('SELECT count(*) AS n FROM catalog_state').get()!.n,0);db.close();
+});
+
+test('unexpected probe failures persist only a bounded failure result and never reopen the consumed review',async()=>{
+ const{db,d1}=database();let ticks=0,calls=0;
+ const now=()=>{if(++ticks===3)throw new Error('QA ONLY private exception');return time();};
+ const grant={sourceId:'a4l-sac' as const,reviewedAt:new Date(time()-1).toISOString()};
+ const fetcher=(async()=>{calls++;return new Response('QA ONLY private upstream body',{status:403});}) as typeof fetch;
+ await maintainPreflight(d1,now,[grant],fetcher);
+ const payload=String(db.prepare('SELECT payload FROM source_preflight').get()!.payload);assert.equal(JSON.parse(payload).outcome,'failure');
+ assert.equal(payload.includes('private'),false);assert.ok(payload.length<16384);
+ await maintainPreflight(d1,time,[grant],fetcher);assert.equal(calls,1);assert.equal(db.prepare('SELECT lease_token FROM acquisition_control').get()!.lease_token,null);db.close();
 });

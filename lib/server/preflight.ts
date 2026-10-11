@@ -78,7 +78,10 @@ export async function maintainPreflight(database: D1Database, now = Date.now, ap
       ON CONFLICT(source_id) DO UPDATE SET checked_at=excluded.checked_at,payload='null',expires_at=excluded.expires_at,next_due_at=excluded.next_due_at WHERE source_preflight.checked_at<=excluded.checked_at`)
       .bind(source,started,started+86400000,started+GLOBAL_MIN_INTERVAL_MS,token,started).run();
     if(marked.meta.changes!==1)return;
-    const observation = await preflightSource(source, fetcher, now), completed = now(), payload = JSON.stringify(observation);
+    let observation: PreflightObservation;
+    try { observation = await preflightSource(source, fetcher, now); }
+    catch { observation = fail(source, new Date(now()).toISOString(), 'failure'); }
+    const completed = now(), payload = JSON.stringify(observation);
     if (new TextEncoder().encode(payload).byteLength > 16384) throw new TypeError('Preflight evidence exceeds limit');
     await database.prepare(`UPDATE source_preflight SET payload=?,expires_at=?,next_due_at=? WHERE source_id=? AND checked_at=? AND EXISTS(SELECT 1 FROM acquisition_control WHERE id=1 AND lease_token=? AND lease_until>?)`)
       .bind(payload, completed + 86400000,Date.parse(observation.notBefore),source,started,token,completed).run();

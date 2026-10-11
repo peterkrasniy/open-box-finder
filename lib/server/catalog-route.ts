@@ -1,4 +1,5 @@
 import type { Catalog } from '../offer.ts';
+import { retainMaintenance } from './worker-lifecycle.ts';
 
 export interface CatalogReadService { read(): Promise<Catalog>; maintain(): Promise<Catalog> }
 /** Public input never reaches acquisition configuration or payloads. HEAD performs no maintenance. */
@@ -7,7 +8,7 @@ export async function catalogResponse(request: Request, service: CatalogReadServ
   if (!['GET','HEAD'].includes(request.method)) return new Response(null, { status: 405, headers: { ...headers, Allow: 'GET, HEAD' } });
   if (new URL(request.url).search) return new Response(null, { status: 400, headers });
   try {
-    const catalog = request.method === 'HEAD' ? await service.read() : await service.maintain();
+    const catalog = request.method === 'HEAD' ? await service.read() : await retainMaintenance(() => service.maintain());
     const etag = `"${catalog.sequence}:${catalog.revision}"`;
     const responseHeaders = { ...headers, ETag: etag, 'Content-Type': 'application/json; charset=utf-8' };
     // Re-anchor after acquisition. The clock is not a stock-observation timestamp.
