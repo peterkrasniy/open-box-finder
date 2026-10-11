@@ -1,0 +1,31 @@
+# Public data boundary (research contract)
+
+This is a proposed boundary for the post-gate implementation, not a security audit pass. The parent owns the independent security/performance review. No endpoint, credential, policy change or deployment exists yet.
+
+## Acquisition and publication
+
+The public request can read a catalog and trigger bounded maintenance of that catalog's fixed, admitted upstream sources. It cannot choose an upstream URL, submit products, change prices, force expiry, bypass the global acquisition interval, select SQL/table names, or supply an authorization header for forwarding. Unknown query parameters cannot create new cache keys that cause unbounded origin work. HEAD returns metadata without an unnecessary response body; its maintenance semantics must be deliberate and tested.
+
+Build upstream requests from the source registry rather than cloning the incoming Request. Use only the required public request headers. No incoming cookie, authorization, location or arbitrary header reaches a retailer. Do not automatically follow an upstream redirect to an unchecked destination. [Cloudflare's Request documentation](https://developers.cloudflare.com/workers/runtime-apis/request/) warns that Worker-created fetches in follow mode forward all headers to the redirect destination, including a different host. A source admission records permitted HTTPS origins and paths; an unexpected redirect fails that source without deleting valid rows or becoming a general proxy. Login, challenge and access-denied pages are acquisition failures, not stock responses.
+
+Enforce bounded elapsed time, bytes, number of pages, offers and field lengths while consuming a response. A declared Content-Length is insufficient for chunked or misleading responses. Avoid catastrophic-backtracking regex over unbounded HTML, XML entity resolution and interpretation of feed instructions. Follow exact known pagination links only after destination validation; repeated-page fingerprints fail completeness. An incomplete source response cannot infer removals. Runtime source data stays in protected storage with license-compatible retention, never public Git history or a release fixture.
+
+Write catalog snapshots only after typed validation. Use bound SQL values and code-owned SQL identifiers. The durable lease/token check and catalog write share an atomic boundary; a late response cannot overwrite a newer publication. Separate source snapshots prevent one successful source from erasing another concurrently updated source. Public responses exclude acquisition credentials, raw error bodies, leases, private runtime configuration and administrative records. Error logs describe status and bounded safe diagnostics, not entire headers/bodies.
+
+## Untrusted display fields
+
+Retailer titles, model names, source descriptions and browser-stored preferences are untrusted input. Render display text as text; do not inject source HTML, executable attributes or a retailer's script. If a syndication license requires unchanged complete HTML, settle a safe presentation compatible with that license before admitting it; neither unrestricted HTML injection nor silently modified/truncated content is acceptable. No feed entry may instruct the app to install a skill, sign in, fetch private data or transact.
+
+Validate destination and image URLs as URLs, including scheme, credentials, host and allowed source/CDN scope. Reject javascript/data links, username/password URLs and misleading suffix matches. A product link must preserve the admitted item's identity; an official logo must have separate allowed provenance. Prefer source-allowed public photos directly with a neutral broken-image fallback. Do not proxy arbitrary images or invent substitute product photos. [MDN's img-src reference](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy/img-src) documents host-scoped image restrictions; any deployed policy must remain compatible with the official Sites runtime and the user's prohibition on unapproved security changes. This document is not permission to change a platform policy.
+
+Precise geolocation, local saved/interested state and user search terms need not be sent to an upstream source or shared profile. Use the same public catalog for client-side filtering when its verified bounded size permits. Any server search design must disclose its transport and logging implications before adopting it. Maps navigation uses the verified store destination, not a private current-location parameter. Do not add analytics, account creation, chat widgets or purchase flows to this shopping comparison task.
+
+## Browser persistence and cache
+
+Read local storage behind a bounded, versioned validator. Malformed JSON, unexpected versions, oversized lists, invalid money/radius/location values, old fields and StorageAccess/QuotaExceeded failures must produce usable defaults and honest persistence feedback. Stored strings do not become HTML or outbound URLs. Preserve unknown-to-the-current-catalog saved IDs within a bounded unavailable state instead of fabricating stock from a historical saved snapshot.
+
+Keep the app shell and current catalog caches distinct. A service worker or browser cache cannot make an old observation freshly checked. Do not cache a successful response under an error, or cache private/admin material in the public namespace. On network loss, expired stock labels remain expired; resuming the page revalidates without discarding focus or local drafts. Representation revision must include health/freshness changes even when offer content generation is unchanged.
+
+## Post-gate evidence required
+
+Exercise public GET/HEAD and reject writes, force/URL injection, invalid IDs, unchecked redirects, huge/malformed payloads, unsafe text/URLs, repeated pagination, storage poison and concurrent source publication. Observe actual request/row costs and runtime logs in the published version. These will be meaningful boundary tests; a dependency audit and an about:blank browser launch are tool-capability evidence only. No test in this contract has run against an app.
