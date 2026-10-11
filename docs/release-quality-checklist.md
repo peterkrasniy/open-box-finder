@@ -24,6 +24,7 @@ Statuses: PASS, FAIL, NOT RUN, BLOCKED. A checklist assertion is not a test pass
 - [ ] Source observation timestamps remain immutable; fetch time is separate.
 - [ ] Catalog updates are atomic; failed fetches never imply sellout or clear the last valid catalog.
 - [ ] Automatic/unattended update claims have actual source fetch/write and public readback evidence, beyond an open-browser timer.
+- [ ] New source offer and removal/change are traced through real observed generations to an already-open client, with measured acquisition/adoption latency. Isolated synthetic injections are identified separately and cannot substitute for real observed source evidence.
 - [ ] Important item restrictions appear in concise details: condition, fulfillment, source time, warranty/returns where supported, comparison basis and stock limits.
 
 ## Navigation and browser-local state
@@ -43,6 +44,7 @@ Statuses: PASS, FAIL, NOT RUN, BLOCKED. A checklist assertion is not a test pass
 - [ ] Original distinctive app icon; actual manifest, 192/512 icons, maskable icon treatment and apple-touch-icon verified.
 - [ ] Actual licensed product photographs and allowed retailer logos; no decorative substitute passed off as product media.
 - [ ] Responsive phone/tablet/desktop layouts, Russian text, 200% zoom, reduced motion, contrast, focus and touch targets checked.
+- [ ] VIS-08/J9: desktop and mobile have separate purposeful layouts and controls; pointer/keyboard/available-space/filter/detail flows and thumb/keyboard/safe-area/sheet flows tested separately, including state continuity across breakpoints.
 - [ ] Native iPhone/VoiceOver checks marked NOT RUN unless actually performed; phone emulation labeled accurately.
 - [ ] Public reads expose no administrative/anonymous writer, unsafe link, arbitrary upstream fetch, XSS or secrets.
 - [ ] Public repository history, build/package and browser responses scanned for credentials/private profile material.
