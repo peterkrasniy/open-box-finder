@@ -26,6 +26,8 @@ The harmless `NETWORK` routing value is `caas_neko_desktop`. No bypass, proxy re
 
 Existing shell Git transport read and push succeeded. The native GitHub `get_repo` read also succeeded and confirmed the public canonical repository. Shell `gh api` requests are proxy-blocked, so use supported existing Git transport/native GitHub tools rather than create a credential or broaden access.
 
+At 08:33:16 UTC a bounded four-request read-only batch attempted BuyDig's robots file and the exact DJI open-box item, plus Outdoor Speaker Depot's robots file and exact AP650 B-stock item. Each used the default Python urllib transport with a 12-second timeout and a 256 KiB observation limit. All returned `Tunnel connection failed: 403 Forbidden` before reaching the retailer origin. No payload was stored, no alternate proxy/user-agent impersonation was used, and those denied endpoints were not retried. Native research-page stock observations do not prove unattended executable-runtime access. Hosted supported fetch access remains a separate verification requirement.
+
 ## Later browser validation capability
 
 Node v24.19.0, npm 11.9.0, `/usr/bin/chromium`, Python Playwright and a Playwright Core Node package are installed. The Browser plugin/skill is not listed in the session. The frontend-testing skill permits ordinary Playwright when Browser is absent; portable Sites preview instructions apply here. No new browser dependency is needed merely to establish browser capability.
