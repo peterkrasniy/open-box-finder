@@ -2,7 +2,7 @@
 
 Updated October 11, 2026, 13:23 UTC. The research gate passed at 08:38 UTC; application implementation began at 08:43:40 UTC.
 
-Sites version 4 deployed at https://open-box-finder.peter-krasniy.chatgpt.site on October 11 at 13:12:58.021759 UTC. Its source is `4a3869311c8609d3120ae9c76cf7516d75ae5c44`, matching canonical GitHub main and the supported Sites source repository. The parent has independently confirmed public version 4 and no attached schedules. This executor's configured proxy rejects public root/catalog with CONNECT 403 before origin; local execution cannot establish the public HTTP/browser journey.
+Sites version 4 deployed at https://open-box-finder.peter-krasniy.chatgpt.site on October 11 at 13:12:58.021759 UTC. Its source is `4a3869311c8609d3120ae9c76cf7516d75ae5c44`, matching canonical GitHub main and the supported Sites source repository. Native Sites confirms public version 4 and no attached schedules; parent acceptance of the latest source revision remains pending. This executor's configured proxy rejects public root/catalog with CONNECT 403 before origin; local execution cannot establish the public HTTP/browser journey.
 
 The bilingual responsive UI, filters, exact-unit details, local pointer saves, client polling, original PWA assets, and inactive database/transport/XML foundations are implemented. Native Sites database reads confirm binding `DB`, four operational tables and zero rows. All seven source candidates remain disabled; publication and private preflight approval maps are empty. No production source request, real offer publication, unattended writer, natural source-change trace or native schedule has been verified. The empty public app is incomplete and is not first complete or live inventory completion.
 
