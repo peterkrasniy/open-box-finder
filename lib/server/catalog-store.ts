@@ -1,6 +1,9 @@
 import type { Catalog } from '../offer.ts';
 import { emptyCatalog } from '../catalog.ts';
-import { validatePublication } from './publication.ts';
+import { APPROVED_POLICIES, validatePublication } from './publication.ts';
+import type { PublicationPolicy } from './publication.ts';
+import { SOURCE_BY_ID } from '../sources.ts';
+import type { SourceDefinition } from '../sources.ts';
 import { decodeCatalog } from '../validation.ts';
 
 export const GLOBAL_MIN_INTERVAL_MS = 15 * 60 * 1000;
@@ -22,12 +25,18 @@ export const RELEASE_SQL = 'UPDATE acquisition_control SET lease_token=NULL,leas
 /** Only the server receives DB; the public route never accepts payloads, lease tokens or SQL. */
 export class CatalogStore {
   private readonly database: D1Database;
-  constructor(database: D1Database) { this.database = database; }
+  private readonly policies: ReadonlyMap<string, PublicationPolicy>;
+  private readonly registry: ReadonlyMap<string, SourceDefinition>;
+  constructor(database: D1Database, policies: ReadonlyMap<string, PublicationPolicy> = APPROVED_POLICIES, registry: ReadonlyMap<string, SourceDefinition> = SOURCE_BY_ID) { this.database = database; this.policies = policies; this.registry = registry; }
   async read(): Promise<Catalog> {
-    const row = await this.database.prepare('SELECT payload FROM catalog_state WHERE id=1').first<{ payload: string }>();
+    const row = await this.database.prepare('SELECT payload,sequence FROM catalog_state WHERE id=1').first<{ payload: string; sequence: number }>();
     if (!row) return emptyCatalog();
     if (new TextEncoder().encode(row.payload).byteLength > CATALOG_MAX_BYTES) throw new TypeError('Stored catalog exceeds limit');
-    return decodeCatalog(JSON.parse(row.payload));
+    const catalog = decodeCatalog(JSON.parse(row.payload));
+    if (row.sequence !== catalog.sequence) throw new TypeError('Stored publication sequence mismatch');
+    if (catalog.sequence === 0) { if (JSON.stringify(catalog) !== JSON.stringify(emptyCatalog())) throw new TypeError('Invalid initial publication'); return catalog; }
+    // A disabled/revoked source must not escape through an older stored payload.
+    return validatePublication(catalog, Date.parse(catalog.publishedAt ?? ''), this.policies, this.registry);
   }
   async claim(now: number): Promise<string | null> {
     if (!Number.isSafeInteger(now) || now < 0) throw new TypeError('Invalid acquisition time');
@@ -37,7 +46,7 @@ export class CatalogStore {
     return row?.lease_token === token ? token : null;
   }
   async publish(token: string, catalog: Catalog, now: number): Promise<boolean> {
-    const publicCatalog = validatePublication(catalog, now), payload = JSON.stringify(publicCatalog);
+    const publicCatalog = validatePublication(catalog, now, this.policies, this.registry), payload = JSON.stringify(publicCatalog);
     if (new TextEncoder().encode(payload).byteLength > CATALOG_MAX_BYTES) throw new TypeError('Public catalog exceeds limit');
     const result = await this.database.prepare(PUBLISH_SQL).bind(payload, publicCatalog.revision, now, publicCatalog.sequence, publicCatalog.sequence, token, now).run();
     return result.meta.changes === 1;

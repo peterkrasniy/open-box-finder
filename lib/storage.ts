@@ -74,6 +74,17 @@ export function safeExternalUrl(value: unknown): string | null {
   } catch { return null; }
 }
 
+export function savedSourceUrl(sourceId: string, value: unknown): string | null {
+  const url = safeExternalUrl(value), source = SOURCE_BY_ID.get(sourceId);
+  if (!url || !source) return null;
+  try {
+    const parsed = new URL(url);
+    if (parsed.origin !== new URL(source.website).origin) return null;
+    const prefixes: Record<string, string> = { 'a4l-sac': '/p/', 'buydig': '/shop/product/', 'blues-appliance': '/collections/', 'outdoor-speaker-depot': '/', 'best-buy': '/site/' };
+    return prefixes[sourceId] && parsed.pathname.startsWith(prefixes[sourceId]) ? url : null;
+  } catch { return null; }
+}
+
 export function decodeSaved(raw: string | null): SavedListing[] {
   if (!raw || raw.length > 320000) return [];
   try {
@@ -84,7 +95,7 @@ export function decodeSaved(raw: string | null): SavedListing[] {
       if (!plain(record) || !smallText(record.offerId, 200) || !record.offerId || /\s/.test(record.offerId) || !smallText(record.sourceId, 80) || !SOURCE_BY_ID.has(record.sourceId) || record.sourceId === 'shopify-catalog'
         || !smallText(record.variantKey, 200) || !record.variantKey || !(record.storeId === null || smallText(record.storeId, 160))
         || !smallText(record.savedAt, 40) || !Number.isFinite(Date.parse(record.savedAt))) continue;
-      const url = safeExternalUrl(record.url);
+      const url = savedSourceUrl(record.sourceId, record.url);
       const metadata = { ...(smallText(record.sourceOfferId, 200) && record.sourceOfferId ? { sourceOfferId: record.sourceOfferId } : {}),
         ...(['open-box', 'refurbished', 'used', 'scratch-and-dent', 'new-clearance', 'unspecified'].includes(String(record.condition)) ? { condition: record.condition as Offer['condition'] } : {}),
         ...(smallText(record.title, 240) && record.title ? { title: record.title } : {}),
@@ -101,7 +112,7 @@ export function decodeSaved(raw: string | null): SavedListing[] {
 export function savedPointer(offer: Offer, now: number, sequence = 0): SavedListing | null {
   // Shopify's no-cache permission is unverified; do not persist even a pointer through this path.
   if (offer.sourceId === 'shopify-catalog' || !SOURCE_BY_ID.has(offer.sourceId) || !Number.isFinite(now)) return null;
-  const url = safeExternalUrl(offer.url);
+  const url = savedSourceUrl(offer.sourceId, offer.url);
   return url ? { offerId: offer.id, sourceId: offer.sourceId, variantKey: offer.variantKey, storeId: offer.pickup?.id ?? null, url, savedAt: new Date(now).toISOString(), sourceOfferId: offer.sourceOfferId, condition: offer.condition, title: offer.title, savedAgainstSequence: sequence } : null;
 }
 

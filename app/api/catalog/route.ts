@@ -1,10 +1,16 @@
+import { env } from 'cloudflare:workers';
 import { emptyCatalog } from '../../../lib/catalog.ts';
+import { CatalogStore } from '../../../lib/server/catalog-store.ts';
+import { catalogResponse } from '../../../lib/server/catalog-route.ts';
+import { maintainPreflight } from '../../../lib/server/preflight.ts';
+import { maintainCatalog } from '../../../lib/server/pipeline.ts';
 
 export const dynamic = 'force-dynamic';
-
-/** Read-only until an admitted adapter and durable acquisition are verified. */
-export function GET(request: Request) {
-  const headers = { 'Cache-Control': 'no-store', ETag: '"uninitialized-v1"', 'X-Content-Type-Options': 'nosniff', 'X-Catalog-Time': new Date().toISOString() };
-  if (request.headers.get('If-None-Match') === headers.ETag) return new Response(null, { status: 304, headers });
-  return Response.json(emptyCatalog(), { headers });
+/** All adapters remain disabled until parent source and security admission. */
+function service() {
+  if (!env.DB) return { read: async () => emptyCatalog(), maintain: async () => emptyCatalog() };
+  const store = new CatalogStore(env.DB);
+  return { read: () => store.read(), maintain: async () => { const catalog = await maintainCatalog(store); await maintainPreflight(env.DB!); return catalog; } };
 }
+export function GET(request: Request) { return catalogResponse(request, service()); }
+export function HEAD(request: Request) { return catalogResponse(request, service()); }

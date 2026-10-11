@@ -78,6 +78,7 @@ export interface SourceHealth {
   nextCheckAt: string | null;
   lastCompleteAt: string | null;
   lastCompleteSequence: number;
+  lastSnapshotComplete?: boolean;
 }
 export interface Catalog {
   schemaVersion: 2;

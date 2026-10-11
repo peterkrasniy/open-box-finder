@@ -30,3 +30,11 @@ export const acquisitionEvents = sqliteTable('acquisition_events', {
   changed: integer('changed').notNull().default(0),
   removed: integer('removed').notNull().default(0),
 });
+
+/** Private, short-lived admission evidence, never included in public catalog responses. */
+export const sourcePreflight = sqliteTable('source_preflight', {
+  sourceId: text('source_id').primaryKey(),
+  checkedAt: integer('checked_at').notNull(),
+  payload: text('payload').notNull(),
+  expiresAt: integer('expires_at').notNull(),
+});

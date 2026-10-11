@@ -3,7 +3,7 @@ import type { Category, Condition, Language, ReferenceBasis, Sort } from './offe
 const en = {
   brand: 'Open Box Finder', deals: 'Deals', saved: 'Saved', search: 'Search deals', searchHint: 'Product, brand, or keyword',
   editorialDeals: 'Deals from DealNews', editorialHelp: 'Original editorial listings. Feed membership does not verify current price or stock. Inventory filters and deal sorting do not apply to this section.', providedBy: 'Provided by',
-  filtersChanged: 'Filters changed in another tab. Choose which to keep.', useUpdatedFilters: 'Use updated filters', keepMyEdits: 'Keep my edits', sourceCoverage: 'Source coverage and check status',
+  filtersChanged: 'Filters changed in another tab. Choose which to keep.', useUpdatedFilters: 'Use updated filters', keepMyEdits: 'Keep my edits', sourcesReady: 'Checked', sourcesAttention: 'Needs attention', sourcesDisconnected: 'Not connected', partialCatalog: 'Partial catalog check', sourceCoverage: 'Source coverage and check status',
   filters: 'Filters', sort: 'Sort', all: 'All', clear: 'Clear', retailers: 'Retailers', categories: 'Categories',
   fulfillment: 'Fulfillment', both: 'Both', pickup: 'Pickup', shipped: 'Shipped', price: 'Price (USD)',
   minPrice: 'Min price', maxPrice: 'Max price', radius: 'Radius (miles)', miles: 'miles', location: 'Location',
@@ -53,7 +53,7 @@ const en = {
 const ru: Record<keyof typeof en, string> = {
   brand: 'Open Box Finder', deals: 'Предложения', saved: 'Сохранённое', search: 'Поиск предложений', searchHint: 'Товар, бренд или слово',
   editorialDeals: 'Предложения от DealNews', editorialHelp: 'Исходные редакционные объявления. Публикация в ленте не подтверждает текущую цену или наличие. Фильтры наличия и сортировка скидок не применяются к этому разделу.', providedBy: 'Источник:',
-  filtersChanged: 'Фильтры изменены в другой вкладке. Выберите, какие сохранить.', useUpdatedFilters: 'Использовать новые фильтры', keepMyEdits: 'Сохранить мои правки', sourceCoverage: 'Источники и состояние проверок',
+  filtersChanged: 'Фильтры изменены в другой вкладке. Выберите, какие сохранить.', useUpdatedFilters: 'Использовать новые фильтры', keepMyEdits: 'Сохранить мои правки', sourcesReady: 'Проверено', sourcesAttention: 'Требуют проверки', sourcesDisconnected: 'Не подключено', partialCatalog: 'Проверена часть каталога', sourceCoverage: 'Источники и состояние проверок',
   filters: 'Фильтры', sort: 'Сортировка', all: 'Все', clear: 'Очистить', retailers: 'Магазины', categories: 'Категории',
   fulfillment: 'Получение', both: 'Любое', pickup: 'Самовывоз', shipped: 'Доставка', price: 'Цена (USD)',
   minPrice: 'Цена от', maxPrice: 'Цена до', radius: 'Радиус (мили)', miles: 'миль', location: 'Местоположение',

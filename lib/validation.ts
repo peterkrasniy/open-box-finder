@@ -65,7 +65,8 @@ export function decodeCatalog(value:unknown):Catalog {
    ||(source.lastSuccessAt&&(!source.lastAttemptAt||Date.parse(source.lastSuccessAt as string)>Date.parse(source.lastAttemptAt as string)))
    ||(source.lastCompleteSequence>0&&(!source.lastCompleteAt||!source.lastSuccessAt))
    ||(source.lastCompleteAt&&(!source.lastSuccessAt||Date.parse(source.lastCompleteAt as string)>Date.parse(source.lastSuccessAt as string))))throw new TypeError('Invalid source health');
-  sources.add(source.sourceId);health.push({sourceId:source.sourceId,status:source.status,lastAttemptAt:source.lastAttemptAt,lastSuccessAt:source.lastSuccessAt,nextCheckAt:source.nextCheckAt,lastCompleteAt:source.lastCompleteAt,lastCompleteSequence:source.lastCompleteSequence} as SourceHealth);
+  if (source.lastSnapshotComplete !== undefined && typeof source.lastSnapshotComplete !== 'boolean') throw new TypeError('Invalid completeness evidence');
+  sources.add(source.sourceId);health.push({sourceId:source.sourceId,status:source.status,lastAttemptAt:source.lastAttemptAt,lastSuccessAt:source.lastSuccessAt,nextCheckAt:source.nextCheckAt,lastCompleteAt:source.lastCompleteAt,lastCompleteSequence:source.lastCompleteSequence,...(typeof source.lastSnapshotComplete === 'boolean'?{lastSnapshotComplete:source.lastSnapshotComplete}:{})} as SourceHealth);
  }
  return {schemaVersion:2,sequence:value.sequence,generation:value.generation,revision:value.revision,publishedAt:value.publishedAt as string|null,offers:value.offers.map(publicOffer),syndication:value.syndication.map(publicSyndication),sources:health};
 }

@@ -19,6 +19,7 @@ import { OfferCard } from './OfferCard';
 import { OfferDetail } from './OfferDetail';
 import { SavedRows } from './SavedRows';
 import { SyndicatedDeals } from './SyndicatedDeals';
+import { SourceCoverage } from './SourceCoverage';
 import { SourceStatus } from './SourceStatus';
 
 function filterFingerprint(value: Filters): string {
@@ -116,10 +117,10 @@ export function OpenBoxApp() {
     </header>
     <div className="search-location" role="search" aria-label={t('search')}><label className="search-field"><Icon name="search"/><span className="sr-only">{t('search')}</span><input type="search" value={filters.query} placeholder={t('searchHint')} maxLength={160} onChange={event => updateFilters({ query: event.target.value })}/></label><button type="button" className="location-button" onClick={() => openPanel('location')}><Icon name="pin"/><span><strong>{filters.origin.label}</strong><small>{filters.radiusMiles} {t('miles')}</small></span><Icon name="down" size={18}/></button></div>
     <div className="shopping-layout">
-      {wide && route.view === 'deals' && <aside className="filter-rail" aria-label={t('filters')}>{route.panel !== 'filters' && <><FilterFields draft={draft} language={language} onChange={setDraft} error={error ? t(error) : null} errorField={errorField} idPrefix="rail"/>{conflict && <div className="notice" role="alert"><p>{t('filtersChanged')}</p><button type="button" className="text-action" onClick={() => setEdited(null)}>{t('useUpdatedFilters')}</button><button type="button" className="text-action" onClick={() => setEdited(previous => previous ? { ...previous, base: fingerprint } : null)}>{t('keepMyEdits')}</button></div>}<div className="filter-actions"><button type="button" className="secondary-button" onClick={cancelFilters}>{t('cancel')}</button><button type="button" className="primary-button" onClick={applyFilters}>{t('apply')}</button></div></>}</aside>}
+      {route.view === 'deals' && <aside className="filter-rail" aria-label={t('filters')}>{route.panel !== 'filters' && <><FilterFields draft={draft} language={language} onChange={setDraft} error={error ? t(error) : null} errorField={errorField} idPrefix="rail"/>{conflict && <div className="notice" role="alert"><p>{t('filtersChanged')}</p><button type="button" className="text-action" onClick={() => setEdited(null)}>{t('useUpdatedFilters')}</button><button type="button" className="text-action" onClick={() => setEdited(previous => previous ? { ...previous, base: fingerprint } : null)}>{t('keepMyEdits')}</button></div>}<div className="filter-actions"><button type="button" className="secondary-button" onClick={cancelFilters}>{t('cancel')}</button><button type="button" className="primary-button" onClick={applyFilters}>{t('apply')}</button></div></>}</aside>}
       <main id="listings" className={`listing-main${route.view === 'saved' ? ' saved-main' : ''}`} tabIndex={-1}>
-        {!wide && route.view === 'deals' && <div className="mobile-controls"><button type="button" className="secondary-button" data-filter-opener onClick={() => openPanel('filters')}><Icon name="filters" size={20}/>{t('filters')}</button><label className="sort-mobile"><span className="sr-only">{t('sort')}</span><Icon name="sort" size={20}/><select value={sort} onChange={event => setPreferences(previous => ({ ...previous, sort: event.target.value as typeof sort }))}>{SORTS.map(value => <option key={value} value={value}>{sortLabel(language, value)}</option>)}</select></label></div>}
-        <div className="listing-toolbar"><h1>{t(route.view === 'saved' ? 'saved' : 'deals')}</h1>{wide && route.view === 'deals' && <label className="sort-desktop">{t('sort')}<select value={sort} onChange={event => setPreferences(previous => ({ ...previous, sort: event.target.value as typeof sort }))}>{SORTS.map(value => <option key={value} value={value}>{sortLabel(language, value)}</option>)}</select></label>}</div>
+        {route.view === 'deals' && <div className="mobile-controls"><button type="button" className="secondary-button" data-filter-opener onClick={() => openPanel('filters')}><Icon name="filters" size={20}/>{t('filters')}</button><label className="sort-mobile"><span className="sr-only">{t('sort')}</span><Icon name="sort" size={20}/><select value={sort} onChange={event => setPreferences(previous => ({ ...previous, sort: event.target.value as typeof sort }))}>{SORTS.map(value => <option key={value} value={value}>{sortLabel(language, value)}</option>)}</select></label></div>}
+        <div className="listing-toolbar"><h1>{t(route.view === 'saved' ? 'saved' : 'deals')}</h1>{route.view === 'deals' && <label className="sort-desktop">{t('sort')}<select value={sort} onChange={event => setPreferences(previous => ({ ...previous, sort: event.target.value as typeof sort }))}>{SORTS.map(value => <option key={value} value={value}>{sortLabel(language, value)}</option>)}</select></label>}</div>
         {route.view === 'deals' && <div className="category-chips" aria-label={t('categories')}>
           <button type="button" aria-pressed={filters.categories.mode === 'all'} onClick={() => updateFilters({ categories: { mode: 'all', ids: [] } })}>{t('all')}</button>
           <button type="button" aria-pressed={filters.categories.mode === 'selected' && filters.categories.ids.length === 1 && filters.categories.ids[0] === 'appliances'} onClick={() => updateFilters({ categories: { mode: 'selected', ids: ['appliances'] } })}>{categoryLabel(language, 'appliances')}</button>
@@ -131,7 +132,7 @@ export function OpenBoxApp() {
           {status === 'loading' ? t('updating') : status === 'offline' ? t('offline') : status === 'error' ? t('updateFailed') : catalog.generation === 'uninitialized' ? t('noSourceConnected') : `${route.view === 'saved' ? saved.length : listings.length} ${t('count')}`}
           {(status === 'error' || status === 'offline') && <button type="button" className="text-action" onClick={refresh}>{t('refresh')}</button>}
         </div>
-        {route.view === 'deals' && catalog.offers.length > 0 && <details className="source-coverage"><summary>{t('sourceCoverage')}</summary><SourceStatus catalog={catalog} language={language}/></details>}
+        {route.view === 'deals' && catalog.offers.length > 0 && <SourceCoverage catalog={catalog} language={language} now={now}/>}
         {route.view === 'saved' ? <>
           <p className="saved-privacy"><Icon name="bookmark" size={18}/>{t('savedPrivacy')}</p>
           {saved.length ? <SavedRows saved={saved} catalog={catalog} status={status} language={language} now={now} onOpen={openOffer} onRemove={removeSaved}/>
@@ -141,7 +142,7 @@ export function OpenBoxApp() {
           {listings.length > visibleCount && <button type="button" className="secondary-button show-more" onClick={() => setPagination(previous => ({ filters, sort, count: (previous.filters === filters && previous.sort === sort ? previous.count : 60) + 60 }))}>{t('showMore')}</button>}
         </> : <>
           <section className="empty-state"><span className="empty-icon"><Icon name="openBox" size={42}/></span><h2>{t(catalog.offers.length ? 'noMatches' : 'noVerified')}</h2><p>{t(catalog.offers.length ? 'noMatchesHelp' : 'noVerifiedHelp')}</p>{catalog.offers.length > 0 && <button type="button" className="secondary-button" onClick={resetFilters}>{t('reset')}</button>}</section>
-          {!catalog.offers.length && <SourceStatus catalog={catalog} language={language}/>}
+          {!catalog.offers.length && <SourceStatus catalog={catalog} language={language} now={now}/>}
         </>}
         {route.view === 'deals' && <SyndicatedDeals deals={catalog.syndication} language={language} filters={filters} now={now}/>}
       </main>

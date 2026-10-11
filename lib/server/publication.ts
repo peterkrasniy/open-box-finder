@@ -24,6 +24,7 @@ export function withinScope(value: string, scopes: readonly UrlScope[], base?: s
 
 /** Inspect the complete supplied HTML; reject a whole unsafe item, never rewrite licensed content. */
 export function safeSyndicatedHtml(html: string, base: string, policy: PublicationPolicy): boolean {
+  if (html.length > 32768 || (html.match(/</g)?.length ?? 0) > 10000) return false;
   const root = parseFragment(html);
   const allowed = new Set(['a','abbr','b','blockquote','br','caption','center','code','dd','del','div','dl','dt','em','figcaption','figure','font','h1','h2','h3','h4','h5','h6','hr','i','img','li','ol','p','pre','s','small','span','strong','sub','sup','table','tbody','td','th','thead','tr','u','ul']);
   let count = 0;

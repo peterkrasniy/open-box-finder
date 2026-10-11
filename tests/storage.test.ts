@@ -25,7 +25,7 @@ test('saved pointers are bounded, deduplicated and cannot contain executable or 
   const valid = { offerId: 'unit-a', sourceId: 'a4l-sac', variantKey: 'exact-variant', storeId: 'elkhorn', url: 'https://www.appliances4less-sac.com/p/example/u/exact-unit', savedAt: '2026-10-11T09:00:00Z' };
   const raw = JSON.stringify({ version: 1, listings: [valid, valid, { ...valid, offerId: 'bad', url: 'javascript:alert(1)' }, { ...valid, offerId: 'foreign', sourceId: 'unknown' }] });
   assert.deepEqual(decodeSaved(raw), [valid]);
-  for (const url of ['javascript:alert(1)', 'data:text/html,test', 'http://example.com', 'https://user:pass@example.com', 'https://127.0.0.1/x', 'https://localhost/x', 'https://[::1]/x', 'https://host.local/x', 'https://example.com:444/x']) assert.equal(safeExternalUrl(url), null);
+  for (const url of ['javascript:alert(1)', 'data:text/html,test', 'http://example.com', 'https://user:pass@example.com', 'https://127.0.0.1/x', 'https://localhost/x', 'https://[::1]/x', 'https://host.local/x', 'https://example.com:444/x','https://localhost./x','https://admin.localhost./x']) assert.equal(safeExternalUrl(url), null);
 });
 
 test('denied storage never crashes or pretends preferences were persisted', () => {
@@ -37,7 +37,7 @@ test('denied storage never crashes or pretends preferences were persisted', () =
 
 test('saved identity keeps distinct variants and branches when a source reuses a listing ID', async () => {
   const { savedIdentity } = await import('../lib/storage.ts');
-  const base = { offerId: 'qa-only-reused-id', sourceId: 'buydig', variantKey: 'qa-only-unit-a', storeId: 'qa-only-branch-a', url: 'https://example.test/item', savedAt: '2026-10-11T09:00:00Z' };
+  const base = { offerId: 'qa-only-reused-id', sourceId: 'buydig', variantKey: 'qa-only-unit-a', storeId: 'qa-only-branch-a', url: 'https://www.buydig.com/shop/product/QA-ONLY', savedAt: '2026-10-11T09:00:00Z' };
   const anotherVariant = { ...base, variantKey: 'qa-only-unit-b' }, anotherBranch = { ...base, storeId: 'qa-only-branch-b' };
   const result = decodeSaved(JSON.stringify({ version: 1, listings: [base, anotherVariant, anotherBranch, base] }));
   assert.equal(result.length, 3);
@@ -56,4 +56,10 @@ test('independent saved entries preserve two interleaved tabs without Web Locks 
  store.setItem(SAVED_KEY,JSON.stringify({version:1,listings:[a]}));writeSavedEntry(store,savedIdentity(a),null);
  assert.deepEqual(readSavedEntries(store),[b]);
  const replacement={...b,condition:'used' as const};assert.notEqual(savedIdentity(b),savedIdentity(replacement));
+});
+
+test('saved pointers cannot label an unrelated hostname as an official retailer link', async () => {
+ const {savedSourceUrl}=await import('../lib/storage.ts');
+ for(const url of ['https://unrelated.test/shop/product/QA','https://www.buydig.com.evil.test/shop/product/QA','https://www.buydig.com/not-a-product'])assert.equal(savedSourceUrl('buydig',url),null);
+ assert.equal(savedSourceUrl('buydig','https://www.buydig.com/shop/product/QA-ONLY'),'https://www.buydig.com/shop/product/QA-ONLY');
 });
