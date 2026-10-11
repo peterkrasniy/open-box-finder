@@ -2,7 +2,8 @@ export type ParseReason = 'html-size' | 'html-tokens' | 'html-structure' | 'cata
   | 'product-json' | 'product-size' | 'product-depth' | 'product-count' | 'product-not-unique'
   | 'product-price-identity' | 'product-price' | 'product-canonical-missing' | 'product-canonical-mismatch'
   | 'rss-size' | 'rss-doctype' | 'rss-structure' | 'rss-envelope' | 'rss-item-limit' | 'rss-duplicate-field'
-  | 'rss-field-limit' | 'rss-incomplete' | 'rss-xml-syntax' | 'parser-unclassified';
+  | 'rss-field-limit' | 'rss-incomplete' | 'rss-xml-syntax' | 'parser-unclassified'
+  | 'response-challenge' | 'product-reference' | 'product-conflict' | 'product-condition';
 
 /** Only compile-time reason codes escape parsing; native/raw error messages never do. */
 export class SourceParseError extends TypeError {

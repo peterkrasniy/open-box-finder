@@ -1,3 +1,4 @@
+import { DISCOUNT_TARGET } from './research/discount-product.ts';
 /** Server-only acquisition. Destination is compile-time policy, never supplied by a visitor. */
 export interface SourceTransport {
   id: string; url: string; allowedContentTypes: readonly string[]; maxBytes: number; timeoutMs: number;
@@ -13,6 +14,8 @@ const registered = new WeakSet<object>([DEALNEWS_TRANSPORT]);
 function register(source: SourceTransport): Readonly<SourceTransport> { const fixed = Object.freeze(source); registered.add(fixed); return fixed; }
 export const A4L_ROBOTS_TRANSPORT = register({ id: 'a4l-sac-robots', url: 'https://www.appliances4less-sac.com/robots.txt', allowedContentTypes: ['text/plain'], maxBytes: 131072, timeoutMs: 8000 });
 export const A4L_CATALOG_TRANSPORT = register({ id: 'a4l-sac-catalog', url: 'https://www.appliances4less-sac.com/products', allowedContentTypes: ['text/html'], maxBytes: 1048576, timeoutMs: 8000 });
+export const DISCOUNT_ROBOTS_TRANSPORT = register({ id: 'discount-electronics-robots', url: 'https://discountelectronics.com/robots.txt', allowedContentTypes: ['text/plain'], maxBytes: 131072, timeoutMs: 8000 });
+export const DISCOUNT_PRODUCT_TRANSPORT = register({ id: 'discount-electronics-product', url: DISCOUNT_TARGET.url, allowedContentTypes: ['text/html'], maxBytes: 1048576, timeoutMs: 8000 });
 /** Only reviewed canonical public unit paths discovered by the server's bounded catalog parser. */
 export function a4lUnitTransport(value: string): Readonly<SourceTransport> {
   const url = new URL(value);

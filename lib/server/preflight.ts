@@ -1,4 +1,4 @@
-import { acquireSource, A4L_ROBOTS_TRANSPORT, A4L_CATALOG_TRANSPORT, DEALNEWS_TRANSPORT, a4lUnitTransport } from './fetch-source.ts';
+import { acquireSource, A4L_ROBOTS_TRANSPORT, A4L_CATALOG_TRANSPORT, DEALNEWS_TRANSPORT, DISCOUNT_ROBOTS_TRANSPORT, DISCOUNT_PRODUCT_TRANSPORT, a4lUnitTransport } from './fetch-source.ts';
 import { discoverA4lUnits, observeA4lUnit } from './a4l-preflight.ts';
 import type { UnitObservation } from './a4l-preflight.ts';
 import { robotsAllows } from './robots.ts';
@@ -9,8 +9,10 @@ import type { FeedEvidence } from './feed-evidence.ts';
 import { parseReason } from './parse-evidence.ts';
 import type { ParseReason } from './parse-evidence.ts';
 import type { FetchOutcome } from './fetch-source.ts';
+import { observeDiscountProduct, DISCOUNT_TARGET } from './research/discount-product.ts';
+import type { RetailProductObservation } from './research/discount-product.ts';
 
-export type PreflightSource = 'a4l-sac' | 'dealnews';
+export type PreflightSource = 'a4l-sac' | 'dealnews' | 'discount-electronics';
 export interface PreflightGrant {sourceId:PreflightSource;reviewedAt:string}
 /** Accepted private research boundary only; this does not authorize publication or recurring reads. */
 export const APPROVED_PREFLIGHTS: readonly PreflightGrant[] = [
@@ -18,19 +20,19 @@ export const APPROVED_PREFLIGHTS: readonly PreflightGrant[] = [
   { sourceId: 'dealnews', reviewedAt: '2026-10-11T14:40:00.000Z' },
 ];
 export interface PreflightDiagnostic {
-  stage: 'robots' | 'catalog' | 'unit' | 'feed'; httpStatus: number | null; contentType: string | null; bytesRead: number;
+  stage: 'robots' | 'catalog' | 'unit' | 'feed' | 'product'; httpStatus: number | null; contentType: string | null; bytesRead: number;
   transportReason: Extract<FetchOutcome, { ok: false }>['reason'] | null;
   robotsAllowed: boolean | null; parserReason: ParseReason | null;
 }
 export interface PreflightObservation {
   sourceId: PreflightSource; checkedAt: string; outcome: 'observed' | 'blocked' | 'unsupported' | 'failure';
   httpStatus: number | null; catalogComplete: false; discoveredUnits: number; units: UnitObservation[];
-  feed: FeedEvidence | null; diagnostics: PreflightDiagnostic[];
+  feed: FeedEvidence | null; product: RetailProductObservation | null; diagnostics: PreflightDiagnostic[];
   notBefore:string;
 }
-const fail = (sourceId: PreflightSource, checkedAt: string, outcome: PreflightObservation['outcome'], httpStatus: number | null = null, delay=900): PreflightObservation => ({ sourceId, checkedAt, outcome, httpStatus, catalogComplete: false, discoveredUnits: 0, units: [], feed: null, diagnostics: [],notBefore:new Date(Date.parse(checkedAt)+delay*1000).toISOString() });
+const fail = (sourceId: PreflightSource, checkedAt: string, outcome: PreflightObservation['outcome'], httpStatus: number | null = null, delay=900): PreflightObservation => ({ sourceId, checkedAt, outcome, httpStatus, catalogComplete: false, discoveredUnits: 0, units: [], feed: null, product: null, diagnostics: [],notBefore:new Date(Date.parse(checkedAt)+delay*1000).toISOString() });
 
-/** Fixed candidates, 1 feed request or at most robots + catalog + 2 exact public unit reads. */
+/** Fixed candidates: one feed, robots + one PDP, or robots + catalog + two exact units. */
 export async function preflightSource(sourceId: PreflightSource, fetcher: typeof fetch = fetch, now = Date.now): Promise<PreflightObservation> {
   // One entire admission probe shares the transport's eight-second budget; four reads do not multiply it.
   const budget=new AbortController(),timeout=setTimeout(()=>budget.abort(),8000);
@@ -51,6 +53,16 @@ export async function preflightSource(sourceId: PreflightSource, fetcher: typeof
       const feed = parseRss(response.text);
       return finish({ ...fail(sourceId, time(), 'observed',response.httpStatus,response.minimumNextCheckSeconds), feed: inspectFeed(feed) });
     } catch (error) { diagnostics.at(-1)!.parserReason=parseReason(error,'rss-xml-syntax');return finish(fail(sourceId, time(), 'unsupported',response.httpStatus,response.minimumNextCheckSeconds)); }
+  }
+  if (sourceId === 'discount-electronics') {
+    const robots=await acquire(DISCOUNT_ROBOTS_TRANSPORT,'robots');
+    if(!robots.ok)return finish(fail(sourceId,time(),robots.stopAutomatic?'blocked':'failure',robots.httpStatus,robots.minimumNextCheckSeconds));
+    const allowed=robotsAllows(robots.text,new URL(DISCOUNT_TARGET.url).pathname);diagnostics.at(-1)!.robotsAllowed=allowed;
+    if(!allowed)return finish(fail(sourceId,time(),'blocked',robots.httpStatus,robots.minimumNextCheckSeconds));
+    const page=await acquire(DISCOUNT_PRODUCT_TRANSPORT,'product'),delay=Math.max(robots.minimumNextCheckSeconds,page.minimumNextCheckSeconds);
+    if(!page.ok)return finish(fail(sourceId,time(),page.stopAutomatic?'blocked':'failure',page.httpStatus,delay));
+    try{return finish({...fail(sourceId,time(),'observed',page.httpStatus,delay),product:observeDiscountProduct(page.text)});}
+    catch(error){const reason=parseReason(error,'parser-unclassified');diagnostics.at(-1)!.parserReason=reason;return finish(fail(sourceId,time(),reason==='response-challenge'?'blocked':'unsupported',page.httpStatus,delay));}
   }
   if (sourceId !== 'a4l-sac') throw new TypeError('Unregistered preflight source');
   const robots = await acquire(A4L_ROBOTS_TRANSPORT,'robots');
@@ -82,7 +94,7 @@ export async function maintainPreflight(database: D1Database, now = Date.now, ap
   if(!Number.isSafeInteger(started)||started<0)throw new TypeError('Invalid preflight clock');
   // Erase expired evidence even after grants are removed. Keep only bounded source/time markers to prevent replay.
   await database.prepare("UPDATE source_preflight SET payload='null' WHERE expires_at<=? AND payload<>'null'").bind(started).run();
-  const candidates=approved.filter(grant=>['a4l-sac','dealnews'].includes(grant.sourceId)&&Number.isFinite(Date.parse(grant.reviewedAt))&&Date.parse(grant.reviewedAt)<=started&&started-Date.parse(grant.reviewedAt)<86400000);
+  const candidates=approved.filter(grant=>['a4l-sac','dealnews','discount-electronics'].includes(grant.sourceId)&&Number.isFinite(Date.parse(grant.reviewedAt))&&Date.parse(grant.reviewedAt)<=started&&started-Date.parse(grant.reviewedAt)<86400000);
   if (!candidates.length) return;
   const rows = await database.prepare('SELECT source_id,checked_at,next_due_at FROM source_preflight').all<{ source_id: string; checked_at: number;next_due_at:number }>();
   const last = new Map(rows.results.map(row => [row.source_id,row]));

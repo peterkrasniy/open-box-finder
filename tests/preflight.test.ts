@@ -98,3 +98,12 @@ test('accepted DealNews one-shot waits for 14:40 and shared cooldown without cha
  const row=db.prepare('SELECT payload FROM source_preflight WHERE source_id=?').get('dealnews')!;const result=JSON.parse(String(row.payload));assert.equal(result.feed.titleConditionEntries,1);assert.equal(result.feed.verifiedInventory,false);assert.equal(result.diagnostics[0].httpStatus,200);
  clock+=3600000;await maintainPreflight(d1,()=>clock,APPROVED_PREFLIGHTS,fetcher);assert.equal(calls,1);assert.deepEqual(db.prepare('SELECT * FROM source_preflight WHERE source_id=?').get('a4l-sac'),previous);assert.equal(db.prepare('SELECT count(*) AS n FROM catalog_state').get()!.n,0);db.close();
 });
+
+test('consumed accepted reviews do not reopen after their cooldowns and no Discount review is implicitly added',async()=>{
+ const{db,d1}=database();let calls=0;const clock=Date.parse('2026-10-11T20:00:00Z');
+ for(const grant of APPROVED_PREFLIGHTS){const checked=Date.parse(grant.reviewedAt)+60000;db.prepare('INSERT INTO source_preflight (source_id,checked_at,payload,expires_at,next_due_at) VALUES (?,?,?,?,?)').run(grant.sourceId,checked,'null',checked+86400000,checked+14400000);}
+ const before=db.prepare('SELECT * FROM source_preflight ORDER BY source_id').all();
+ await maintainPreflight(d1,()=>clock,APPROVED_PREFLIGHTS,(async()=>{calls++;throw new Error('Unexpected network');}) as typeof fetch);
+ assert.equal(calls,0);assert.deepEqual(db.prepare('SELECT * FROM source_preflight ORDER BY source_id').all(),before);
+ assert.equal(db.prepare('SELECT count(*) AS n FROM source_preflight WHERE source_id=?').get('discount-electronics')!.n,0);db.close();
+});
