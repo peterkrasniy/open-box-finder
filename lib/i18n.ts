@@ -36,7 +36,10 @@ const en = {
   storageUnavailable: 'Browser storage is unavailable. Changes will last for this visit.',
   liveLimit: 'Verified source coverage is still being connected.',
   skip: 'Skip to listings', language: 'Language', selectedRetailers: 'Selected retailers',
-  noneSelected: 'No retailers selected', more: 'More information', count: 'listings',
+  noneSelected: 'No retailers selected', more: 'More information', count: 'listings', noImage: 'Retailer image unavailable',
+  saveUnavailable: 'Saving is unavailable for this source.', saveLimit: 'Your saved list is full. Remove a listing to save another.',
+  lastObservedPrice: 'Last observed price',
+  showMore: 'Show more listings', electronics: 'Electronics',
 } as const;
 
 const ru: Record<keyof typeof en, string> = {
@@ -75,7 +78,10 @@ const ru: Record<keyof typeof en, string> = {
   storageUnavailable: 'Хранилище браузера недоступно. Изменения сохранятся только на время посещения.',
   liveLimit: 'Проверенные источники ещё подключаются.',
   skip: 'Перейти к предложениям', language: 'Язык', selectedRetailers: 'Выбранные магазины',
-  noneSelected: 'Магазины не выбраны', more: 'Дополнительная информация', count: 'предложений',
+  noneSelected: 'Магазины не выбраны', more: 'Дополнительная информация', count: 'предложений', noImage: 'Изображение магазина недоступно',
+  saveUnavailable: 'Сохранение недоступно для этого источника.', saveLimit: 'Список сохранённого заполнен. Удалите предложение, чтобы сохранить другое.',
+  lastObservedPrice: 'Последняя наблюдаемая цена',
+  showMore: 'Показать ещё', electronics: 'Электроника',
 };
 
 export type TextKey = keyof typeof en;
