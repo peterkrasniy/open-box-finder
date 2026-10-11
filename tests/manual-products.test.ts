@@ -1,12 +1,23 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { MANUAL_PRODUCTS, manualNewModelComparison, manualProductActive, manualProductsForFilters, manualSavedPointer } from '../lib/manual-products.ts';
+import { MANUAL_PRODUCTS, manualRetailerComparison, manualNewModelComparison, manualProductActive, manualProductsForFilters, manualSavedPointer } from '../lib/manual-products.ts';
 import { defaultPreferences, decodeSaved, savedSourceUrl } from '../lib/storage.ts';
 import { SOURCE_BY_ID } from '../lib/sources.ts';
 import { validOffer } from '../lib/validation.ts';
 
 const product = MANUAL_PRODUCTS[0];
 const reviewed = Date.parse(product.reviewedAt);
+test('retailer comparison notes retain ambiguous basis, expire and never change savings order or saved pointers', () => {
+  assert.deepEqual(manualRetailerComparison(product, reviewed), { cents: product.retailerComparison.cents, url: product.url });
+  assert.equal(manualRetailerComparison(product, Date.parse(product.reviewUntil)), null);
+  assert.equal(manualRetailerComparison({ ...product, retailerComparison: { ...product.retailerComparison, cents: product.observedPriceCents } }, reviewed), null);
+  assert.equal(manualRetailerComparison({ ...product, retailerComparison: { ...product.retailerComparison, url: 'https://unrelated.test/' } }, reviewed), null);
+  assert.equal(manualRetailerComparison({ ...product, retailerComparison: { ...product.retailerComparison, cents: Infinity } }, reviewed), null);
+  const filters = defaultPreferences().filters;
+  assert.deepEqual(manualProductsForFilters(filters, 'percent', reviewed).map(note => note.id), MANUAL_PRODUCTS.map(note => note.id));
+  assert.deepEqual(manualProductsForFilters(filters, 'dollars', reviewed).map(note => note.id), MANUAL_PRODUCTS.map(note => note.id));
+  assert.equal('retailerComparison' in manualSavedPointer(product, reviewed)!, false);
+});
 test('new-model references have a bounded explicit basis and equal prices do not claim a discount', () => {
   assert.equal(manualNewModelComparison(product, reviewed)?.lowerRefurbished, true);
   const equal = MANUAL_PRODUCTS.find(note => note.observedPriceCents === note.newModelReference.cents)!;

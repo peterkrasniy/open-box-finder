@@ -1,7 +1,7 @@
 import type { Language } from '../lib/offer.ts';
 import type { ManualProduct } from '../lib/manual-products.ts';
-import { manualSavedPointer, manualNewModelComparison } from '../lib/manual-products.ts';
-import { useState } from 'react';
+import { manualSavedPointer, manualNewModelComparison, manualRetailerComparison } from '../lib/manual-products.ts';
+import { useEffect, useRef, useState } from 'react';
 import { savedIdentity } from '../lib/storage.ts';
 import { text } from '../lib/i18n.ts';
 import { Icon } from './Icon';
@@ -9,19 +9,32 @@ import { Icon } from './Icon';
 export function ManualProductFacts({ product, language, now }: { product: ManualProduct; language: Language; now: number }) {
   const formatter = new Intl.NumberFormat(language === 'ru' ? 'ru-RU' : 'en-US', { style: 'currency', currency: product.currency });
   const price = formatter.format(product.observedPriceCents / 100), comparison = manualNewModelComparison(product, now);
+  const retailerComparison = manualRetailerComparison(product, now);
   return <><p className="manual-condition">{text(language, 'certifiedRefurbished')}</p><p className="manual-price"><span>{price}</span><small>{text(language, 'observedPrice')}</small></p>
-    {comparison && <p className="manual-comparison"><a href={comparison.url} target="_blank" rel="noopener noreferrer">{text(language, 'observedNewModel')}</a>{comparison.lowerRefurbished ? <s className="manual-reference">{formatter.format(comparison.cents / 100)}</s> : <span>{formatter.format(comparison.cents / 100)} · {text(language, 'sameNewPrice')}</span>}</p>}
+    {retailerComparison && <p className="manual-comparison"><a href={retailerComparison.url} target="_blank" rel="noopener noreferrer">{text(language, 'retailerComparisonPrice')}</a><s className="manual-reference">{formatter.format(retailerComparison.cents / 100)}</s></p>}
+    {comparison && <p className="manual-new-price"><a href={comparison.url} target="_blank" rel="noopener noreferrer">{text(language, 'observedNewModel')}</a><span>{formatter.format(comparison.cents / 100)}{comparison.cents === product.observedPriceCents && ` · ${text(language, 'sameNewPrice')}`}</span></p>}
     <p className="manual-unknown">{text(language, 'manualUnknown')}</p>
     <p className="manual-review">{text(language, 'manualChecked')} <time dateTime={product.reviewedAt}>{new Date(product.reviewedAt).toLocaleString(language === 'ru' ? 'ru-RU' : 'en-US', { timeZone: 'UTC', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false })} UTC</time></p></>;
 }
 export function ManualProductVisual({ product, language }: { product: ManualProduct; language: Language }) {
-  const [open, setOpen] = useState(false);
+  const [load, setLoad] = useState(false), target = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!target.current) return;
+    if (!('IntersectionObserver' in window)) {
+      const frame = requestAnimationFrame(() => setLoad(true));
+      return () => cancelAnimationFrame(frame);
+    }
+    const observer = new IntersectionObserver(entries => {
+      if (entries.some(entry => entry.isIntersecting)) { setLoad(true); observer.disconnect(); }
+    }, { rootMargin: '160px 0px' });
+    observer.observe(target.current);
+    return () => observer.disconnect();
+  }, []);
   const video = product.video;
-  return <div className="manual-visual">
-    <button type="button" className="manual-visual-toggle" aria-expanded={open} aria-controls={`model-video-${product.id}`} onClick={() => setOpen(previous => !previous)}><Icon name="external" size={18}/>{text(language, open ? 'hideModelVideo' : 'showModelVideo')}<span aria-hidden="true">{open ? '−' : '+'}</span></button>
-    <div id={`model-video-${product.id}`} hidden={!open}>{open && <iframe title={`${text(language, 'modelVideo')}: ${product.brand} ${product.model} · ${video.creator}`} src={`https://www.youtube-nocookie.com/embed/${video.id}?autoplay=0&playsinline=1&cc_load_policy=1&cc_lang_pref=${language}&hl=${language}`} loading="lazy" referrerPolicy="strict-origin-when-cross-origin" allow="encrypted-media; picture-in-picture; fullscreen" allowFullScreen/>}
-      <p className="manual-video-credit">{text(language, video.kind === 'manufacturer' ? 'manufacturerVideo' : 'independentVideo')} · {video.creator}</p><p className="manual-video-note">{text(language, 'modelVideoNote')}</p><a className="manual-video-link" href={`https://www.youtube.com/watch?v=${video.id}`} target="_blank" rel="noopener noreferrer">{text(language, 'watchOnYouTube')}</a>
-    </div>
+  return <div className="manual-visual" ref={target}>
+    <div className="manual-player">{load ? <iframe title={`${text(language, 'modelVideo')}: ${product.brand} ${product.model} · ${video.creator}`} src={`https://www.youtube-nocookie.com/embed/${video.id}?autoplay=0&playsinline=1&cc_load_policy=1&cc_lang_pref=${language}&hl=${language}`} loading="lazy" referrerPolicy="strict-origin-when-cross-origin" allow="encrypted-media; picture-in-picture; fullscreen" allowFullScreen/> : <span className="manual-player-loading">{text(language, 'modelVideo')}</span>}</div>
+    <div className="manual-video-caption"><span>{text(language, video.kind === 'manufacturer' ? 'manufacturerVideo' : 'independentVideo')} · {video.creator}</span><a href={`https://www.youtube.com/watch?v=${video.id}`} target="_blank" rel="noopener noreferrer">YouTube<Icon name="external" size={13}/><span className="sr-only"> · {text(language, 'watchOnYouTube')}</span></a></div>
+    <p className="manual-video-note">{text(language, 'modelVideoNote')}</p>
   </div>;
 }
 export function ManualProducts({ products, language, now, savedIds, onSave }: {
