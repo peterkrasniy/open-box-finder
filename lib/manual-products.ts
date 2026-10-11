@@ -10,26 +10,69 @@ export interface ManualProduct {
   url: string; reviewedAt: string; reviewUntil: string;
   newModelReference: { cents: number; basis: 'observed-new-model'; url: string };
   retailerComparison: { cents: number; basis: 'retailer-comparison'; url: string };
-  video: { id: string; creator: string; kind: 'manufacturer' | 'retailer-review' | 'independent-review' };
+  image: { url: string; listingUrl: string; width: number; height: number; alt: { en: string; ru: string } };
 }
 const reviewedAt = '2026-10-11T19:28:00.000Z';
 const reviewUntil = '2026-10-12T19:28:00.000Z';
+/** Exact hero currentSrc URLs and natural dimensions visually verified by parent Chrome at 20:27 UTC. */
+const LISTING_PHOTOS: Record<string, ManualProduct['image']> = {
+  "accentum-plus-refurbished": {
+    "url": "https://us.sennheiser-hearing.com/cdn/shop/files/ACCENTUM_PLUS__Better__Product_Images_af997a39-cd00-439f-84d8-e89b694d24f7.jpg?v=1715091057",
+    "listingUrl": "https://us.sennheiser-hearing.com/collections/refurbished-by-sennheiser/products/accentum-plus-refurbished?variant=47755244142875",
+    "width": 1280,
+    "height": 1280,
+    "alt": {
+      "en": "Black Sennheiser ACCENTUM Plus headphones, photo from the refurbished listing",
+      "ru": "Чёрные наушники Sennheiser ACCENTUM Plus, фото из объявления о восстановленном товаре"
+    }
+  },
+  "hd-600-refurbished": {
+    "url": "https://us.sennheiser-hearing.com/cdn/shop/files/product_detail_x2_desktop_HD_600_Sennheiser_01_48b5a84e-7b00-4a3b-bbee-8ee1bccd52c3.jpg?v=1715092308",
+    "listingUrl": "https://us.sennheiser-hearing.com/collections/refurbished-by-sennheiser/products/hd-600-refurbished?variant=45465012338971",
+    "width": 1312,
+    "height": 1312,
+    "alt": {
+      "en": "Sennheiser HD 600 wired headphones, photo from the refurbished listing",
+      "ru": "Проводные наушники Sennheiser HD 600, фото из объявления о восстановленном товаре"
+    }
+  },
+  "rs-120-w-refurbished": {
+    "url": "https://us.sennheiser-hearing.com/cdn/shop/files/rs_120_w_iso_1_e0b5357f-9fe9-46a6-9171-dd4668697733.jpg?v=1715091606",
+    "listingUrl": "https://us.sennheiser-hearing.com/collections/refurbished-by-sennheiser/products/rs-120-w-refurbished?variant=45464908267803",
+    "width": 3000,
+    "height": 3000,
+    "alt": {
+      "en": "Sennheiser RS 120-W headphones and charging base, photo from the refurbished listing",
+      "ru": "Наушники Sennheiser RS 120-W с зарядной базой, фото из объявления о восстановленном товаре"
+    }
+  },
+  "ambeo-soundbar-plus-refurbished": {
+    "url": "https://us.sennheiser-hearing.com/cdn/shop/files/Sennheiser_AMBEO_Soundbar_Plus.jpg?v=1762307608",
+    "listingUrl": "https://us.sennheiser-hearing.com/collections/refurbished-by-sennheiser/products/ambeo-soundbar-plus-refurbished?variant=45464951226651",
+    "width": 2400,
+    "height": 2400,
+    "alt": {
+      "en": "Sennheiser AMBEO Soundbar Plus without a separate subwoofer, photo from the refurbished listing",
+      "ru": "Саундбар Sennheiser AMBEO Soundbar Plus без отдельного сабвуфера, фото из объявления о восстановленном товаре"
+    }
+  }
+};
 /** Original factual notes and new-model page comparisons, never former refurbished prices.
  * Primary product pages and sales terms manually reviewed. No recurring requests.
  */
 export const MANUAL_PRODUCTS: readonly ManualProduct[] = [
-  ['accentum-plus-refurbished', 'ACCENTUM Plus', 9995, 12995, 'JM0QIRfkOfs', 'Sennheiser', 24995],
-  ['hd-600-refurbished', 'HD 600', 27995, 34995, '9gcuORhXRuI', 'askdrtk', 49995],
-  ['rs-120-w-refurbished', 'RS 120-W', 12995, 12995, 'clMbbm0UIno', 'Best Buy Canada Product Videos', 15995],
-  ['ambeo-soundbar-plus-refurbished', 'AMBEO Soundbar Plus', 99995, 119995, '0sbHEii2rCs', 'Taps Das (@0102studio)', 179995],
-].map(([slug, model, price, newPrice, videoId, creator, retailerPrice]) => ({
+  ['accentum-plus-refurbished', 'ACCENTUM Plus', 9995, 12995, 24995],
+  ['hd-600-refurbished', 'HD 600', 27995, 34995, 49995],
+  ['rs-120-w-refurbished', 'RS 120-W', 12995, 12995, 15995],
+  ['ambeo-soundbar-plus-refurbished', 'AMBEO Soundbar Plus', 99995, 119995, 179995],
+].map(([slug, model, price, newPrice, retailerPrice]) => ({
   id: String(slug), model: String(model), observedPriceCents: Number(price),
   recordType: 'manual-observation', sourceId: 'sennheiser-manual', brand: 'Sennheiser',
   category: 'audio', condition: 'refurbished', currency: 'USD', availability: 'unknown',
   url: `https://us.sennheiser-hearing.com/collections/refurbished-by-sennheiser/products/${slug}`,
   newModelReference: { cents: Number(newPrice), basis: 'observed-new-model', url: `https://us.sennheiser-hearing.com/products/${String(slug).replace(/-refurbished$/, '')}` },
   retailerComparison: { cents: Number(retailerPrice), basis: 'retailer-comparison', url: `https://us.sennheiser-hearing.com/collections/refurbished-by-sennheiser/products/${slug}` },
-  video: { id: String(videoId), creator: String(creator), kind: creator === 'Sennheiser' ? 'manufacturer' : creator === 'Best Buy Canada Product Videos' ? 'retailer-review' : 'independent-review' },
+  image: LISTING_PHOTOS[String(slug)],
   reviewedAt, reviewUntil,
 }));
 

@@ -28,6 +28,7 @@ test('new-model references have a bounded explicit basis and equal prices do not
   const pointer = manualSavedPointer(product, reviewed)!;
   assert.equal('newModelReference' in pointer, false);
   assert.equal('video' in pointer, false);
+  assert.equal('image' in pointer, false);
 });
 test('manual observations fail closed outside the bounded review window and never become inventory', () => {
   for (const clock of [Infinity, NaN, reviewed - 1, Date.parse(product.reviewUntil)]) assert.equal(manualProductActive(product, clock), false);
