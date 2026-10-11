@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import type { Filters, Language, Offer } from '../lib/offer.ts';
 import { displayDiscount, isFresh } from '../lib/offer.ts';
 import { pickupDistance } from '../lib/filter.ts';
@@ -8,7 +9,7 @@ import { Icon } from './Icon';
 import { OfferMedia } from './OfferMedia';
 import { Price } from './Price';
 
-export function OfferCard({ offer, language, filters, now, saved, onSave, onOpen, priority = false }: {
+export const OfferCard = memo(function OfferCard({ offer, language, filters, now, saved, onSave, onOpen, priority = false }: {
   offer: Offer; language: Language; filters: Filters; now: number; saved: boolean;
   onSave: (offer: Offer) => void; onOpen: (offer: Offer) => void; priority?: boolean;
 }) {
@@ -36,4 +37,4 @@ export function OfferCard({ offer, language, filters, now, saved, onSave, onOpen
       <button type="button" className="detail-action" onClick={() => onOpen(offer)}>{text(language, 'details')}<Icon name="right" size={18}/></button>
     </div>
   </article>;
-}
+});

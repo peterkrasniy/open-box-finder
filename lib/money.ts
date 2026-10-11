@@ -13,11 +13,18 @@ export function parsePrice(input: string): ParsedPrice {
   return validCents(cents) ? { ok: true, cents } : { ok: false, error: 'invalid-price' };
 }
 
+const priceFormatters = {
+  en: new Intl.NumberFormat('en-US', {
+    style: 'currency', currency: 'USD', minimumFractionDigits: 2, maximumFractionDigits: 2,
+  }),
+  ru: new Intl.NumberFormat('ru-RU', {
+    style: 'currency', currency: 'USD', minimumFractionDigits: 2, maximumFractionDigits: 2,
+  }),
+};
+
 export function formatPrice(cents: number, language: Language): string {
   if (!validCents(cents)) throw new RangeError('Invalid USD cents');
-  return new Intl.NumberFormat(language === 'ru' ? 'ru-RU' : 'en-US', {
-    style: 'currency', currency: 'USD', minimumFractionDigits: 2, maximumFractionDigits: 2,
-  }).format(cents / 100);
+  return priceFormatters[language].format(cents / 100);
 }
 
 export function editPrice(cents: number | null, language: Language): string {

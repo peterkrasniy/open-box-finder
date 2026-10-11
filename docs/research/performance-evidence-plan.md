@@ -29,3 +29,10 @@ Compute costs from measured request counts and rows scanned/written, including g
 ## Required published-version evidence
 
 Record dependency audit, supported official build, exact public page identity, resource errors/console, target-size journeys, lab report and runtime request/cost observations for the same source commit. Name isolated synthetic tests separately from actual source-fetch/write/readback/client evidence. Keep raw QA captures/reports outside the shipping assets; publish compact factual summaries that contain no secret headers, private profiles, user locations or licensed raw catalog archive. Repeat broad testing only when a new change, failure or unresolved finding justifies it.
+
+
+## Populated local audit, October 11 at 13:23 UTC
+
+The isolated 2,000-unit response is 1,762,520 bytes. Three Chromium 154 runs per viewport (390/1280, CPU throttle 4) exercise search, savings sort, EN/RU, expansion from 60 to 120 cards, details and changed-generation adoption. The version-4 baseline's median largest Event Timing sample was 424 ms mobile / 552 ms desktop. Profiling attributes dominant app-function samples to currency-formatter construction. Reusing the two formatters and memoizing unchanged cards reduces the final sequential median to 288 / 320 ms, with individual maxima 232–312 / 288–440 ms. No page errors or horizontal overflow occurred.
+
+This is an improvement, with remaining responsiveness work and substantial shared-host variance. It is not field INP, proof of a 200-ms target, native iPhone performance, real-media performance or public-hosting measurement. Concurrent QA measurements are not used for the final comparison. Raw QA traces stay outside the public app/source payload.

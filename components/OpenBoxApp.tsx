@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { DEFAULT_FILTERS } from '../lib/offer.ts';
 import type { Filters, Offer, Language } from '../lib/offer.ts';
 import { savedIdentity, offerIdentity } from '../lib/storage.ts';
@@ -81,7 +81,8 @@ export function OpenBoxApp() {
     setPreferences(previous => ({ ...previous, filters: { ...previous.filters, ...change } }));
     if (edited) setEdited(previous => previous ? ({ ...previous, value: { ...previous.value, filters: { ...previous.value.filters, ...change } }, base: previous.base === fingerprint ? filterFingerprint({ ...filters, ...change }) : previous.base }) : null);
   };
-  const openOffer = (offer: Offer) => navigate({ view: route.view, offerId: offer.id, offerIdentity: offerIdentity(offer), panel: null });
+  const openOffer = useCallback((offer: Offer) => navigate({ view: route.view, offerId: offer.id, offerIdentity: offerIdentity(offer), panel: null }), [navigate, route.view]);
+  const saveOffer = useCallback((offer: Offer) => { toggleSaved(offer, catalog.sequence); }, [toggleSaved, catalog.sequence]);
   const openPanel = (panel: 'filters' | 'location') => { setError(null); setLocationErrorField(null); if (panel === 'location') setLocation(locationDraft(filters)); navigate({ view: route.view, offerId: null, panel }); };
   const restoreFilterFocus = () => requestAnimationFrame(() => requestAnimationFrame(() => { if (!wide) return; document.querySelector<HTMLElement>(`[data-filter-control="${lastFilterFocus.current}"]`)?.focus(); }));
   const resolveConflict=(keep:boolean)=>{setEdited(previous=>keep&&previous?{...previous,base:fingerprint}:null);setError(null);requestAnimationFrame(()=>{document.querySelector<HTMLElement>(`${route.panel==='filters'?'dialog':'.filter-rail'} [data-filter-control="${lastFilterFocus.current}"]`)?.focus();});};
@@ -144,7 +145,7 @@ export function OpenBoxApp() {
           {saved.length ? <SavedRows saved={saved} catalog={catalog} status={status} language={language} now={now} onOpen={openOffer} onRemove={removeSaved}/>
             : <section className="empty-state"><span className="empty-icon"><Icon name="bookmark" size={38}/></span><h2>{t('noSaved')}</h2><p>{t('noSavedHelp')}</p></section>}
         </> : listings.length ? <>
-          <div className="offer-grid">{listings.slice(0, visibleCount).map((offer, index) => <OfferCard key={offer.id} offer={offer} language={language} now={now} filters={filters} saved={savedIds.has(offerIdentity(offer))} priority={index === 0} onOpen={() => openOffer(offer)} onSave={() => void toggleSaved(offer, catalog.sequence)}/>)}</div>
+          <div className="offer-grid">{listings.slice(0, visibleCount).map((offer, index) => <OfferCard key={offer.id} offer={offer} language={language} now={now} filters={filters} saved={savedIds.has(offerIdentity(offer))} priority={index === 0} onOpen={openOffer} onSave={saveOffer}/>)}</div>
           {listings.length > visibleCount && <button type="button" className="secondary-button show-more" onClick={() => setPagination(previous => ({ filters, sort, count: (previous.filters === filters && previous.sort === sort ? previous.count : 60) + 60 }))}>{t('showMore')}</button>}
         </> : <>
           <section className="empty-state"><span className="empty-icon"><Icon name="openBox" size={42}/></span><h2>{t(catalog.offers.length ? 'noMatches' : 'noVerified')}</h2><p>{t(catalog.offers.length ? 'noMatchesHelp' : 'noVerifiedHelp')}</p>{catalog.offers.length > 0 && <button type="button" className="secondary-button" onClick={resetFilters}>{t('reset')}</button>}</section>
