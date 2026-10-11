@@ -6,7 +6,7 @@ A responsive English/Russian app for open-box deal discovery, local pickup, ship
 
 ## Run and edit
 
-Use Node 24 (minimum 22.13) and npm. A fresh canonical GitHub clone at the version-4 commit was installed, tested, typechecked, linted and built in an isolated clean checkout in this environment; framework-generated build IDs can differ. Install the committed dependency state with `npm ci`, then run `npm run dev`. The app's own UI lives in `components/`, client hooks in `hooks/`, offer/filter/price/persistence rules in `lib/`, and protected acquisition modules in `lib/server/`. English/Russian strings are in `lib/i18n.ts`; responsive styles are in `app/globals.css`.
+Use Node 24 (minimum 22.13) and npm. A fresh canonical GitHub clone at the version-4 commit was installed, tested, typechecked, linted and built in an isolated clean checkout in this environment; framework-generated build IDs can differ. Install the committed dependency state with `npm ci`, then run `npm run dev`. The app's own UI lives in `components/`, client hooks in `hooks/`, offer/filter/price/persistence rules in `lib/`, and protected acquisition modules in `lib/server/`. English/Russian strings are in `lib/i18n.ts`; responsive styles are in `app/globals.css`. The original app-icon source is in `assets/`; only the derived install icons ship from `public/icons/`.
 
 Run `npm test`, `npm run typecheck`, `npm run lint`, and `npm run build` before sharing changes. `npm run db:generate` creates the D1 migrations after schema edits. Runtime data is not seeded in source. Synthetic records are confined to tests and isolated browser fixtures.
 

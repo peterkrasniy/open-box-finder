@@ -121,3 +121,12 @@ The 2,000-unit, 1,762,520-byte synthetic catalog stays under the public response
 The performance change preserves cents/locale output and invalid-price boundaries, passes 62 models/typecheck/lint/official build, thirteen browser regressions and the eight targeted cases plus twenty repeated Saved capacity races. A fresh production-declaration audit reports zero known advisories; the eight development braces advisories remain. No source admission, real catalog or first complete is implied.
 
 The final compiled follow-up also passes ten shopper journeys, four syndication presentation checks and eight HTTP cases. Native Sites error-only logs for the preceding thirty minutes contain zero events; this is not proof of actual public request execution.
+
+
+### 13:26–13:31 UTC: performance publication and storage failures
+
+Public version 5 deployed at 13:26:52.021504 UTC: source db40980bf8bc4f371731dde3406c52d87bbc6e4a, tree 7ef27542eaf490628eef0edfc0d007972d26d3a9, deployment appgdep_6acb8e94ed7c8191a988bff4702edc2f. Canonical main/research and Sites source match, with a clean tracked tree. Native Sites confirms public access and no schedules. Local compressed archive SHA-256 92a02f6c587a74186e7ba8578c71c59745b04207a4157ccdfe764917154cca19; uploaded transformed tar hash 92194decf37b9908fc59a05af6b5a6004641b74453df901de9166fa9b82e4636 (98 files). Known-pattern scan passes 377 Git blobs, 142 tracked files, 98 build and 98 archive files. Final compiled HTTP checks pass.
+
+Four isolated browser storage fault cases pass with no page errors: IndexedDB access denial, Saved-write quota error, total localStorage denial and a stalled IndexedDB open. Browsing is ready in about one second; each successful temporary save has explicit EN/RU visit-only copy and no persistent Saved pointer. The stalled open falls back at about 10.5 seconds, inside its bound. Axe passes all four. This deliberately faults browser APIs; it is not native Safari or actual disk-quota exhaustion evidence.
+
+Asset review found a 1,274,850-byte original app-icon source in the public asset directory with no runtime reference. Move it unchanged to nonpublic assets/icon-original.png while retaining the derived 192/512/180 install icons. This reduces unused shipped assets; it is not a measured page-loading improvement because the original was not requested. No retailer media or new source permission is involved.
