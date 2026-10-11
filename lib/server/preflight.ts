@@ -18,6 +18,7 @@ export interface PreflightGrant {sourceId:PreflightSource;reviewedAt:string}
 export const APPROVED_PREFLIGHTS: readonly PreflightGrant[] = [
   { sourceId: 'a4l-sac', reviewedAt: '2026-10-11T14:20:00.000Z' },
   { sourceId: 'dealnews', reviewedAt: '2026-10-11T14:40:00.000Z' },
+  { sourceId: 'discount-electronics', reviewedAt: '2026-10-11T15:12:57.000Z' },
 ];
 export interface PreflightDiagnostic {
   stage: 'robots' | 'catalog' | 'unit' | 'feed' | 'product'; httpStatus: number | null; contentType: string | null; bytesRead: number;

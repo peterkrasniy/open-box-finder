@@ -117,7 +117,7 @@ test('Discount facts reject contradictory blocks, identity, currency, condition 
   assert.throws(() => observeDiscountProduct('<title>Just a moment...</title><script src="/cdn-cgi/challenge-platform/QA"></script>' + script(product), target), reason('response-challenge'));
 });
 
-test('prepared Discount mapping is partial SKU stock with caveats and no runtime/public grant', async () => {
+test('prepared Discount mapping is partial SKU stock with caveats and exactly one private review, no public grant', async () => {
   const facts = observeDiscountProduct(script({ ...product, sku: DISCOUNT_TARGET.sku, url: DISCOUNT_TARGET.url }));
   const result = await mapDiscountProbe({ ...observation('discount-electronics'), outcome: 'observed', product: facts });
   assert.equal(result.ok, true);
@@ -127,6 +127,6 @@ test('prepared Discount mapping is partial SKU stock with caveats and no runtime
     for (const key of ['reference', 'imageUrl', 'pickup', 'shipping', 'localDelivery'] as const) assert.equal(result.offers[0][key], null);
   }
   assert.deepEqual(await mapDiscountProbe(observation('discount-electronics')), { ok: false, stopAutomatic: true, minimumNextCheckSeconds: 14400 });
-  assert.equal(APPROVED_PREFLIGHTS.some(grant => grant.sourceId === 'discount-electronics'), false);
+  assert.deepEqual(APPROVED_PREFLIGHTS.filter(grant => grant.sourceId === 'discount-electronics'), [{ sourceId: 'discount-electronics', reviewedAt: '2026-10-11T15:12:57.000Z' }]);
   assert.equal(APPROVED_POLICIES.size, 0); assert.equal(SOURCE_BY_ID.get('discount-electronics')?.enabled, false);
 });

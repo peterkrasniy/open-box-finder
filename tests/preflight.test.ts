@@ -88,22 +88,37 @@ test('unexpected probe failures persist only a bounded failure result and never 
 });
 
 test('accepted DealNews one-shot waits for 14:40 and shared cooldown without changing or replaying held A4L evidence',async()=>{
+ const earlierReviews=APPROVED_PREFLIGHTS.filter(grant=>grant.sourceId!=='discount-electronics');
  const{db,d1}=database();const checked=Date.parse('2026-10-11T14:24:30.638Z'),due=Date.parse('2026-10-11T18:24:31.887Z');
  db.prepare('INSERT INTO source_preflight (source_id,checked_at,payload,expires_at,next_due_at) VALUES (?,?,?,?,?)').run('a4l-sac',checked,'{"outcome":"unsupported"}',checked+86400000,due);
  db.prepare('INSERT INTO acquisition_control (id,lease_token,lease_until,next_due_at,quota_day,daily_attempts) VALUES (1,NULL,0,?,?,2)').run(Date.parse('2026-10-11T14:39:32.020Z'),'2026-10-11');
  const previous=db.prepare('SELECT * FROM source_preflight WHERE source_id=?').get('a4l-sac');let clock=Date.parse('2026-10-11T14:39:59Z'),calls=0;
  const fetcher=(async input=>{calls++;assert.equal(String(input),'https://www.dealnews.com/?rss=1&sort=time');return new Response('<rss version="2.0"><channel><item><guid>QA</guid><title>QA ONLY open box</title><link>https://www.dealnews.com/QA</link><description>QA ONLY</description></item></channel></rss>',{headers:{'Content-Type':'text/xml'}});}) as typeof fetch;
- await maintainPreflight(d1,()=>clock,APPROVED_PREFLIGHTS,fetcher);assert.equal(calls,0);
- clock=Date.parse('2026-10-11T14:40:00Z');await maintainPreflight(d1,()=>clock,APPROVED_PREFLIGHTS,fetcher);assert.equal(calls,1);
+ await maintainPreflight(d1,()=>clock,earlierReviews,fetcher);assert.equal(calls,0);
+ clock=Date.parse('2026-10-11T14:40:00Z');await maintainPreflight(d1,()=>clock,earlierReviews,fetcher);assert.equal(calls,1);
  const row=db.prepare('SELECT payload FROM source_preflight WHERE source_id=?').get('dealnews')!;const result=JSON.parse(String(row.payload));assert.equal(result.feed.titleConditionEntries,1);assert.equal(result.feed.verifiedInventory,false);assert.equal(result.diagnostics[0].httpStatus,200);
- clock+=3600000;await maintainPreflight(d1,()=>clock,APPROVED_PREFLIGHTS,fetcher);assert.equal(calls,1);assert.deepEqual(db.prepare('SELECT * FROM source_preflight WHERE source_id=?').get('a4l-sac'),previous);assert.equal(db.prepare('SELECT count(*) AS n FROM catalog_state').get()!.n,0);db.close();
+ clock+=3600000;await maintainPreflight(d1,()=>clock,earlierReviews,fetcher);assert.equal(calls,1);assert.deepEqual(db.prepare('SELECT * FROM source_preflight WHERE source_id=?').get('a4l-sac'),previous);assert.equal(db.prepare('SELECT count(*) AS n FROM catalog_state').get()!.n,0);db.close();
 });
 
-test('consumed accepted reviews do not reopen after their cooldowns and no Discount review is implicitly added',async()=>{
+test('all three consumed accepted reviews do not reopen after their cooldowns',async()=>{
  const{db,d1}=database();let calls=0;const clock=Date.parse('2026-10-11T20:00:00Z');
  for(const grant of APPROVED_PREFLIGHTS){const checked=Date.parse(grant.reviewedAt)+60000;db.prepare('INSERT INTO source_preflight (source_id,checked_at,payload,expires_at,next_due_at) VALUES (?,?,?,?,?)').run(grant.sourceId,checked,'null',checked+86400000,checked+14400000);}
  const before=db.prepare('SELECT * FROM source_preflight ORDER BY source_id').all();
  await maintainPreflight(d1,()=>clock,APPROVED_PREFLIGHTS,(async()=>{calls++;throw new Error('Unexpected network');}) as typeof fetch);
  assert.equal(calls,0);assert.deepEqual(db.prepare('SELECT * FROM source_preflight ORDER BY source_id').all(),before);
- assert.equal(db.prepare('SELECT count(*) AS n FROM source_preflight WHERE source_id=?').get('discount-electronics')!.n,0);db.close();
+ assert.equal(db.prepare('SELECT count(*) AS n FROM source_preflight WHERE source_id=?').get('discount-electronics')!.n,1);db.close();
+});
+
+test('accepted Discount review waits for its timestamp/shared cooldown, then consumes once without replaying held sources or publishing',async()=>{
+ const{db,d1}=database();const grant=APPROVED_PREFLIGHTS.find(grant=>grant.sourceId==='discount-electronics')!;let clock=Date.parse(grant.reviewedAt)-1,calls=0;
+ for(const earlier of APPROVED_PREFLIGHTS.filter(review=>review.sourceId!=='discount-electronics')){const checked=Date.parse(earlier.reviewedAt)+60000;db.prepare('INSERT INTO source_preflight (source_id,checked_at,payload,expires_at,next_due_at) VALUES (?,?,?,?,?)').run(earlier.sourceId,checked,'{"outcome":"unsupported"}',checked+86400000,checked+14400000);}
+ const before=db.prepare('SELECT * FROM source_preflight ORDER BY source_id').all();
+ db.prepare('INSERT INTO acquisition_control (id,lease_token,lease_until,next_due_at,quota_day,daily_attempts) VALUES (1,NULL,0,?,?,3)').run(clock+60000,'2026-10-11');
+ const fetcher=(async input=>{calls++;assert.equal(String(input),'https://discountelectronics.com/robots.txt');return new Response('User-agent: *\nDisallow: /',{headers:{'Content-Type':'text/plain'}});}) as typeof fetch;
+ await maintainPreflight(d1,()=>clock,APPROVED_PREFLIGHTS,fetcher);assert.equal(calls,0);
+ clock++;await maintainPreflight(d1,()=>clock,APPROVED_PREFLIGHTS,fetcher);assert.equal(calls,0);
+ clock+=60000;await maintainPreflight(d1,()=>clock,APPROVED_PREFLIGHTS,fetcher);assert.equal(calls,1);
+ const row=db.prepare('SELECT payload FROM source_preflight WHERE source_id=?').get('discount-electronics')!;assert.equal(JSON.parse(String(row.payload)).outcome,'blocked');
+ assert.deepEqual(db.prepare('SELECT * FROM source_preflight WHERE source_id<>? ORDER BY source_id').all('discount-electronics'),before);
+ clock+=18000000;await maintainPreflight(d1,()=>clock,APPROVED_PREFLIGHTS,fetcher);assert.equal(calls,1);assert.equal(db.prepare('SELECT count(*) AS n FROM catalog_state').get()!.n,0);db.close();
 });
