@@ -38,7 +38,7 @@ Keep card identity, committed filters, local saves, editing drafts and open deta
 
 Announce useful new-result/availability changes once and politely. Preserve keyboard focus and the reading position, including when sorting admits new higher-ranked offers. A failed or older response cannot overwrite a newer catalog/health revision. Metadata-only revalidation does not announce newly listed offers. Resume/reconnect revalidation is required because sleeping browser/app timers do not establish background freshness.
 
-All behavioral, cross-tab, responsive and assistive-technology checks remain NOT RUN until an implemented candidate is exercised.
+At the research gate, all behavioral, cross-tab, responsive and assistive-technology checks were NOT RUN. Later scoped local checks appear in the evidence ledger; native iPhone/VoiceOver remains NOT RUN.
 
 
 ### Saved capacity after independent retest
