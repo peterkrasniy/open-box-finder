@@ -9,7 +9,7 @@ export type PreflightSource = 'a4l-sac' | 'dealnews';
 export interface PreflightGrant {sourceId:PreflightSource;reviewedAt:string}
 /** Accepted private research boundary only; this does not authorize publication or recurring reads. */
 export const APPROVED_PREFLIGHTS: readonly PreflightGrant[] = [
-  { sourceId: 'a4l-sac', reviewedAt: '2026-10-11T13:50:00.000Z' },
+  { sourceId: 'a4l-sac', reviewedAt: '2026-10-11T14:20:00.000Z' },
 ];
 export interface PreflightObservation {
   sourceId: PreflightSource; checkedAt: string; outcome: 'observed' | 'blocked' | 'unsupported' | 'failure';
