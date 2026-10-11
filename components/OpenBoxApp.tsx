@@ -1,7 +1,8 @@
 'use client';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { DEFAULT_FILTERS } from '../lib/offer.ts';
-import type { Filters, Offer } from '../lib/offer.ts';
+import type { Filters, Offer, Language } from '../lib/offer.ts';
+import { savedIdentity, offerIdentity } from '../lib/storage.ts';
 import { filterAndSort, validPoint } from '../lib/filter.ts';
 import { editPrice, parsePrice, validateRange } from '../lib/money.ts';
 import { categoryLabel, SORTS, sortLabel, text } from '../lib/i18n.ts';
@@ -19,17 +20,22 @@ import { OfferDetail } from './OfferDetail';
 import { SavedRows } from './SavedRows';
 import { SourceStatus } from './SourceStatus';
 
+function makeFilterDraft(value: Filters, language: Language): FilterDraft {
+  return { filters: structuredClone(value), min: editPrice(value.minCents, language), max: editPrice(value.maxCents, language), radius: String(value.radiusMiles) };
+}
+
 export function OpenBoxApp() {
   const { preferences, setPreferences, saved, ready, storageAvailable, saveError, toggleSaved, removeSaved } = usePreferences();
   const { route, navigate, dismiss } = useRoute();
   const { catalog, status, now, refresh } = useCatalog(ready);
   const { language, filters, sort } = preferences;
   const t = (key: TextKey) => text(language, key);
-  const makeDraft = (value: Filters): FilterDraft => ({ filters: structuredClone(value), min: editPrice(value.minCents, language), max: editPrice(value.maxCents, language), radius: String(value.radiusMiles) });
-  const [draft, setDraft] = useState<FilterDraft>(() => makeDraft(DEFAULT_FILTERS));
+  const [draft, setDraft] = useState<FilterDraft>(() => makeFilterDraft(DEFAULT_FILTERS, language));
   const [location, setLocation] = useState(() => locationDraft(DEFAULT_FILTERS));
   const [error, setError] = useState<TextKey | null>(null);
-  const [wide, setWide] = useState(false), [visibleCount, setVisibleCount] = useState(60);
+  const [wide, setWide] = useState(false);
+  const [pagination, setPagination] = useState<{ filters: Filters | null; sort: typeof sort | null; count: number }>({ filters: null, sort: null, count: 60 });
+  const visibleCount = pagination.filters === filters && pagination.sort === sort ? pagination.count : 60;
   const initialized = useRef(false), previousPanel = useRef(route.panel);
   useEffect(() => {
     const media = window.matchMedia('(min-width: 1024px)');
@@ -37,24 +43,23 @@ export function OpenBoxApp() {
     media.addEventListener('change', changed); return () => media.removeEventListener('change', changed);
   }, []);
   useEffect(() => {
-    if (ready && !initialized.current) { initialized.current = true; setDraft(makeDraft(filters)); setLocation(locationDraft(filters)); }
-  }, [ready, filters]);
+    if (ready && !initialized.current) { initialized.current = true; setDraft(makeFilterDraft(filters, language)); setLocation(locationDraft(filters)); }
+  }, [ready, filters, language]);
   useEffect(() => {
-    if (previousPanel.current && !route.panel) { setDraft(makeDraft(filters)); setLocation(locationDraft(filters)); setError(null); }
+    if (previousPanel.current && !route.panel) { setDraft(makeFilterDraft(filters, language)); setLocation(locationDraft(filters)); setError(null); }
     previousPanel.current = route.panel;
-  }, [route.panel, filters]);
+  }, [route.panel, filters, language]);
   const listings = useMemo(() => filterAndSort(catalog.offers, filters, sort, now), [catalog.offers, filters, sort, now]);
-  const savedIds = useMemo(() => new Set(saved.map(record => record.offerId)), [saved]);
+  const savedIds = useMemo(() => new Set(saved.map(savedIdentity)), [saved]);
   const detail = useMemo(() => catalog.offers.find(offer => offer.id === route.offerId) ?? null, [catalog.offers, route.offerId]);
-  useEffect(() => setVisibleCount(60), [filters, sort]);
   const updateFilters = (change: Partial<Filters>) => {
     setPreferences(previous => ({ ...previous, filters: { ...previous.filters, ...change } }));
     setDraft(previous => ({ ...previous, filters: { ...previous.filters, ...change } }));
   };
   const openOffer = (offer: Offer) => navigate({ view: route.view, offerId: offer.id, panel: null });
   const openPanel = (panel: 'filters' | 'location') => { setError(null); if (panel === 'location') setLocation(locationDraft(filters)); navigate({ view: route.view, offerId: null, panel }); };
-  const cancelFilters = () => { setDraft(makeDraft(filters)); setError(null); if (route.panel) dismiss(); };
-  const resetFilters = () => { const next = { ...structuredClone(DEFAULT_FILTERS), origin: filters.origin, radiusMiles: filters.radiusMiles }; setPreferences(previous => ({ ...previous, filters: next })); setDraft(makeDraft(next)); };
+  const cancelFilters = () => { setDraft(makeFilterDraft(filters, language)); setError(null); if (route.panel) dismiss(); };
+  const resetFilters = () => { const next = { ...structuredClone(DEFAULT_FILTERS), origin: filters.origin, radiusMiles: filters.radiusMiles }; setPreferences(previous => ({ ...previous, filters: next })); setDraft(makeFilterDraft(next, language)); };
   const applyFilters = () => {
     const minimum = parsePrice(draft.min), maximum = parsePrice(draft.max);
     if (!minimum.ok || !maximum.ok) { setError('invalidPrice'); return; }
@@ -63,7 +68,7 @@ export function OpenBoxApp() {
     const radius = Number(draft.radius.replace(',', '.'));
     if (!/^\d{1,3}(?:[.,]\d{1,2})?$/.test(draft.radius) || !Number.isFinite(radius) || radius < 0 || radius > 500) { setError('invalidRadius'); return; }
     const next = { ...draft.filters, query: filters.query, origin: filters.origin, minCents: minimum.cents, maxCents: maximum.cents, radiusMiles: radius };
-    setPreferences(previous => ({ ...previous, filters: next })); setDraft(makeDraft(next)); setError(null); if (route.panel) dismiss();
+    setPreferences(previous => ({ ...previous, filters: next })); setDraft(makeFilterDraft(next, language)); setError(null); if (route.panel) dismiss();
   };
   const applyLocation = () => {
     const coordinate = (value: string) => /^[+-]?\d{1,3}(?:[.,]\d{1,8})?$/.test(value.trim()) ? Number(value.replace(',', '.')) : NaN;
@@ -102,8 +107,8 @@ export function OpenBoxApp() {
           {saved.length ? <SavedRows saved={saved} offers={catalog.offers} language={language} now={now} onOpen={openOffer} onRemove={removeSaved}/>
             : <section className="empty-state"><span className="empty-icon"><Icon name="bookmark" size={38}/></span><h2>{t('noSaved')}</h2><p>{t('noSavedHelp')}</p></section>}
         </> : listings.length ? <>
-          <div className="offer-grid">{listings.slice(0, visibleCount).map((offer, index) => <OfferCard key={offer.id} offer={offer} language={language} now={now} filters={filters} saved={savedIds.has(offer.id)} priority={index === 0} onOpen={() => openOffer(offer)} onSave={() => void toggleSaved(offer)}/>)}</div>
-          {listings.length > visibleCount && <button type="button" className="secondary-button show-more" onClick={() => setVisibleCount(value => value + 60)}>{t('showMore')}</button>}
+          <div className="offer-grid">{listings.slice(0, visibleCount).map((offer, index) => <OfferCard key={offer.id} offer={offer} language={language} now={now} filters={filters} saved={savedIds.has(offerIdentity(offer))} priority={index === 0} onOpen={() => openOffer(offer)} onSave={() => void toggleSaved(offer)}/>)}</div>
+          {listings.length > visibleCount && <button type="button" className="secondary-button show-more" onClick={() => setPagination(previous => ({ filters, sort, count: (previous.filters === filters && previous.sort === sort ? previous.count : 60) + 60 }))}>{t('showMore')}</button>}
         </> : <>
           <section className="empty-state"><span className="empty-icon"><Icon name="openBox" size={42}/></span><h2>{t(catalog.offers.length ? 'noMatches' : 'noVerified')}</h2><p>{t(catalog.offers.length ? 'noMatchesHelp' : 'noVerifiedHelp')}</p>{catalog.offers.length > 0 && <button type="button" className="secondary-button" onClick={resetFilters}>{t('reset')}</button>}</section>
           {!catalog.offers.length && <SourceStatus catalog={catalog} language={language}/>}
@@ -114,7 +119,7 @@ export function OpenBoxApp() {
     <Dialog open={ready && Boolean(route.offerId || route.panel)} title={t(route.panel === 'filters' ? 'filters' : route.panel === 'location' ? 'location' : 'details')} language={language} onDismiss={route.panel ? cancelFilters : dismiss} className={route.offerId ? 'detail-dialog' : 'filter-dialog'}>
       {route.panel === 'filters' ? <div className="dialog-content"><FilterFields draft={draft} language={language} onChange={setDraft} error={error ? t(error) : null} idPrefix="sheet"/><div className="filter-actions"><button type="button" className="secondary-button" onClick={cancelFilters}>{t('cancel')}</button><button type="button" className="primary-button" onClick={applyFilters}>{t('apply')}</button></div></div>
         : route.panel === 'location' ? <div className="dialog-content"><LocationFields draft={location} language={language} onChange={setLocation} error={error ? t(error) : null}/><div className="filter-actions"><button type="button" className="secondary-button" onClick={cancelFilters}>{t('cancel')}</button><button type="button" className="primary-button" onClick={applyLocation}>{t('apply')}</button></div></div>
-          : <OfferDetail savedView={route.view === 'saved'} offer={detail} language={language} now={now} saved={detail ? savedIds.has(detail.id) : false} onSave={() => { if (detail) void toggleSaved(detail); }} onBack={dismiss}/>}
+          : <OfferDetail savedView={route.view === 'saved'} offer={detail} language={language} now={now} saved={detail ? savedIds.has(offerIdentity(detail)) : false} onSave={() => { if (detail) void toggleSaved(detail); }} onBack={dismiss}/>}
     </Dialog>
   </div>;
 }

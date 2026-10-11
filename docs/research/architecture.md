@@ -1,6 +1,6 @@
 # Open Box Finder: research and acceptance gates
 
-Status: research only. No application implementation or Site registration has begun.
+Research/acceptance specification captured before implementation. The app foundation and Site registration now exist; see [current status](../current-status.md) for verified implementation and remaining gates.
 
 ## Time and evidence gates
 

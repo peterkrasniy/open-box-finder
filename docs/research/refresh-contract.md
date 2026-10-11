@@ -1,6 +1,6 @@
 # Proposed catalog refresh contract
 
-Research specification only; no application code, schema, scheduled task, or hosted endpoint has been created. Parent security/data/accountability review remains required. This design does not admit a retailer or grant access rights.
+Research specification preserved from before implementation. Application code, generated schema and local read endpoint now exist; the real unattended writer, scheduled task and public hosted endpoint remain unverified. See [current status](../current-status.md). Parent security/data/accountability review remains required. This design does not admit a retailer or grant access rights.
 
 ## Public read boundary
 

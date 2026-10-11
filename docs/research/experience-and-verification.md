@@ -1,6 +1,6 @@
 # Shopping patterns and verification plan
 
-This document is design/verification research only; no application code is present.
+This document preserves design/verification research from before implementation. Application code now exists; see [current status](../current-status.md) and the evidence ledger for actual checks.
 
 ## Shopping patterns to adapt originally
 

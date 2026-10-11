@@ -13,6 +13,12 @@ export interface Preferences { version: 1; language: Language; filters: Filters;
 export interface SavedListing {
   offerId: string; sourceId: string; variantKey: string; storeId: string | null; url: string; savedAt: string;
 }
+export function savedIdentity(record: Pick<SavedListing, 'offerId' | 'sourceId' | 'variantKey' | 'storeId'>): string {
+  return JSON.stringify([record.offerId, record.sourceId, record.variantKey, record.storeId]);
+}
+export function offerIdentity(offer: Offer): string {
+  return savedIdentity({ offerId: offer.id, sourceId: offer.sourceId, variantKey: offer.variantKey, storeId: offer.pickup?.id ?? null });
+}
 export interface StorageLike { getItem(key: string): string | null; setItem(key: string, value: string): void }
 const plain = (value: unknown): value is Record<string, unknown> => Boolean(value) && typeof value === 'object' && !Array.isArray(value);
 const smallText = (value: unknown, max: number): value is string => typeof value === 'string' && value.length <= max && !/[\u0000-\u001f]/.test(value);
@@ -72,12 +78,13 @@ export function decodeSaved(raw: string | null): SavedListing[] {
     if (!plain(value) || value.version !== 1 || !Array.isArray(value.listings) || value.listings.length > 100) return [];
     const result: SavedListing[] = [], ids = new Set<string>();
     for (const record of value.listings) {
-      if (!plain(record) || !smallText(record.offerId, 200) || !smallText(record.sourceId, 80) || !SOURCE_BY_ID.has(record.sourceId)
-        || !smallText(record.variantKey, 200) || !(record.storeId === null || smallText(record.storeId, 160))
+      if (!plain(record) || !smallText(record.offerId, 200) || !record.offerId || /\s/.test(record.offerId) || !smallText(record.sourceId, 80) || !SOURCE_BY_ID.has(record.sourceId) || record.sourceId === 'shopify-catalog'
+        || !smallText(record.variantKey, 200) || !record.variantKey || !(record.storeId === null || smallText(record.storeId, 160))
         || !smallText(record.savedAt, 40) || !Number.isFinite(Date.parse(record.savedAt))) continue;
       const url = safeExternalUrl(record.url);
-      if (!url || ids.has(record.offerId)) continue;
-      ids.add(record.offerId);
+      const identity = savedIdentity({ offerId: record.offerId, sourceId: record.sourceId, variantKey: record.variantKey, storeId: record.storeId });
+      if (!url || ids.has(identity)) continue;
+      ids.add(identity);
       result.push({ offerId: record.offerId, sourceId: record.sourceId, variantKey: record.variantKey, storeId: record.storeId, url, savedAt: record.savedAt });
     }
     return result;

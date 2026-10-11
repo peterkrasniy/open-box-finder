@@ -18,7 +18,7 @@ export function OfferCard({ offer, language, filters, now, saved, onSave, onOpen
     <button type="button" className="media-action" aria-label={`${text(language, 'details')}: ${offer.title}`} onClick={() => onOpen(offer)}><OfferMedia offer={offer} language={language} priority={priority}/></button>
     <div className="offer-card-body">
       <div className="offer-source"><span>{retailer}</span><button type="button" className={`icon-button save-button${saved ? ' is-saved' : ''}`} aria-label={`${text(language, saved ? 'unsave' : 'save')}: ${offer.title}`} aria-pressed={saved} onClick={() => onSave(offer)}><Icon name="heart"/></button></div>
-      <h3><button type="button" className="text-action" onClick={() => onOpen(offer)}>{offer.title}</button></h3>
+      <h2><button type="button" className="text-action" onClick={() => onOpen(offer)}>{offer.title}</button></h2>
       <p className="condition">{conditionLabel(language, offer.condition)}{offer.cosmeticGrade && <> · {offer.cosmeticGrade}</>}</p>
       {!isFresh(offer, now) && <p className="muted small">{text(language, 'lastObservedPrice')}</p>}
       <Price offer={offer} language={language} now={now}/>

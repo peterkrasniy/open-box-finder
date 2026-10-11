@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Offer } from '../lib/offer.ts';
 import type { Preferences, SavedListing, StorageLike } from '../lib/storage.ts';
-import { decodeSaved, defaultPreferences, PREFERENCES_KEY, readStorage, SAVED_KEY, savedPointer, writePreferences, writeSaved } from '../lib/storage.ts';
+import { decodeSaved, defaultPreferences, PREFERENCES_KEY, readStorage, SAVED_KEY, savedIdentity, savedPointer, writePreferences, writeSaved } from '../lib/storage.ts';
 
 export function usePreferences() {
   const [preferences, setPreferences] = useState<Preferences>(defaultPreferences);
@@ -10,13 +10,13 @@ export function usePreferences() {
   const [ready, setReady] = useState(false), [storageAvailable, setStorageAvailable] = useState(true);
   const [saveError, setSaveError] = useState<'saveUnavailable' | 'saveLimit' | null>(null);
   const store = useRef<StorageLike | null>(null), savedRef = useRef(saved);
-  savedRef.current = saved;
   useEffect(() => {
     try { store.current = window.localStorage; } catch { store.current = null; }
     const value = readStorage(store.current);
-    setPreferences(value.preferences); setSaved(value.saved); setStorageAvailable(value.available); setReady(true);
+    setPreferences(value.preferences); savedRef.current = value.saved; setSaved(value.saved); setStorageAvailable(value.available); setReady(true);
     const changed = (event: StorageEvent) => {
-      if (event.key === SAVED_KEY) setSaved(decodeSaved(event.newValue));
+      if (event.key === null) { const next = readStorage(store.current); savedRef.current = next.saved; setSaved(next.saved); setPreferences(next.preferences); }
+      else if (event.key === SAVED_KEY) { const next = decodeSaved(event.newValue); savedRef.current = next; setSaved(next); }
       else if (event.key === PREFERENCES_KEY) setPreferences(readStorage(store.current).preferences);
     };
     window.addEventListener('storage', changed);
@@ -37,19 +37,24 @@ export function usePreferences() {
       savedRef.current = next; setSaved(next);
       if (!writeSaved(store.current, next)) setStorageAvailable(false);
     };
-    if (navigator.locks?.request) await navigator.locks.request('open-box-finder:saved', update);
-    else update();
+    let completed = false;
+    const once = () => { if (!completed) { completed = true; update(); } };
+    if (navigator.locks?.request) {
+      try { await navigator.locks.request('open-box-finder:saved', once); }
+      catch { once(); }
+    } else once();
   }, [storageAvailable]);
   const toggleSaved = useCallback((offer: Offer) => {
     setSaveError(null);
     const pointer = savedPointer(offer, Date.now());
     if (!pointer) { setSaveError('saveUnavailable'); return; }
     void mutateSaved(value => {
-      if (value.some(item => item.offerId === offer.id)) return value.filter(item => item.offerId !== offer.id);
+      const identity = savedIdentity(pointer);
+      if (value.some(item => savedIdentity(item) === identity)) return value.filter(item => savedIdentity(item) !== identity);
       if (value.length >= 100) { setSaveError('saveLimit'); return value; }
       return [pointer, ...value];
     });
   }, [mutateSaved]);
-  const removeSaved = useCallback((id: string) => { void mutateSaved(value => value.filter(item => item.offerId !== id)); }, [mutateSaved]);
+  const removeSaved = useCallback((identity: string) => { void mutateSaved(value => value.filter(item => savedIdentity(item) !== identity)); }, [mutateSaved]);
   return { preferences, setPreferences, saved, ready, storageAvailable, saveError, toggleSaved, removeSaved };
 }

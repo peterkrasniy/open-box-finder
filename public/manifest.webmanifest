@@ -1,0 +1,15 @@
+{
+  "id": "/",
+  "name": "Open Box Finder",
+  "short_name": "Open Box",
+  "description": "Open-box deal discovery near you, with shipping and device-local saves.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f6f8fb",
+  "theme_color": "#0866ef",
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

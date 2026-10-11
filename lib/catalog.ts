@@ -1,5 +1,6 @@
 import type { Catalog, Offer } from './offer.ts';
 import { SOURCES } from './sources.ts';
+import { publicOffer } from './validation.ts';
 
 export function emptyCatalog(): Catalog {
   return {
@@ -46,6 +47,7 @@ export function reconcileSnapshot(previous: readonly Offer[], incoming: SourceSn
 }
 
 export function materialFields(offer: Offer): Omit<Offer, 'observedAt' | 'freshUntil'> {
-  const { observedAt: _observed, freshUntil: _until, reference, ...rest } = offer;
-  return { ...rest, reference: reference ? { ...reference, observedAt: '' } : null };
+  const record = publicOffer(offer);
+  const stable = Object.fromEntries(Object.entries(record).filter(([key]) => key !== 'observedAt' && key !== 'freshUntil'));
+  return { ...stable, reference: record.reference ? { ...record.reference, observedAt: '' } : null } as Omit<Offer, 'observedAt' | 'freshUntil'>;
 }

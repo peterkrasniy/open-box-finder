@@ -2,7 +2,11 @@
 
 Dedicated checkout: `/workspace/open-box-finder`. Existing public source: `https://github.com/peterkrasniy/open-box-finder`. No other project checkout has been edited.
 
-## Source helper gap
+## Current provisioning
+
+The supported Library text transfer resolved the helper gap on October 11 at 09:05–09:08 UTC. The verified official tooling bundle is installed outside public source, the portable starter is initialized and dependencies installed, and the exact registered Site ID is persisted. See [current status](../current-status.md). The observations below preserve the original blocker and do not describe present provisioning.
+
+## Historical source helper gap
 
 The cloud Sites skill is available and was read. Its source is `skill://plugin_connector_1p_689987207de08191979cf68eca2941c6/sites/SKILL.md`. It states: “For hosted work, package with the source helper.” New server projects use its supplied Vinext starter. The helper scripts and starter are not installed locally in this selected environment.
 

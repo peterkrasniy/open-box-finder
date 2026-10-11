@@ -1,4 +1,5 @@
-@import "tailwindcss";
+@import "tailwindcss/theme.css";
+@import "tailwindcss/preflight.css";
 :root { color-scheme: light; --ink:#0b1220; --muted:#596579; --blue:#0866ef; --blue-dark:#0758cd; --line:#dce2eb; --surface:#fff; --background:#f6f8fb; --red:#c82828; }
 * { box-sizing:border-box; }
 html { scroll-behavior:smooth; scrollbar-gutter:stable; }
@@ -97,7 +98,7 @@ legend { padding:0; margin-bottom:8px; font-weight:650; font-size:15px; }
 .icon-button:hover { background:#edf3fc; }
 .is-saved { color:var(--blue-dark); background:#e5efff; }
 .is-saved svg { fill:#c8dfff; }
-.offer-card h3 { font-size:16px; line-height:1.4; margin:6px 0; }
+.offer-card h2 { font-size:16px; line-height:1.4; margin:6px 0; }
 .text-action { padding:0; text-align:left; font-weight:inherit; }
 .text-action:hover { color:var(--blue-dark); }
 .condition { font-size:12px; color:var(--muted); margin:6px 0 12px; }
@@ -118,7 +119,7 @@ legend { padding:0; margin-bottom:8px; font-weight:650; font-size:15px; }
 .saved-row:last-child { border-bottom:0; }
 .saved-media-action { width:150px; flex-shrink:0; padding:0; border-radius:12px; overflow:hidden; }
 .saved-row-information { flex:1; min-width:0; }
-.saved-row-information h3 { margin:4px 0 10px; font-size:17px; }
+.saved-row-information h2 { margin:4px 0 10px; font-size:17px; }
 .remove-button { min-height:44px; padding:10px; color:var(--red); font-size:13px; }
 .app-dialog { max-height:calc(100dvh - 64px); width:min(520px,calc(100% - 40px)); margin:auto; padding:0; border:1px solid var(--line); border-radius:20px; color:var(--ink); background:var(--surface); box-shadow:0 24px 80px #0b12202e; }
 .app-dialog::backdrop { background:#0b122055; backdrop-filter:blur(3px); }
@@ -179,10 +180,10 @@ legend { padding:0; margin-bottom:8px; font-weight:650; font-size:15px; }
   .category-chips button { white-space:nowrap; padding:8px 15px; font-size:13px; }
   .empty-state { min-height:276px; padding:32px 18px; border-radius:20px; } .empty-state h2 { font-size:21px; } .empty-state p { font-size:14px; }
   .source-status { padding:18px; border-radius:20px; } .source-row { gap:12px; font-size:13px; } .source-row>span:last-child { max-width:58%; font-size:11px; }
-  .offer-grid { grid-template-columns:minmax(0,1fr); gap:20px; } .offer-card { border-radius:20px; } .offer-card-body { padding:18px; } .offer-card h3 { font-size:19px; } .condition { font-size:13px; } .fulfillment-lines { font-size:13px; } .offer-source { font-size:13px; } .current-price { font-size:30px; }
+  .offer-grid { grid-template-columns:minmax(0,1fr); gap:20px; } .offer-card { border-radius:20px; } .offer-card-body { padding:18px; } .offer-card h2 { font-size:19px; } .condition { font-size:13px; } .fulfillment-lines { font-size:13px; } .offer-source { font-size:13px; } .current-price { font-size:30px; }
   .app-dialog { width:100%; max-height:92dvh; margin:auto 0 0; border-radius:24px 24px 0 0; border-bottom:0; padding-bottom:env(safe-area-inset-bottom); } .dialog-header { padding:16px 20px; } .dialog-content { padding:20px; } .filter-fields { gap:24px; } .check-row,.radio-row { min-height:44px; font-size:15px; } .fulfillment-options { flex-direction:row; justify-content:space-between; flex-wrap:wrap; gap:8px; } .filter-actions { position:sticky; bottom:0; background:#fff; padding:18px 0 4px; }
   .detail-layout { display:block; } .detail-layout>.offer-media { position:static; margin-bottom:24px; } .offer-detail { padding:20px; } .detail-information h3 { font-size:25px; }
-  .saved-row { padding:18px; gap:14px; flex-wrap:wrap; } .saved-media-action { width:86px; } .saved-row-information h3 { font-size:15px; } .saved-row-information .current-price { font-size:23px; } .remove-button { margin-left:auto; }
+  .saved-row { padding:18px; gap:14px; flex-wrap:wrap; } .saved-media-action { width:86px; } .saved-row-information h2 { font-size:15px; } .saved-row-information .current-price { font-size:23px; } .remove-button { margin-left:auto; }
 }
 @media (max-width:359px) { .app-shell { padding-left:12px; padding-right:12px; } .brand { font-size:18px; gap:6px; } .brand svg { width:25px; height:25px; } .language-switch button { min-width:44px; padding:4px 5px; } .sort-mobile { padding-left:7px; gap:3px; } .sort-mobile select { font-size:12px; } }
 @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } *,*::before,*::after { transition:none!important; animation:none!important; } }

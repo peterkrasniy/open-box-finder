@@ -1,18 +1,21 @@
 'use client';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { emptyCatalog } from '../lib/catalog.ts';
+import { serverAnchor, serverNow } from '../lib/server-clock.ts';
+import type { ClockAnchor } from '../lib/server-clock.ts';
 import { decodeCatalog } from '../lib/validation.ts';
 
 export function useCatalog(enabled: boolean) {
   const [catalog, setCatalog] = useState(emptyCatalog);
   const [status, setStatus] = useState<'idle' | 'loading' | 'ready' | 'error' | 'offline'>('idle');
-  const [now, setNow] = useState(() => Date.now());
+  const [now, setNow] = useState(Infinity);
+  const clockAnchor = useRef<ClockAnchor | null>(null);
   const active = useRef(false), controller = useRef<AbortController | null>(null);
   const serial = useRef(0), etag = useRef<string | null>(null);
   const refresh = useCallback(async () => {
     if (!active.current || controller.current || document.hidden) return;
     if (!navigator.onLine) { setStatus('offline'); return; }
-    const request = new AbortController(), number = ++serial.current;
+    const request = new AbortController(), number = ++serial.current, started = performance.now();
     controller.current = request;
     const timer = setTimeout(() => request.abort(), 15000);
     setStatus('loading');
@@ -20,7 +23,9 @@ export function useCatalog(enabled: boolean) {
       const response = await fetch('/api/catalog', { cache: 'no-store', credentials: 'omit', signal: request.signal,
         headers: etag.current ? { 'If-None-Match': etag.current } : {} });
       if (!active.current || request.signal.aborted || serial.current !== number) return;
-      if (response.status === 304) { setStatus('ready'); return; }
+      const anchor = serverAnchor(response.headers.get('X-Catalog-Time'), started, performance.now());
+      if (!anchor) throw new Error('Catalog server time unavailable');
+      if (response.status === 304) { clockAnchor.current = anchor; setNow(serverNow(anchor, performance.now())); setStatus('ready'); return; }
       if (!response.ok || !response.headers.get('content-type')?.includes('application/json') || !response.body) throw new Error('Catalog unavailable');
       const reader = response.body.getReader(), chunks: Uint8Array[] = [];
       let bytes = 0;
@@ -38,23 +43,26 @@ export function useCatalog(enabled: boolean) {
       if (!active.current || request.signal.aborted || serial.current !== number) return;
       const value = response.headers.get('etag');
       etag.current = value && value.length <= 256 ? value : null;
-      setCatalog(next); setNow(Date.now()); setStatus('ready');
+      clockAnchor.current = anchor; setCatalog(next); setNow(serverNow(anchor, performance.now())); setStatus('ready');
     } catch { if (active.current && serial.current === number) setStatus(navigator.onLine ? 'error' : 'offline'); }
     finally { clearTimeout(timer); if (controller.current === request) controller.current = null; }
   }, []);
+  const deactivate = useCallback(() => { active.current = false; ++serial.current; controller.current?.abort(); controller.current = null; }, []);
   useEffect(() => {
     if (!enabled) return;
     active.current = true;
+    // Starting the external polling subscription also establishes its loading/offline state.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     void refresh();
-    const resumed = () => { if (!document.hidden) void refresh(); };
+    const resumed = () => { if (!document.hidden) { clockAnchor.current = null; setNow(Infinity); void refresh(); } };
     const offline = () => { controller.current?.abort(); setStatus('offline'); };
     const poll = setInterval(() => { void refresh(); }, 120000);
-    const clock = setInterval(() => { if (!document.hidden) setNow(Date.now()); }, 30000);
+    const clock = setInterval(() => { if (!document.hidden) setNow(serverNow(clockAnchor.current, performance.now())); }, 30000);
     document.addEventListener('visibilitychange', resumed);
     window.addEventListener('online', resumed); window.addEventListener('offline', offline);
-    return () => { active.current = false; ++serial.current; controller.current?.abort(); controller.current = null;
+    return () => { deactivate();
       clearInterval(poll); clearInterval(clock); document.removeEventListener('visibilitychange', resumed);
       window.removeEventListener('online', resumed); window.removeEventListener('offline', offline); };
-  }, [enabled, refresh]);
+  }, [enabled, refresh, deactivate]);
   return { catalog, status, now, refresh };
 }

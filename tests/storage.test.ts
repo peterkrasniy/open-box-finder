@@ -34,3 +34,13 @@ test('denied storage never crashes or pretends preferences were persisted', () =
   assert.equal(writePreferences(denied, defaultPreferences()), false);
   assert.equal(writeSaved(denied, []), false);
 });
+
+test('saved identity keeps distinct variants and branches when a source reuses a listing ID', async () => {
+  const { savedIdentity } = await import('../lib/storage.ts');
+  const base = { offerId: 'qa-only-reused-id', sourceId: 'buydig', variantKey: 'qa-only-unit-a', storeId: 'qa-only-branch-a', url: 'https://example.test/item', savedAt: '2026-10-11T09:00:00Z' };
+  const anotherVariant = { ...base, variantKey: 'qa-only-unit-b' }, anotherBranch = { ...base, storeId: 'qa-only-branch-b' };
+  const result = decodeSaved(JSON.stringify({ version: 1, listings: [base, anotherVariant, anotherBranch, base] }));
+  assert.equal(result.length, 3);
+  assert.equal(new Set(result.map(savedIdentity)).size, 3);
+  assert.deepEqual(result.map(record => record.variantKey), ['qa-only-unit-a', 'qa-only-unit-b', 'qa-only-unit-a']);
+});
