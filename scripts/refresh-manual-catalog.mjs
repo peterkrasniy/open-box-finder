@@ -21,7 +21,8 @@ function publicProduct(product) {
   const nested = (value, allowed) => value === undefined || object(value) && keys(value, allowed);
   if (!nested(product.image, ['url', 'listingUrl', 'width', 'height', 'alt']) || !nested(product.image.alt, ['en', 'ru'])) return false;
   if (['conditionDetail', 'fulfillmentNote', 'details'].some(field => !nested(product[field], ['en', 'ru']))) return false;
-  if (['referencePrice', 'newModelReference', 'retailerComparison'].some(field => !nested(product[field], ['cents', 'basis', 'url']))) return false;
+  if (['referencePrice', 'newModelReference', 'retailerComparison'].some(field => !nested(product[field], field === 'referencePrice' ? ['cents', 'basis', 'url', 'evidenceUrl'] : field === 'retailerComparison' ? ['cents', 'basis', 'url', 'evidenceUrl', 'label'] : ['cents', 'basis', 'url']))) return false;
+  if (!nested(product.retailerComparison?.label, ['en', 'ru'])) return false;
   if (!nested(product.archived, ['at', 'reason']) || !nested(product.stockEvidence, ['url', 'detail', 'context'])) return false;
   if (!nested(product.shipping, ['country', 'costCents', 'restrictions', 'eligibility']) || !nested(product.shipping?.eligibility, ['scope', 'states', 'excludedStates'])) return false;
   if (!nested(product.pickup, ['id', 'name', 'address', 'point', 'pickupVerified']) || product.pickup?.point !== null && !nested(product.pickup?.point, ['latitude', 'longitude'])) return false;

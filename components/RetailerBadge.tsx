@@ -9,7 +9,7 @@ const LOGOS: Record<string, string> = {
   'vitamix-manual': 'https://www.vitamix.com/us/en_us/media_1b6df617f80b582bd4723381f3183d40d52ec867b.png?format=png&optimize=medium&width=750',
   'dyson-manual': 'https://dyson-h.assetsadobe2.com/is/image/content/dam/dyson/leap-petite-global/reasons-to-buy/lifetime-help-support.png',
 };
-const INITIALS: Record<string, string> = { 'best-buy': 'BB', 'direct-tools-manual': 'DTO', 'cuckoo-manual': 'C', 'epson-manual': 'E', 'newegg-manual': 'N', 'target-manual': 'T', 'dyson-manual': 'D', 'vitamix-manual': 'V', 'sennheiser-manual': 'S' };
+const INITIALS: Record<string, string> = { 'nintendo-manual': 'N', 'kitchenaid-manual': 'KA', 'canon-manual': 'C', 'logitech-manual': 'L', 'roborock-manual': 'R', 'best-buy': 'BB', 'direct-tools-manual': 'DTO', 'cuckoo-manual': 'C', 'epson-manual': 'E', 'newegg-manual': 'N', 'target-manual': 'T', 'dyson-manual': 'D', 'vitamix-manual': 'V', 'sennheiser-manual': 'S' };
 export function RetailerBadge({ sourceId }: { sourceId: string }) {
   const [failed, setFailed] = useState(false), name = SOURCE_BY_ID.get(sourceId)?.name ?? sourceId;
   return <span className="retailer-badge" data-retailer={sourceId}><span className="retailer-mark" aria-hidden="true">{LOGOS[sourceId] && !failed ?

@@ -2,6 +2,7 @@ import type { Category, Condition, Filters, ReferenceBasis, Shipping, Sort, Stor
 import { milesBetween, selected, validPoint } from './filter.ts';
 import { shippingEligibility } from './shipping.ts';
 import { savedSourceUrl } from './storage.ts';
+import { validManualReference, validNewModelUrl, validUnrankedComparison } from './manual-snapshot-schema.ts';
 import { ALL_MANUAL_PRODUCTS } from './manual-catalog.ts';
 import type { SavedListing } from './storage.ts';
 
@@ -17,11 +18,11 @@ export interface ManualProduct {
   shipping?: Shipping; pickup?: Store;
   fulfillmentNote?: { en: string; ru: string };
   details?: { en: string; ru: string };
-  referencePrice?: { cents: number; basis: ReferenceBasis; url: string };
+  referencePrice?: { cents: number; basis: ReferenceBasis; url: string; evidenceUrl?: string };
   observedPriceCents: number; currency: 'USD'; availability: 'unknown';
   url: string; reviewedAt: string; reviewUntil: string;
   newModelReference?: { cents: number; basis: 'observed-new-model'; url: string };
-  retailerComparison?: { cents: number; basis: 'retailer-comparison'; url: string };
+  retailerComparison?: { cents: number; basis: 'retailer-comparison'; url: string; evidenceUrl?: string; label?: { en: string; ru: string } };
   image: { url: string; listingUrl: string; width?: number; height?: number; alt: { en: string; ru: string } };
 }
 export const MANUAL_PRODUCTS: readonly ManualProduct[] = ALL_MANUAL_PRODUCTS;
@@ -30,8 +31,7 @@ export const MANUAL_PRODUCTS: readonly ManualProduct[] = ALL_MANUAL_PRODUCTS;
 export function manualSupportedReference(product: ManualProduct, now: number) {
   const reference = product.referencePrice;
   if (!manualProductActive(product, now) || !reference || !Number.isSafeInteger(reference.cents)
-    || !['retailer-was', 'retailer-regular', 'current-new'].includes(reference.basis) || reference.cents <= product.observedPriceCents || reference.url !== product.url
-    || !savedSourceUrl(product.sourceId, reference.url)) return null;
+    || !['retailer-was', 'retailer-regular', 'current-new'].includes(reference.basis) || reference.cents <= product.observedPriceCents || !validManualReference(product)) return null;
   const cents = reference.cents - product.observedPriceCents;
   return { ...reference, savingCents: cents, fraction: cents / reference.cents };
 }
@@ -44,19 +44,19 @@ export function manualFulfillmentMatches(product: ManualProduct, filters: Filter
   return distance !== null && distance <= filters.radiusMiles;
 }
 
-export function manualRetailerComparison(product: ManualProduct, now: number): { cents: number; url: string } | null {
+export function manualRetailerComparison(product: ManualProduct, now: number): { cents: number; url: string; label?: { en: string; ru: string } } | null {
   const reference = product.retailerComparison;
   if (!manualProductActive(product, now) || !reference || reference.basis !== 'retailer-comparison'
     || !Number.isSafeInteger(reference.cents) || reference.cents <= product.observedPriceCents
-    || reference.url !== product.url || !savedSourceUrl(product.sourceId, reference.url)) return null;
-  return { cents: reference.cents, url: reference.url };
+    || !validUnrankedComparison(product)) return null;
+  return { cents: reference.cents, url: reference.url, ...(reference.label ? { label: reference.label } : {}) };
 }
 
 export function manualNewModelComparison(product: ManualProduct, now: number): { cents: number; lowerRefurbished: boolean; url: string } | null {
   const reference = product.newModelReference;
   if (!manualProductActive(product, now) || !reference || reference.basis !== 'observed-new-model'
     || !Number.isSafeInteger(reference.cents) || reference.cents <= 0
-    || reference.url !== `https://us.sennheiser-hearing.com/products/${product.id.replace(/-refurbished$/, '')}`) return null;
+    || (product.sourceId === 'sennheiser-manual' ? reference.url !== `https://us.sennheiser-hearing.com/products/${product.id.replace(/-refurbished$/, '')}` : !validNewModelUrl(product.sourceId, reference.url))) return null;
   return { cents: reference.cents, lowerRefurbished: reference.cents > product.observedPriceCents, url: reference.url };
 }
 

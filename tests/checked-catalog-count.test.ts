@@ -1,7 +1,7 @@
 import {test} from 'node:test';import assert from 'node:assert/strict';
 import {MANUAL_PRODUCTS,manualProductActive,manualSupportedReference,manualProductsForFilters} from '../lib/manual-products.ts';
 import {DEFAULT_FILTERS} from '../lib/offer.ts';import {directionsUrl} from '../lib/filter.ts';import {SOURCE_BY_ID} from '../lib/sources.ts';
-const now=Math.max(...MANUAL_PRODUCTS.map(product=>Date.parse(product.reviewedAt)))+1;
+const now=Date.now();
 test('published checked catalog exceeds 100 real distinct stocked products across sources and categories',()=>{
  const eligible=MANUAL_PRODUCTS.filter(p=>manualProductActive(p,now)&&p.observedStock==='available');assert.ok(eligible.length>=100);assert.equal(new Set(eligible.map(p=>p.productKey)).size,eligible.length);assert.equal(new Set(eligible.map(p=>p.url)).size,eligible.length);assert.ok(new Set(eligible.map(p=>p.sourceId)).size>=4);assert.ok(new Set(eligible.map(p=>p.category)).size>=3);
  for(const p of eligible){assert.ok(p.image.url&&p.image.alt.en&&p.image.alt.ru);assert.ok(p.observedPriceCents>0);assert.equal(SOURCE_BY_ID.get(p.sourceId)?.enabled,false);}

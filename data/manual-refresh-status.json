@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "revision": "ab8b3a41f66d3a93973e0fdd33989a07f8a196a74769d22e744707c8ad47b8e3",
+  "revision": "af7f52d2aea245079e9c83c892ab93554286ca13b81a17a70de3b5339fd0299c",
   "sources": [
     {
       "sourceId": "direct-tools-manual",
@@ -26,9 +26,44 @@
     {
       "sourceId": "best-buy",
       "scopeKey": "california-selected-95628",
-      "attemptedAt": "2026-10-12T03:53:17.300Z",
+      "attemptedAt": "2026-10-12T04:26:50.305Z",
       "status": "success",
-      "lastSuccessAt": "2026-10-12T03:53:17.300Z"
+      "lastSuccessAt": "2026-10-12T04:26:50.305Z"
+    },
+    {
+      "sourceId": "kitchenaid-manual",
+      "scopeKey": "parent-selected-20261012",
+      "attemptedAt": "2026-10-12T04:12:47.537809+00:00",
+      "status": "success",
+      "lastSuccessAt": "2026-10-12T04:12:47.537809+00:00"
+    },
+    {
+      "sourceId": "roborock-manual",
+      "scopeKey": "parent-selected-20261012",
+      "attemptedAt": "2026-10-12T04:10:52.112294+00:00",
+      "status": "success",
+      "lastSuccessAt": "2026-10-12T04:10:52.112294+00:00"
+    },
+    {
+      "sourceId": "canon-manual",
+      "scopeKey": "parent-selected-20261012",
+      "attemptedAt": "2026-10-12T04:14:00Z",
+      "status": "success",
+      "lastSuccessAt": "2026-10-12T04:14:00Z"
+    },
+    {
+      "sourceId": "logitech-manual",
+      "scopeKey": "parent-selected-20261012",
+      "attemptedAt": "2026-10-12T04:14:00Z",
+      "status": "success",
+      "lastSuccessAt": "2026-10-12T04:14:00Z"
+    },
+    {
+      "sourceId": "nintendo-manual",
+      "scopeKey": "parent-selected-20261012",
+      "attemptedAt": "2026-10-12T04:16:30Z",
+      "status": "success",
+      "lastSuccessAt": "2026-10-12T04:16:30Z"
     }
   ]
 }

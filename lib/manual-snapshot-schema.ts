@@ -3,6 +3,9 @@ import { savedSourceUrl, safeExternalUrl } from './storage.ts';
 import { US_STATES } from './shipping.ts';
 
 const photoHosts: Record<string, readonly string[]> = {
+  'nintendo-manual': ['assets.nintendo.com'],
+  'kitchenaid-manual': ['www.kitchenaid.com', 'kitchenaidus.vtexassets.com'], 'canon-manual': ['s7d1.scene7.com'],
+  'logitech-manual': ['resource.logitech.com', 'resource.logitechg.com'], 'roborock-manual': ['cdn.shopify.com'],
   'cuckoo-manual': ['cuckooamerica.com'], 'epson-manual': ['mediaserver.goepson.com'],
   'direct-tools-manual': ['cdn.shopify.com'], 'sennheiser-manual': ['us.sennheiser-hearing.com'],
   'target-manual': ['target.scene7.com'], 'newegg-manual': ['c1.neweggimages.com'],
@@ -25,7 +28,7 @@ export function validManualSnapshot(value: unknown): value is ManualProduct {
   }) || !object(p.image) || !timestamp(p.reviewedAt) || !timestamp(p.reviewUntil)) return false;
   if (!string(p.id, 160) || !string(p.sourceId, 80) || !string(p.brand, 100) || !string(p.model, 500)
     || p.recordType !== 'manual-observation' || p.currency !== 'USD' || p.availability !== 'unknown'
-    || !['appliances', 'tv', 'computers', 'phones', 'audio', 'smart-home', 'gaming', 'tools', 'home', 'other'].includes(p.category)
+    || !['appliances', 'tv', 'computers', 'phones', 'cameras', 'audio', 'smart-home', 'gaming', 'tools', 'home', 'other'].includes(p.category)
     || !['open-box', 'refurbished', 'used', 'scratch-and-dent', 'new-clearance', 'unspecified'].includes(p.condition)
     || !cents(p.observedPriceCents) || !savedSourceUrl(p.sourceId, p.url)) return false;
   const checked = Date.parse(p.reviewedAt), until = Date.parse(p.reviewUntil);
@@ -40,9 +43,9 @@ export function validManualSnapshot(value: unknown): value is ManualProduct {
   if (p.stockEvidence && (p.stockEvidence.url !== p.url || !string(p.stockEvidence.detail, 1500) || p.stockEvidence.context !== undefined && !string(p.stockEvidence.context, 500))) return false;
   if (p.archived && (!timestamp(p.archived.at) || !['confirmed-unavailable', 'absent-from-complete-scope'].includes(p.archived.reason))) return false;
   if (p.previousUrls !== undefined && (!Array.isArray(p.previousUrls) || p.previousUrls.length > 50 || !p.previousUrls.every(url => savedSourceUrl(p.sourceId, url)))) return false;
-  if (p.retailerComparison && (!cents(p.retailerComparison.cents) || p.retailerComparison.basis !== 'retailer-comparison' || p.retailerComparison.url !== p.url)) return false;
-  if (p.referencePrice && (!cents(p.referencePrice.cents) || !['retailer-was', 'retailer-regular', 'current-new'].includes(p.referencePrice.basis) || p.referencePrice.url !== p.url)) return false;
-  if (p.newModelReference && (!cents(p.newModelReference.cents) || p.newModelReference.basis !== 'observed-new-model' || !safeExternalUrl(p.newModelReference.url))) return false;
+  if (p.retailerComparison && !validUnrankedComparison(p)) return false;
+  if (p.referencePrice && !validManualReference(p)) return false;
+  if (p.newModelReference && (!cents(p.newModelReference.cents) || p.newModelReference.basis !== 'observed-new-model' || (p.sourceId === 'sennheiser-manual' ? p.newModelReference.url !== `https://us.sennheiser-hearing.com/products/${p.id.replace(/-refurbished$/, '')}` : !validNewModelUrl(p.sourceId, p.newModelReference.url)))) return false;
   if (p.shipping?.eligibility !== undefined && !object(p.shipping.eligibility) || p.pickup?.point !== undefined && p.pickup.point !== null && !object(p.pickup.point)) return false;
   if (p.shipping && (p.shipping.country !== 'US' || p.shipping.costCents !== null && (!Number.isSafeInteger(p.shipping.costCents) || p.shipping.costCents < 0)
     || p.shipping.restrictions !== null && !string(p.shipping.restrictions, 1500)
@@ -59,5 +62,36 @@ export function validManualSnapshot(value: unknown): value is ManualProduct {
   if (p.sourceId === 'epson-manual' && !/^\/Certified-ReNew\/.+\/p\/[A-Za-z0-9-]+\/?$/.test(path)
     || p.sourceId === 'cuckoo-manual' && !/^\/collections\/certified-renewed\/products\/[A-Za-z0-9-]+\/?$/.test(path)
     || p.sourceId === 'direct-tools-manual' && !/^\/products\/[A-Za-z0-9-]+\/?$/.test(path)) return false;
+  if (p.sourceId === 'nintendo-manual' && !/^\/us\/store\/products\/[a-z0-9-]+-refurbished\/$/.test(path)) return false;
+  if (p.sourceId === 'kitchenaid-manual' && !/^\/countertop-appliances\/refurbished\/[^/]+\/p\.refurbished-[a-z0-9-]+\.[A-Z0-9]+\.html$/.test(path)
+    || p.sourceId === 'canon-manual' && !/^\/shop\/p\/refurbished-[a-z0-9-]+\/?$/.test(path)
+    || p.sourceId === 'logitech-manual' && !/^\/en-us\/shop\/p\/[a-z0-9-]*refurb[a-z0-9-]*\.\d{3}-\d{6}\/?$/.test(path)
+    || p.sourceId === 'roborock-manual' && (!/^\/products\/certified-refurbished-[a-z0-9-]+$/.test(path) || !/^\d+$/.test(new URL(p.url).searchParams.get('variant') ?? ''))) return false;
   return true;
+}
+
+/** Separately observed current-new model PDPs, never a generic catalog or unrelated origin. */
+export function validNewModelUrl(sourceId: string, value: string): boolean {
+  if (!savedSourceUrl(sourceId, value)) return false;
+  const path = new URL(value).pathname;
+  if (sourceId === 'nintendo-manual') return /^\/us\/store\/products\/(?!.*refurbished)[a-z0-9-]+\/$/.test(path);
+  if (sourceId === 'canon-manual') return /^\/shop\/p\/(?!refurbished-)[a-z0-9-]+\/?$/.test(path);
+  if (sourceId === 'logitech-manual') return /^\/en-us\/shop\/p\/(?!.*refurb)[a-z0-9-]+\.\d{3}-\d{6}\/?$/.test(path);
+  if (sourceId === 'roborock-manual') return /^\/products\/(?!certified-refurbished-)[a-z0-9-]+$/.test(path);
+  if (sourceId === 'kitchenaid-manual') return /^\/countertop-appliances\/(?!refurbished\/).+\/p\.[a-z0-9-]+\.[A-Z0-9]+\.html$/.test(path);
+  return false;
+}
+export function validManualReference(product: ManualProduct): boolean {
+  const ref = product.referencePrice;
+  if (!ref || !cents(ref.cents) || !['retailer-was', 'retailer-regular', 'current-new'].includes(ref.basis)) return false;
+  if (ref.url === product.url) return !!savedSourceUrl(product.sourceId, ref.url) && (ref.evidenceUrl === undefined || ref.evidenceUrl === product.url);
+  return ref.basis === 'current-new' && ref.evidenceUrl === product.url && validNewModelUrl(product.sourceId, ref.url);
+}
+
+
+export function validUnrankedComparison(product: ManualProduct): boolean {
+  const ref = product.retailerComparison;
+  if (!ref || !cents(ref.cents) || ref.basis !== 'retailer-comparison' || ref.label !== undefined && !bilingual(ref.label)) return false;
+  if (ref.url === product.url) return !!savedSourceUrl(product.sourceId, ref.url) && (ref.evidenceUrl === undefined || ref.evidenceUrl === product.url);
+  return product.sourceId === 'nintendo-manual' && ref.evidenceUrl === product.url && !!ref.label && validNewModelUrl(product.sourceId, ref.url);
 }

@@ -1,9 +1,16 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { EXPANDED_MANUAL_PRODUCTS } from '../lib/manual-catalog.ts';
-import { MANUAL_PRODUCTS, manualProductActive, manualProductsForFilters, manualSavedPointer, manualSupportedReference } from '../lib/manual-products.ts';
+import { manualProductActive, manualProductsForFilters as filterPublished, manualSavedPointer as savePublished, manualSupportedReference } from '../lib/manual-products.ts';
 import { decodeSaved, defaultPreferences, savedSourceUrl } from '../lib/storage.ts';
 import { SOURCE_BY_ID } from '../lib/sources.ts';
+
+import fixture from './fixtures/manual-products-v19.json' with { type: 'json' };
+import type { ManualProduct } from '../lib/manual-products.ts';
+// Dated regression evidence stays fixed while the published catalog is refreshed.
+const MANUAL_PRODUCTS = fixture as unknown as readonly ManualProduct[];
+const manualProductsForFilters = (...args: Parameters<typeof filterPublished>) => filterPublished(args[0], args[1], args[2], MANUAL_PRODUCTS);
+const manualSavedPointer = (product: ManualProduct, now: number) => savePublished(product, now, MANUAL_PRODUCTS);
+const EXPANDED_MANUAL_PRODUCTS = MANUAL_PRODUCTS.filter(product => product.sourceId !== 'sennheiser-manual');
 
 const now = Date.parse('2026-10-12T02:30:00Z');
 const filters = defaultPreferences().filters;

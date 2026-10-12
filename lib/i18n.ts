@@ -139,6 +139,7 @@ export function listingCount(language: Language, count: number, manual = false):
 const categories: Record<Category, [string, string]> = {
   appliances: ['Appliances', 'Бытовая техника'], tv: ['TV & Home Theater', 'ТВ и домашний кинотеатр'],
   computers: ['Computers & Tablets', 'Компьютеры и планшеты'], phones: ['Phones & Wearables', 'Телефоны и часы'],
+  cameras: ['Cameras & Lenses', 'Камеры и объективы'],
   audio: ['Audio', 'Аудио'], 'smart-home': ['Smart Home', 'Умный дом'], gaming: ['Gaming', 'Игры'],
   tools: ['Tools & Home Improvement', 'Инструменты и ремонт'], home: ['Home & Kitchen', 'Дом и кухня'], other: ['Other', 'Другое'],
 };

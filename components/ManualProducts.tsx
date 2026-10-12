@@ -13,10 +13,13 @@ export function ManualProductFacts({ product, language, now }: { product: Manual
   const formatter = new Intl.NumberFormat(language === 'ru' ? 'ru-RU' : 'en-US', { style: 'currency', currency: product.currency });
   const price = formatter.format(product.observedPriceCents / 100), comparison = manualNewModelComparison(product, now);
   const retailerComparison = manualRetailerComparison(product, now), supported = manualSupportedReference(product, now);
+  const grade = product.sourceId === 'best-buy' && new URL(product.url).searchParams.get('condition') === 'fair'
+    ? (language === 'ru' ? 'Открытая упаковка · Fair, детали могут отсутствовать' : 'Open-Box Fair · parts may be missing')
+    : product.conditionDetail?.[language] ?? conditionLabel(language, product.condition);
   const navigate = directionsUrl({ pickup: product.pickup ?? null });
-  return <><p className="manual-condition">{product.conditionDetail?.[language] ?? conditionLabel(language, product.condition)} · {text(language, 'manualOnly')}</p><p className="manual-price"><span>{price}</span><small>{text(language, 'observedPrice')}</small></p>
+  return <><p className="manual-condition">{grade} · {text(language, 'manualOnly')}</p><p className="manual-price"><span>{price}</span><small>{text(language, 'observedPrice')}</small></p>
     {supported && <><p className="manual-comparison"><a href={supported.url} target="_blank" rel="noopener noreferrer">{referenceLabel(language, supported.basis)}</a><s className="manual-reference">{formatter.format(supported.cents / 100)}</s></p><p className="manual-saving">{formatter.format(supported.savingCents / 100)} · {product.observedPriceCents === 0 ? 100 : Math.min(99, Math.round(supported.fraction * 100))}% <span>{text(language, 'referenceSavings')}</span></p></>}
-    {retailerComparison && <p className="manual-comparison"><a href={retailerComparison.url} target="_blank" rel="noopener noreferrer">{text(language, 'retailerComparisonPrice')}</a><s className="manual-reference">{formatter.format(retailerComparison.cents / 100)}</s></p>}
+    {retailerComparison && <p className="manual-comparison"><a href={retailerComparison.url} target="_blank" rel="noopener noreferrer">{retailerComparison.label?.[language] ?? text(language, 'retailerComparisonPrice')}</a><s className="manual-reference">{formatter.format(retailerComparison.cents / 100)}</s></p>}
     {comparison && <p className="manual-new-price"><a href={comparison.url} target="_blank" rel="noopener noreferrer">{text(language, 'observedNewModel')}</a><span>{formatter.format(comparison.cents / 100)}{comparison.cents === product.observedPriceCents && ` · ${text(language, 'sameNewPrice')}`}</span></p>}
     <p className="manual-unknown">{text(language, product.observedStock === 'available' ? 'observedInStock' : 'manualUnknown')}</p>
     {product.fulfillmentNote && <p className="manual-fulfillment">{product.fulfillmentNote[language]}</p>}
@@ -50,7 +53,7 @@ export function ManualProducts({ products, records, filterKey, failedSources, ch
       return <article className="manual-product-card" key={`${product.sourceId}:${product.id}`} data-product-key={product.productKey}>
         <div className="manual-card-top"><RetailerBadge sourceId={product.sourceId}/><button type="button" className="manual-save" aria-label={`${text(language, saved ? 'unsave' : 'save')}: ${title}`} aria-pressed={saved} onClick={() => onSave(product)}><Icon name="bookmark" size={21}/></button></div>
         <h3><a href={product.url} target="_blank" rel="noopener noreferrer">{product.brand} {product.model}</a></h3>
-        <ManualProductVisual product={product} language={language}/>
+        <ManualProductVisual key={product.image.url} product={product} language={language}/>
         {failedSources.includes(product.sourceId) && <p className="notice">{language === 'ru' ? 'Последняя проверка магазина не удалась. Данные ниже — из предыдущей проверки.' : 'Latest retailer check failed. Details below are from the previous check.'}</p>}
         <ManualProductFacts product={product} language={language} now={now}/>
         <a className="manual-retailer" href={product.url} target="_blank" rel="noopener noreferrer">{text(language, 'viewProductAtRetailer')}<Icon name="external" size={17}/></a>

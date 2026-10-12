@@ -3,6 +3,7 @@ export interface SourceDefinition {
   id: string;
   name: string;
   website: string;
+  additionalOrigins?: readonly string[];
   catalogUrl: string | null;
   admission: Admission;
   enabled: boolean;
@@ -11,6 +12,11 @@ export interface SourceDefinition {
 
 /** Source-admission registry. No runtime fetch is enabled by a research observation. */
 export const SOURCES: readonly SourceDefinition[] = [
+  { id: 'nintendo-manual', name: 'Nintendo Store', website: 'https://www.nintendo.com/', catalogUrl: null, admission: 'manual-only', enabled: false, presentation: 'manual-curation' },
+  { id: 'kitchenaid-manual', name: 'KitchenAid', website: 'https://www.kitchenaid.com/', catalogUrl: null, admission: 'manual-only', enabled: false, presentation: 'manual-curation' },
+  { id: 'canon-manual', name: 'Canon USA', website: 'https://www.usa.canon.com/', catalogUrl: null, admission: 'manual-only', enabled: false, presentation: 'manual-curation' },
+  { id: 'logitech-manual', name: 'Logitech', website: 'https://www.logitech.com/', additionalOrigins: ['https://www.logitechg.com'], catalogUrl: null, admission: 'manual-only', enabled: false, presentation: 'manual-curation' },
+  { id: 'roborock-manual', name: 'Roborock US', website: 'https://us.roborock.com/', catalogUrl: null, admission: 'manual-only', enabled: false, presentation: 'manual-curation' },
   { id: 'cuckoo-manual', name: 'CUCKOO America', website: 'https://cuckooamerica.com/', catalogUrl: null, admission: 'manual-only', enabled: false, presentation: 'manual-curation' },
   { id: 'epson-manual', name: 'Epson', website: 'https://epson.com/', catalogUrl: null, admission: 'manual-only', enabled: false, presentation: 'manual-curation' },
   { id: 'vitamix-manual', name: 'Vitamix', website: 'https://www.vitamix.com/', catalogUrl: null, admission: 'manual-only', enabled: false, presentation: 'manual-curation' },

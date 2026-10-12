@@ -1,5 +1,5 @@
 export type Language = 'en' | 'ru';
-export type Category = 'appliances' | 'tv' | 'computers' | 'phones' | 'audio' | 'smart-home' | 'gaming' | 'tools' | 'home' | 'other';
+export type Category = 'appliances' | 'tv' | 'computers' | 'phones' | 'cameras' | 'audio' | 'smart-home' | 'gaming' | 'tools' | 'home' | 'other';
 export type Condition = 'open-box' | 'refurbished' | 'used' | 'scratch-and-dent' | 'new-clearance' | 'unspecified';
 export type Availability = 'available' | 'unavailable' | 'unknown';
 export type ReferenceBasis = 'current-new' | 'msrp' | 'retailer-list' | 'retailer-regular' | 'retailer-was';

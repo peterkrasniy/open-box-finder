@@ -7302,5 +7302,1379 @@
       "en": "Shipping $0 shown for ZIP 95628 only. Confirm your address, current stock and tax at checkout.",
       "ru": "Доставка $0 показана только для индекса 95628. Уточните свой адрес, текущее наличие и налог при оформлении."
     }
+  },
+  {
+    "id": "rksmfga",
+    "productKey": "kitchenaid:rksmfga",
+    "scopeKey": "parent-selected-20261012",
+    "recordType": "manual-observation",
+    "sourceId": "kitchenaid-manual",
+    "brand": "KitchenAid",
+    "model": "Food Grinder Attachment (RKSMFGA)",
+    "category": "home",
+    "condition": "refurbished",
+    "conditionDetail": {
+      "en": "Manufacturer certified refurbished",
+      "ru": "Восстановлен производителем"
+    },
+    "observedStock": "available",
+    "availability": "unknown",
+    "currency": "USD",
+    "observedPriceCents": 2999,
+    "url": "https://www.kitchenaid.com/countertop-appliances/refurbished/stand-mixers-and-attachments/p.refurbished-food-grinder-attachment.RKSMFGA.html",
+    "reviewedAt": "2026-10-12T04:12:47.393922+00:00",
+    "reviewUntil": "2026-10-13T04:12:47.393922Z",
+    "stockEvidence": {
+      "url": "https://www.kitchenaid.com/countertop-appliances/refurbished/stand-mixers-and-attachments/p.refurbished-food-grinder-attachment.RKSMFGA.html",
+      "detail": "Exact model offer InStock and purchase action confirmed"
+    },
+    "image": {
+      "url": "https://www.kitchenaid.com/is/image/content/dam/global/kitchenaid/parts-and-accessories/small-appliances-accessories/images/hero-RKSMFGA.tif?wid=1000&hei=1000&fit=constrain,1&fmt=jpg&color=ffffff",
+      "listingUrl": "https://www.kitchenaid.com/countertop-appliances/refurbished/stand-mixers-and-attachments/p.refurbished-food-grinder-attachment.RKSMFGA.html",
+      "alt": {
+        "en": "KitchenAid Food Grinder Attachment (RKSMFGA), retailer model photograph",
+        "ru": "KitchenAid Food Grinder Attachment (RKSMFGA) — фото модели из магазина"
+      }
+    },
+    "fulfillmentNote": {
+      "en": "Delivery address, shipping and tax must be confirmed at checkout. Pickup not verified.",
+      "ru": "Уточните адрес, доставку и налог при оформлении. Самовывоз не подтверждён."
+    },
+    "details": {
+      "en": "Attachment only; compatible household stand mixer sold separately. Factory refurbished; cosmetic marks possible. 60-day returns advertised. Exact model warranty controls.",
+      "ru": "Только насадка; совместимый бытовой миксер продаётся отдельно. Возможны косметические следы. Заявлен возврат 60 дней. Условия гарантии зависят от модели."
+    },
+    "retailerComparison": {
+      "cents": 6999,
+      "basis": "retailer-comparison",
+      "url": "https://www.kitchenaid.com/countertop-appliances/refurbished/stand-mixers-and-attachments/p.refurbished-food-grinder-attachment.RKSMFGA.html",
+      "label": {
+        "en": "Retailer reference · not verified current-new",
+        "ru": "Цена для сравнения · не подтверждённая цена нового товара"
+      }
+    },
+    "shipping": {
+      "country": "US",
+      "costCents": null,
+      "restrictions": "Exact delivery address not checked; shipping messages differ for orders below $49.99"
+    }
+  },
+  {
+    "id": "rksmvsa",
+    "productKey": "kitchenaid:rksmvsa",
+    "scopeKey": "parent-selected-20261012",
+    "recordType": "manual-observation",
+    "sourceId": "kitchenaid-manual",
+    "brand": "KitchenAid",
+    "model": "Fresh Prep Slicer / Shredder Attachment (RKSMVSA)",
+    "category": "home",
+    "condition": "refurbished",
+    "conditionDetail": {
+      "en": "Manufacturer certified refurbished",
+      "ru": "Восстановлен производителем"
+    },
+    "observedStock": "available",
+    "availability": "unknown",
+    "currency": "USD",
+    "observedPriceCents": 3499,
+    "url": "https://www.kitchenaid.com/countertop-appliances/refurbished/stand-mixers-and-attachments/p.refurbished-fresh-prep-slicershredder-attachment.RKSMVSA.html",
+    "reviewedAt": "2026-10-12T04:12:47.358755+00:00",
+    "reviewUntil": "2026-10-13T04:12:47.358755Z",
+    "stockEvidence": {
+      "url": "https://www.kitchenaid.com/countertop-appliances/refurbished/stand-mixers-and-attachments/p.refurbished-fresh-prep-slicershredder-attachment.RKSMVSA.html",
+      "detail": "Exact model offer InStock and purchase action confirmed"
+    },
+    "image": {
+      "url": "https://www.kitchenaid.com/is/image/content/dam/global/kitchenaid/parts-and-accessories/small-appliances-accessories/images/hero-RKSMVSA.tif?wid=1000&hei=1000&fit=constrain,1&fmt=jpg&color=ffffff",
+      "listingUrl": "https://www.kitchenaid.com/countertop-appliances/refurbished/stand-mixers-and-attachments/p.refurbished-fresh-prep-slicershredder-attachment.RKSMVSA.html",
+      "alt": {
+        "en": "KitchenAid Fresh Prep Slicer / Shredder Attachment (RKSMVSA), retailer model photograph",
+        "ru": "KitchenAid Fresh Prep Slicer / Shredder Attachment (RKSMVSA) — фото модели из магазина"
+      }
+    },
+    "fulfillmentNote": {
+      "en": "Delivery address, shipping and tax must be confirmed at checkout. Pickup not verified.",
+      "ru": "Уточните адрес, доставку и налог при оформлении. Самовывоз не подтверждён."
+    },
+    "details": {
+      "en": "Attachment only; compatible household stand mixer sold separately. Factory refurbished; cosmetic marks possible. 60-day returns advertised. Exact model warranty controls.",
+      "ru": "Только насадка; совместимый бытовой миксер продаётся отдельно. Возможны косметические следы. Заявлен возврат 60 дней. Условия гарантии зависят от модели."
+    },
+    "retailerComparison": {
+      "cents": 6999,
+      "basis": "retailer-comparison",
+      "url": "https://www.kitchenaid.com/countertop-appliances/refurbished/stand-mixers-and-attachments/p.refurbished-fresh-prep-slicershredder-attachment.RKSMVSA.html",
+      "label": {
+        "en": "Retailer reference · not verified current-new",
+        "ru": "Цена для сравнения · не подтверждённая цена нового товара"
+      }
+    },
+    "shipping": {
+      "country": "US",
+      "costCents": null,
+      "restrictions": "Exact delivery address not checked; shipping messages differ for orders below $49.99"
+    }
+  },
+  {
+    "id": "rksmpra",
+    "productKey": "kitchenaid:rksmpra",
+    "scopeKey": "parent-selected-20261012",
+    "recordType": "manual-observation",
+    "sourceId": "kitchenaid-manual",
+    "brand": "KitchenAid",
+    "model": "3-Piece Pasta Roller & Cutter Set (RKSMPRA)",
+    "category": "home",
+    "condition": "refurbished",
+    "conditionDetail": {
+      "en": "Manufacturer certified refurbished",
+      "ru": "Восстановлен производителем"
+    },
+    "observedStock": "available",
+    "availability": "unknown",
+    "currency": "USD",
+    "observedPriceCents": 12999,
+    "url": "https://www.kitchenaid.com/countertop-appliances/refurbished/stand-mixers-and-attachments/p.refurbished-3-piece-pasta-roller-cutter-set.RKSMPRA.html",
+    "reviewedAt": "2026-10-12T04:12:47.537809+00:00",
+    "reviewUntil": "2026-10-13T04:12:47.537809Z",
+    "stockEvidence": {
+      "url": "https://www.kitchenaid.com/countertop-appliances/refurbished/stand-mixers-and-attachments/p.refurbished-3-piece-pasta-roller-cutter-set.RKSMPRA.html",
+      "detail": "Exact model offer InStock and purchase action confirmed"
+    },
+    "image": {
+      "url": "https://www.kitchenaid.com/is/image/content/dam/global/kitchenaid/parts-and-accessories/small-appliances-accessories/images/hero-RKSMPRA.tif?wid=1000&hei=1000&fit=constrain,1&fmt=jpg&color=ffffff",
+      "listingUrl": "https://www.kitchenaid.com/countertop-appliances/refurbished/stand-mixers-and-attachments/p.refurbished-3-piece-pasta-roller-cutter-set.RKSMPRA.html",
+      "alt": {
+        "en": "KitchenAid 3-Piece Pasta Roller & Cutter Set (RKSMPRA), retailer model photograph",
+        "ru": "KitchenAid 3-Piece Pasta Roller & Cutter Set (RKSMPRA) — фото модели из магазина"
+      }
+    },
+    "fulfillmentNote": {
+      "en": "Delivery address, shipping and tax must be confirmed at checkout. Pickup not verified.",
+      "ru": "Уточните адрес, доставку и налог при оформлении. Самовывоз не подтверждён."
+    },
+    "details": {
+      "en": "Attachment only; compatible household stand mixer sold separately. Factory refurbished; cosmetic marks possible. 60-day returns advertised. Exact model warranty controls.",
+      "ru": "Только насадка; совместимый бытовой миксер продаётся отдельно. Возможны косметические следы. Заявлен возврат 60 дней. Условия гарантии зависят от модели."
+    },
+    "retailerComparison": {
+      "cents": 21999,
+      "basis": "retailer-comparison",
+      "url": "https://www.kitchenaid.com/countertop-appliances/refurbished/stand-mixers-and-attachments/p.refurbished-3-piece-pasta-roller-cutter-set.RKSMPRA.html",
+      "label": {
+        "en": "Retailer reference · not verified current-new",
+        "ru": "Цена для сравнения · не подтверждённая цена нового товара"
+      }
+    },
+    "shipping": {
+      "country": "US",
+      "costCents": null,
+      "restrictions": "Exact delivery address not checked; shipping messages differ for orders below $49.99"
+    }
+  },
+  {
+    "id": "rrkhm5ic",
+    "productKey": "kitchenaid:rrkhm5ic",
+    "scopeKey": "parent-selected-20261012",
+    "recordType": "manual-observation",
+    "sourceId": "kitchenaid-manual",
+    "brand": "KitchenAid",
+    "model": "5-Speed Ultra Power Hand Mixer · Ice (RRKHM5IC)",
+    "category": "appliances",
+    "condition": "refurbished",
+    "conditionDetail": {
+      "en": "Manufacturer certified refurbished",
+      "ru": "Восстановлен производителем"
+    },
+    "observedStock": "available",
+    "availability": "unknown",
+    "currency": "USD",
+    "observedPriceCents": 3499,
+    "url": "https://www.kitchenaid.com/countertop-appliances/refurbished/hand-mixers/p.refurbished-5-speed-ultra-power-hand-mixer.RRKHM5IC.html",
+    "reviewedAt": "2026-10-12T04:12:47.440187+00:00",
+    "reviewUntil": "2026-10-13T04:12:47.440187Z",
+    "stockEvidence": {
+      "url": "https://www.kitchenaid.com/countertop-appliances/refurbished/hand-mixers/p.refurbished-5-speed-ultra-power-hand-mixer.RRKHM5IC.html",
+      "detail": "Exact model offer InStock and purchase action confirmed"
+    },
+    "image": {
+      "url": "https://www.kitchenaid.com/is/image/content/dam/global/kitchenaid/countertop-appliance/portable/images/hero-RRKHM5IC.tif?wid=1000&hei=1000&fit=constrain,1&fmt=jpg&color=ffffff",
+      "listingUrl": "https://www.kitchenaid.com/countertop-appliances/refurbished/hand-mixers/p.refurbished-5-speed-ultra-power-hand-mixer.RRKHM5IC.html",
+      "alt": {
+        "en": "KitchenAid 5-Speed Ultra Power Hand Mixer · Ice (RRKHM5IC), retailer model photograph",
+        "ru": "KitchenAid 5-Speed Ultra Power Hand Mixer · Ice (RRKHM5IC) — фото модели из магазина"
+      }
+    },
+    "fulfillmentNote": {
+      "en": "Delivery address, shipping and tax must be confirmed at checkout. Pickup not verified.",
+      "ru": "Уточните адрес, доставку и налог при оформлении. Самовывоз не подтверждён."
+    },
+    "details": {
+      "en": "Factory refurbished; cosmetic marks possible. 60-day returns advertised. Exact model warranty controls.",
+      "ru": "Возможны косметические следы. Заявлен возврат 60 дней. Условия гарантии зависят от модели."
+    },
+    "retailerComparison": {
+      "cents": 5999,
+      "basis": "retailer-comparison",
+      "url": "https://www.kitchenaid.com/countertop-appliances/refurbished/hand-mixers/p.refurbished-5-speed-ultra-power-hand-mixer.RRKHM5IC.html",
+      "label": {
+        "en": "Retailer reference · not verified current-new",
+        "ru": "Цена для сравнения · не подтверждённая цена нового товара"
+      }
+    },
+    "shipping": {
+      "country": "US",
+      "costCents": null,
+      "restrictions": "Exact delivery address not checked; shipping messages differ for orders below $49.99"
+    }
+  },
+  {
+    "id": "rksm70bk",
+    "productKey": "kitchenaid:rksm70bk",
+    "scopeKey": "parent-selected-20261012",
+    "recordType": "manual-observation",
+    "sourceId": "kitchenaid-manual",
+    "brand": "KitchenAid",
+    "model": "7-qt Bowl-Lift Stand Mixer · Midnight Black (RKSM70BK)",
+    "category": "appliances",
+    "condition": "refurbished",
+    "conditionDetail": {
+      "en": "Manufacturer certified refurbished",
+      "ru": "Восстановлен производителем"
+    },
+    "observedStock": "available",
+    "availability": "unknown",
+    "currency": "USD",
+    "observedPriceCents": 32499,
+    "url": "https://www.kitchenaid.com/countertop-appliances/refurbished/stand-mixers/p.refurbished-7-quart-bowl-lift-stand-mixer.RKSM70BK.html",
+    "reviewedAt": "2026-10-12T04:12:47.478133+00:00",
+    "reviewUntil": "2026-10-13T04:12:47.478133Z",
+    "stockEvidence": {
+      "url": "https://www.kitchenaid.com/countertop-appliances/refurbished/stand-mixers/p.refurbished-7-quart-bowl-lift-stand-mixer.RKSM70BK.html",
+      "detail": "Exact model offer InStock and purchase action confirmed"
+    },
+    "image": {
+      "url": "https://www.kitchenaid.com/is/image/content/dam/global/kitchenaid/countertop-appliance/portable/images/hero-RKSM70BK.tif?wid=1000&hei=1000&fit=constrain,1&fmt=jpg&color=ffffff",
+      "listingUrl": "https://www.kitchenaid.com/countertop-appliances/refurbished/stand-mixers/p.refurbished-7-quart-bowl-lift-stand-mixer.RKSM70BK.html",
+      "alt": {
+        "en": "KitchenAid 7-qt Bowl-Lift Stand Mixer · Midnight Black (RKSM70BK), retailer model photograph",
+        "ru": "KitchenAid 7-qt Bowl-Lift Stand Mixer · Midnight Black (RKSM70BK) — фото модели из магазина"
+      }
+    },
+    "fulfillmentNote": {
+      "en": "Delivery address, shipping and tax must be confirmed at checkout. Pickup not verified.",
+      "ru": "Уточните адрес, доставку и налог при оформлении. Самовывоз не подтверждён."
+    },
+    "details": {
+      "en": "Factory refurbished; cosmetic marks possible. 60-day returns advertised. Exact model warranty controls.",
+      "ru": "Возможны косметические следы. Заявлен возврат 60 дней. Условия гарантии зависят от модели."
+    },
+    "retailerComparison": {
+      "cents": 64999,
+      "basis": "retailer-comparison",
+      "url": "https://www.kitchenaid.com/countertop-appliances/refurbished/stand-mixers/p.refurbished-7-quart-bowl-lift-stand-mixer.RKSM70BK.html",
+      "label": {
+        "en": "Retailer reference · not verified current-new",
+        "ru": "Цена для сравнения · не подтверждённая цена нового товара"
+      }
+    },
+    "shipping": {
+      "country": "US",
+      "costCents": null,
+      "restrictions": "Exact delivery address not checked; shipping messages differ for orders below $49.99"
+    }
+  },
+  {
+    "id": "rkfp0718bm",
+    "productKey": "kitchenaid:rkfp0718bm",
+    "scopeKey": "parent-selected-20261012",
+    "recordType": "manual-observation",
+    "sourceId": "kitchenaid-manual",
+    "brand": "KitchenAid",
+    "model": "7-Cup Food Processor Bundle · Black Matte (RKFP0718BM)",
+    "category": "appliances",
+    "condition": "refurbished",
+    "conditionDetail": {
+      "en": "Manufacturer certified refurbished",
+      "ru": "Восстановлен производителем"
+    },
+    "observedStock": "available",
+    "availability": "unknown",
+    "currency": "USD",
+    "observedPriceCents": 4999,
+    "url": "https://www.kitchenaid.com/countertop-appliances/refurbished/food-processors-and-choppers/p.refurbished-7-cup-food-processor-bundle.RKFP0718BM.html",
+    "reviewedAt": "2026-10-12T04:12:47.321826+00:00",
+    "reviewUntil": "2026-10-13T04:12:47.321826Z",
+    "stockEvidence": {
+      "url": "https://www.kitchenaid.com/countertop-appliances/refurbished/food-processors-and-choppers/p.refurbished-7-cup-food-processor-bundle.RKFP0718BM.html",
+      "detail": "Exact model offer InStock and purchase action confirmed"
+    },
+    "image": {
+      "url": "https://www.kitchenaid.com/is/image/content/dam/global/kitchenaid/countertop-appliance/food-processor/images/hero-RKFP0718BM.tif?wid=1000&hei=1000&fit=constrain,1&fmt=jpg&color=ffffff",
+      "listingUrl": "https://www.kitchenaid.com/countertop-appliances/refurbished/food-processors-and-choppers/p.refurbished-7-cup-food-processor-bundle.RKFP0718BM.html",
+      "alt": {
+        "en": "KitchenAid 7-Cup Food Processor Bundle · Black Matte (RKFP0718BM), retailer model photograph",
+        "ru": "KitchenAid 7-Cup Food Processor Bundle · Black Matte (RKFP0718BM) — фото модели из магазина"
+      }
+    },
+    "fulfillmentNote": {
+      "en": "Delivery address, shipping and tax must be confirmed at checkout. Pickup not verified.",
+      "ru": "Уточните адрес, доставку и налог при оформлении. Самовывоз не подтверждён."
+    },
+    "details": {
+      "en": "New model is the same color; accessory bundles may differ. Compare What’s in the box. Factory refurbished; cosmetic marks possible. 60-day returns advertised. Exact model warranty controls.",
+      "ru": "Новая модель того же цвета; комплект принадлежностей может отличаться. Сравните комплектацию. Возможны косметические следы. Заявлен возврат 60 дней. Условия гарантии зависят от модели."
+    },
+    "newModelReference": {
+      "cents": 10999,
+      "basis": "observed-new-model",
+      "url": "https://www.kitchenaid.com/countertop-appliances/food-processors/processors/p.7-cup-food-processor.KFP0718BM.html"
+    },
+    "shipping": {
+      "country": "US",
+      "costCents": null,
+      "restrictions": "Exact delivery address not checked; shipping messages differ for orders below $49.99"
+    }
+  },
+  {
+    "id": "rrk150wh",
+    "productKey": "kitchenaid:rrk150wh",
+    "scopeKey": "parent-selected-20261012",
+    "recordType": "manual-observation",
+    "sourceId": "kitchenaid-manual",
+    "brand": "KitchenAid",
+    "model": "Artisan 5-qt Tilt-Head Stand Mixer · White (RRK150WH)",
+    "category": "appliances",
+    "condition": "refurbished",
+    "conditionDetail": {
+      "en": "Manufacturer certified refurbished",
+      "ru": "Восстановлен производителем"
+    },
+    "observedStock": "available",
+    "availability": "unknown",
+    "currency": "USD",
+    "observedPriceCents": 24999,
+    "url": "https://www.kitchenaid.com/countertop-appliances/refurbished/stand-mixers/p.refurbished-artisan-series-5-quart-tilt-head-stand-mixer.RRK150WH.html",
+    "reviewedAt": "2026-10-12T04:11:28.200504+00:00",
+    "reviewUntil": "2026-10-13T04:11:28.200504Z",
+    "stockEvidence": {
+      "url": "https://www.kitchenaid.com/countertop-appliances/refurbished/stand-mixers/p.refurbished-artisan-series-5-quart-tilt-head-stand-mixer.RRK150WH.html",
+      "detail": "Exact model offer InStock and purchase action confirmed"
+    },
+    "image": {
+      "url": "https://kitchenaidus.vtexassets.com/arquivos/ids/158508/hero-RRK150WH.jpg?v=639255781227800000",
+      "listingUrl": "https://www.kitchenaid.com/countertop-appliances/refurbished/stand-mixers/p.refurbished-artisan-series-5-quart-tilt-head-stand-mixer.RRK150WH.html",
+      "alt": {
+        "en": "KitchenAid Artisan 5-qt Tilt-Head Stand Mixer · White (RRK150WH), retailer model photograph",
+        "ru": "KitchenAid Artisan 5-qt Tilt-Head Stand Mixer · White (RRK150WH) — фото модели из магазина"
+      }
+    },
+    "fulfillmentNote": {
+      "en": "Delivery address, shipping and tax must be confirmed at checkout. Pickup not verified.",
+      "ru": "Уточните адрес, доставку и налог при оформлении. Самовывоз не подтверждён."
+    },
+    "details": {
+      "en": "New model is the same color; accessory bundles may differ. Compare What’s in the box. Factory refurbished; cosmetic marks possible. 60-day returns advertised. Exact model warranty controls.",
+      "ru": "Новая модель того же цвета; комплект принадлежностей может отличаться. Сравните комплектацию. Возможны косметические следы. Заявлен возврат 60 дней. Условия гарантии зависят от модели."
+    },
+    "newModelReference": {
+      "cents": 49999,
+      "basis": "observed-new-model",
+      "url": "https://www.kitchenaid.com/countertop-appliances/stand-mixers/tilt-head-stand-mixers/p.artisan-series-5-quart-tilt-head-stand-mixer.KSM150PSWH.html"
+    },
+    "shipping": {
+      "country": "US",
+      "costCents": null,
+      "restrictions": "Exact delivery address not checked; shipping messages differ for orders below $49.99"
+    }
+  },
+  {
+    "id": "rr-qrevopro0r-m2",
+    "productKey": "roborock:rr-qrevopro0r-m2",
+    "scopeKey": "parent-selected-20261012",
+    "recordType": "manual-observation",
+    "sourceId": "roborock-manual",
+    "brand": "Roborock",
+    "model": "Qrevo Pro with Multifunctional Dock 2.0 · White",
+    "category": "appliances",
+    "condition": "refurbished",
+    "conditionDetail": {
+      "en": "Certified refurbished · retailer grade 90% New",
+      "ru": "Восстановлен производителем"
+    },
+    "observedStock": "available",
+    "availability": "unknown",
+    "currency": "USD",
+    "observedPriceCents": 39999,
+    "url": "https://us.roborock.com/products/certified-refurbished-90-new-roborock-qrevo-pro-robot-vacuum-with-multifunctional-dock-2-0?variant=43572800061558",
+    "reviewedAt": "2026-10-12T04:10:52.065919+00:00",
+    "reviewUntil": "2026-10-13T04:10:52.065919Z",
+    "stockEvidence": {
+      "url": "https://us.roborock.com/products/certified-refurbished-90-new-roborock-qrevo-pro-robot-vacuum-with-multifunctional-dock-2-0?variant=43572800061558",
+      "detail": "Exact selected Shopify variant available=true; matching product price and Add to Cart"
+    },
+    "image": {
+      "url": "https://cdn.shopify.com/s/files/1/0082/3666/2902/files/Qrevo_Pro_W.png?v=1789886884",
+      "listingUrl": "https://us.roborock.com/products/certified-refurbished-90-new-roborock-qrevo-pro-robot-vacuum-with-multifunctional-dock-2-0?variant=43572800061558",
+      "alt": {
+        "en": "Roborock Qrevo Pro with Multifunctional Dock 2.0 · White, retailer model photograph",
+        "ru": "Roborock Qrevo Pro with Multifunctional Dock 2.0 · White — фото модели из магазина"
+      }
+    },
+    "fulfillmentNote": {
+      "en": "Free delivery advertised for vacuums. Confirm your address and tax at checkout.",
+      "ru": "Для пылесосов заявлена бесплатная доставка. Уточните адрес и налог при оформлении."
+    },
+    "details": {
+      "en": "6-month limited refurbished warranty; 30-day free returns. Manufacturer says battery capacity is around 80% of original. Cosmetic marks possible. 2.4GHz Wi-Fi only.",
+      "ru": "Ограниченная гарантия 6 месяцев; бесплатный возврат 30 дней. По данным производителя, ёмкость батареи — около 80% исходной. Возможны косметические следы. Только Wi-Fi 2,4 ГГц."
+    },
+    "retailerComparison": {
+      "cents": 99999,
+      "basis": "retailer-comparison",
+      "url": "https://us.roborock.com/products/certified-refurbished-90-new-roborock-qrevo-pro-robot-vacuum-with-multifunctional-dock-2-0?variant=43572800061558",
+      "label": {
+        "en": "Manufacturer reference · current-new unavailable",
+        "ru": "Цена производителя для сравнения · новый товар не подтверждён"
+      }
+    },
+    "shipping": {
+      "country": "US",
+      "costCents": null,
+      "restrictions": "US storefront; exact address serviceability not checked"
+    }
+  },
+  {
+    "id": "rr-qrevos5v5r-m1",
+    "productKey": "roborock:rr-qrevos5v5r-m1",
+    "scopeKey": "parent-selected-20261012",
+    "recordType": "manual-observation",
+    "sourceId": "roborock-manual",
+    "brand": "Roborock",
+    "model": "Qrevo S5V with Multifunctional Dock · Black",
+    "category": "appliances",
+    "condition": "refurbished",
+    "conditionDetail": {
+      "en": "Certified refurbished · retailer grade 90% New",
+      "ru": "Восстановлен производителем"
+    },
+    "observedStock": "available",
+    "availability": "unknown",
+    "currency": "USD",
+    "observedPriceCents": 52999,
+    "url": "https://us.roborock.com/products/certified-refurbished-90-new-roborock-qrevo-s5v-robot-vacuum-with-multifunctional-dock?variant=44217074810998",
+    "reviewedAt": "2026-10-12T04:10:52.042312+00:00",
+    "reviewUntil": "2026-10-13T04:10:52.042312Z",
+    "stockEvidence": {
+      "url": "https://us.roborock.com/products/certified-refurbished-90-new-roborock-qrevo-s5v-robot-vacuum-with-multifunctional-dock?variant=44217074810998",
+      "detail": "Exact selected Shopify variant available=true; matching product price and Add to Cart"
+    },
+    "image": {
+      "url": "https://cdn.shopify.com/s/files/1/0082/3666/2902/files/PE_Pro_B_Set_e170f516-0d70-4f22-ace7-923c6a271297.jpg?v=1763709273",
+      "listingUrl": "https://us.roborock.com/products/certified-refurbished-90-new-roborock-qrevo-s5v-robot-vacuum-with-multifunctional-dock?variant=44217074810998",
+      "alt": {
+        "en": "Roborock Qrevo S5V with Multifunctional Dock · Black, retailer model photograph",
+        "ru": "Roborock Qrevo S5V with Multifunctional Dock · Black — фото модели из магазина"
+      }
+    },
+    "fulfillmentNote": {
+      "en": "Free delivery advertised for vacuums. Confirm your address and tax at checkout.",
+      "ru": "Для пылесосов заявлена бесплатная доставка. Уточните адрес и налог при оформлении."
+    },
+    "details": {
+      "en": "6-month limited refurbished warranty; 30-day free returns. Manufacturer says battery capacity is around 80% of original. Cosmetic marks possible. 2.4GHz Wi-Fi only.",
+      "ru": "Ограниченная гарантия 6 месяцев; бесплатный возврат 30 дней. По данным производителя, ёмкость батареи — около 80% исходной. Возможны косметические следы. Только Wi-Fi 2,4 ГГц."
+    },
+    "referencePrice": {
+      "cents": 89999,
+      "basis": "current-new",
+      "url": "https://us.roborock.com/products/roborock-qrevo-s5v",
+      "evidenceUrl": "https://us.roborock.com/products/certified-refurbished-90-new-roborock-qrevo-s5v-robot-vacuum-with-multifunctional-dock?variant=44217074810998"
+    },
+    "shipping": {
+      "country": "US",
+      "costCents": null,
+      "restrictions": "US storefront; exact address serviceability not checked"
+    }
+  },
+  {
+    "id": "rr-qrevoslim5r-m1",
+    "productKey": "roborock:rr-qrevoslim5r-m1",
+    "scopeKey": "parent-selected-20261012",
+    "recordType": "manual-observation",
+    "sourceId": "roborock-manual",
+    "brand": "Roborock",
+    "model": "Qrevo Slim with Self-Cleaning Dock 3.0",
+    "category": "appliances",
+    "condition": "refurbished",
+    "conditionDetail": {
+      "en": "Certified refurbished · retailer grade 90% New",
+      "ru": "Восстановлен производителем"
+    },
+    "observedStock": "available",
+    "availability": "unknown",
+    "currency": "USD",
+    "observedPriceCents": 54999,
+    "url": "https://us.roborock.com/products/certified-refurbished-90-new-roborock-qrevo-slim-robot-vacuum-with-multifunctional-self-cleaning-dock-3-0-upgraded-from-qrevo-master?variant=44217079136374",
+    "reviewedAt": "2026-10-12T04:10:52.112294+00:00",
+    "reviewUntil": "2026-10-13T04:10:52.112294Z",
+    "stockEvidence": {
+      "url": "https://us.roborock.com/products/certified-refurbished-90-new-roborock-qrevo-slim-robot-vacuum-with-multifunctional-self-cleaning-dock-3-0-upgraded-from-qrevo-master?variant=44217079136374",
+      "detail": "Exact selected Shopify variant available=true; matching product price and Add to Cart"
+    },
+    "image": {
+      "url": "https://cdn.shopify.com/s/files/1/0082/3666/2902/files/Qrevo_Slim-1.png?v=1789886889",
+      "listingUrl": "https://us.roborock.com/products/certified-refurbished-90-new-roborock-qrevo-slim-robot-vacuum-with-multifunctional-self-cleaning-dock-3-0-upgraded-from-qrevo-master?variant=44217079136374",
+      "alt": {
+        "en": "Roborock Qrevo Slim with Self-Cleaning Dock 3.0, retailer model photograph",
+        "ru": "Roborock Qrevo Slim with Self-Cleaning Dock 3.0 — фото модели из магазина"
+      }
+    },
+    "fulfillmentNote": {
+      "en": "Free delivery advertised for vacuums. Confirm your address and tax at checkout.",
+      "ru": "Для пылесосов заявлена бесплатная доставка. Уточните адрес и налог при оформлении."
+    },
+    "details": {
+      "en": "6-month limited refurbished warranty; 30-day free returns. Manufacturer says battery capacity is around 80% of original. Cosmetic marks possible. 2.4GHz Wi-Fi only.",
+      "ru": "Ограниченная гарантия 6 месяцев; бесплатный возврат 30 дней. По данным производителя, ёмкость батареи — около 80% исходной. Возможны косметические следы. Только Wi-Fi 2,4 ГГц."
+    },
+    "retailerComparison": {
+      "cents": 139999,
+      "basis": "retailer-comparison",
+      "url": "https://us.roborock.com/products/certified-refurbished-90-new-roborock-qrevo-slim-robot-vacuum-with-multifunctional-self-cleaning-dock-3-0-upgraded-from-qrevo-master?variant=44217079136374",
+      "label": {
+        "en": "Manufacturer reference · current-new unavailable",
+        "ru": "Цена производителя для сравнения · новый товар не подтверждён"
+      }
+    },
+    "shipping": {
+      "country": "US",
+      "costCents": null,
+      "restrictions": "US storefront; exact address serviceability not checked"
+    }
+  },
+  {
+    "id": "6390c020",
+    "productKey": "canon:6390c020",
+    "scopeKey": "parent-selected-20261012",
+    "recordType": "manual-observation",
+    "sourceId": "canon-manual",
+    "brand": "Canon",
+    "model": "PowerShot V1",
+    "category": "cameras",
+    "condition": "refurbished",
+    "conditionDetail": {
+      "en": "Manufacturer refurbished",
+      "ru": "Восстановлен производителем"
+    },
+    "observedStock": "available",
+    "availability": "unknown",
+    "currency": "USD",
+    "observedPriceCents": 64999,
+    "url": "https://www.usa.canon.com/shop/p/refurbished-powershot-v1",
+    "reviewedAt": "2026-10-12T04:10:25Z",
+    "reviewUntil": "2026-10-13T04:10:25Z",
+    "stockEvidence": {
+      "url": "https://www.usa.canon.com/shop/p/refurbished-powershot-v1",
+      "detail": "Exact model offer InStock and purchase action confirmed"
+    },
+    "image": {
+      "url": "https://s7d1.scene7.com/is/image/canon/6390C001_PowerShot_V1_primary?fmt=webp-alpha",
+      "listingUrl": "https://www.usa.canon.com/shop/p/refurbished-powershot-v1",
+      "alt": {
+        "en": "Canon PowerShot V1, retailer model photograph",
+        "ru": "Canon PowerShot V1 — фото модели из магазина"
+      }
+    },
+    "fulfillmentNote": {
+      "en": "Free standard shipping to street addresses in 50 US states and DC, advertised through Oct 31. Tax additional.",
+      "ru": "До 31 октября заявлена бесплатная стандартная доставка по уличным адресам в 50 штатах США и округе Колумбия. Налог отдельно."
+    },
+    "details": {
+      "en": "Successful price/stock check at 04:10 UTC; a later recheck was blocked. Fixed lens. 1-year refurbished warranty. Returns: defective or unopened items only; request RMA within 14 days of delivery. Original packaging/accessories required.",
+      "ru": "Цена и наличие проверены в 04:10 UTC; повторная проверка позже была заблокирована. Несменный объектив. Гарантия 1 год. Возврат только дефектного или нераспакованного товара: запрос RMA в течение 14 дней после доставки. Нужны упаковка и принадлежности."
+    },
+    "shipping": {
+      "country": "US",
+      "costCents": 0,
+      "restrictions": "Street addresses in 50 US states and DC; tax additional",
+      "eligibility": {
+        "scope": "all-us",
+        "states": [],
+        "excludedStates": []
+      }
+    },
+    "referencePrice": {
+      "cents": 84900,
+      "basis": "current-new",
+      "url": "https://www.usa.canon.com/shop/p/powershot-v1",
+      "evidenceUrl": "https://www.usa.canon.com/shop/p/refurbished-powershot-v1"
+    }
+  },
+  {
+    "id": "4515c011",
+    "productKey": "canon:4515c011",
+    "scopeKey": "parent-selected-20261012",
+    "recordType": "manual-observation",
+    "sourceId": "canon-manual",
+    "brand": "Canon",
+    "model": "RF50mm F1.8 STM lens",
+    "category": "cameras",
+    "condition": "refurbished",
+    "conditionDetail": {
+      "en": "Manufacturer refurbished",
+      "ru": "Восстановлен производителем"
+    },
+    "observedStock": "available",
+    "availability": "unknown",
+    "currency": "USD",
+    "observedPriceCents": 15999,
+    "url": "https://www.usa.canon.com/shop/p/refurbished-rf50mm-f1-8-stm",
+    "reviewedAt": "2026-10-12T04:14:00Z",
+    "reviewUntil": "2026-10-13T04:14:00Z",
+    "stockEvidence": {
+      "url": "https://www.usa.canon.com/shop/p/refurbished-rf50mm-f1-8-stm",
+      "detail": "Exact model offer InStock and purchase action confirmed"
+    },
+    "image": {
+      "url": "https://s7d1.scene7.com/is/image/canon/4515C002_rf50mm-f18-stm_primary-v2?fmt=webp-alpha",
+      "listingUrl": "https://www.usa.canon.com/shop/p/refurbished-rf50mm-f1-8-stm",
+      "alt": {
+        "en": "Canon RF50mm F1.8 STM lens, retailer model photograph",
+        "ru": "Canon RF50mm F1.8 STM lens — фото модели из магазина"
+      }
+    },
+    "fulfillmentNote": {
+      "en": "Free standard shipping to street addresses in 50 US states and DC, advertised through Oct 31. Tax additional.",
+      "ru": "До 31 октября заявлена бесплатная стандартная доставка по уличным адресам в 50 штатах США и округе Колумбия. Налог отдельно."
+    },
+    "details": {
+      "en": "RF mount lens; not directly compatible with EF/EF-M bodies. 1-year refurbished warranty. Returns: defective or unopened items only; request RMA within 14 days of delivery. Original packaging/accessories required.",
+      "ru": "Объектив RF; не подходит напрямую к камерам EF/EF-M. Гарантия 1 год. Возврат только дефектного или нераспакованного товара: запрос RMA в течение 14 дней после доставки. Нужны упаковка и принадлежности."
+    },
+    "shipping": {
+      "country": "US",
+      "costCents": 0,
+      "restrictions": "Street addresses in 50 US states and DC; tax additional",
+      "eligibility": {
+        "scope": "all-us",
+        "states": [],
+        "excludedStates": []
+      }
+    },
+    "referencePrice": {
+      "cents": 19999,
+      "basis": "current-new",
+      "url": "https://www.usa.canon.com/shop/p/rf50mm-f1-8-stm",
+      "evidenceUrl": "https://www.usa.canon.com/shop/p/refurbished-rf50mm-f1-8-stm"
+    }
+  },
+  {
+    "id": "996-000374",
+    "productKey": "logitech:996-000374",
+    "scopeKey": "parent-selected-20261012",
+    "recordType": "manual-observation",
+    "sourceId": "logitech-manual",
+    "brand": "Logitech",
+    "model": "G923 TRUEFORCE racing wheel and pedals · Xbox / PC",
+    "category": "gaming",
+    "condition": "refurbished",
+    "conditionDetail": {
+      "en": "Certified refurbished",
+      "ru": "Восстановлен производителем"
+    },
+    "observedStock": "available",
+    "availability": "unknown",
+    "currency": "USD",
+    "observedPriceCents": 24999,
+    "url": "https://www.logitechg.com/en-us/shop/p/g923-trueforce-sim-racing-wheel-refurb.996-000374",
+    "reviewedAt": "2026-10-12T04:14:00Z",
+    "reviewUntil": "2026-10-13T04:14:00Z",
+    "stockEvidence": {
+      "url": "https://www.logitechg.com/en-us/shop/p/g923-trueforce-sim-racing-wheel-refurb.996-000374",
+      "detail": "SKU-level JSON-LD offer InStock with exact variant price"
+    },
+    "image": {
+      "url": "https://resource.logitechg.com/c_fill,q_auto,f_auto,dpr_1.0/d_transparent.gif/content/dam/gaming/en/products/g923-and-trueforce/g923-gallery/g923-xbox-gallery-1.png",
+      "listingUrl": "https://www.logitechg.com/en-us/shop/p/g923-trueforce-sim-racing-wheel-refurb.996-000374",
+      "alt": {
+        "en": "Logitech G923 TRUEFORCE racing wheel and pedals · Xbox / PC, retailer model photograph",
+        "ru": "Logitech G923 TRUEFORCE racing wheel and pedals · Xbox / PC — фото модели из магазина"
+      }
+    },
+    "fulfillmentNote": {
+      "en": "Free standard shipping advertised on the US page; confirm your address, current timing and tax.",
+      "ru": "На странице для США заявлена бесплатная стандартная доставка; уточните адрес, сроки и налог."
+    },
+    "details": {
+      "en": "Xbox/PC, not PlayStation. Gear-driven wheel; shifter sold separately. Use the conservative 1-year refurbished warranty; gaming-page warranty language conflicts. 30-day free returns from purchase. Brown-box packaging with standard accessories.",
+      "ru": "Xbox/PC, не PlayStation. Шестерёнчатый привод; рычаг переключения передач отдельно. Считайте гарантию на восстановленный товар равной 1 году: сведения на странице противоречивы. Бесплатный возврат в течение 30 дней с покупки. Простая упаковка со стандартными принадлежностями."
+    },
+    "referencePrice": {
+      "cents": 34999,
+      "basis": "current-new",
+      "url": "https://www.logitechg.com/en-us/shop/p/g923-trueforce-sim-racing-wheel.941-000156",
+      "evidenceUrl": "https://www.logitechg.com/en-us/shop/p/g923-trueforce-sim-racing-wheel-refurb.996-000374"
+    },
+    "shipping": {
+      "country": "US",
+      "costCents": null,
+      "restrictions": "US page; exact address eligibility not checked"
+    }
+  },
+  {
+    "id": "996-000430",
+    "productKey": "logitech:996-000430",
+    "scopeKey": "parent-selected-20261012",
+    "recordType": "manual-observation",
+    "sourceId": "logitech-manual",
+    "brand": "Logitech",
+    "model": "G PRO Racing Wheel · Xbox / PC",
+    "category": "gaming",
+    "condition": "refurbished",
+    "conditionDetail": {
+      "en": "Certified refurbished · limited stock",
+      "ru": "Восстановлен производителем · ограниченное наличие"
+    },
+    "observedStock": "available",
+    "availability": "unknown",
+    "currency": "USD",
+    "observedPriceCents": 79999,
+    "url": "https://www.logitechg.com/en-us/shop/p/pro-racing-wheel-refurb.996-000430",
+    "reviewedAt": "2026-10-12T04:14:00Z",
+    "reviewUntil": "2026-10-13T04:14:00Z",
+    "stockEvidence": {
+      "url": "https://www.logitechg.com/en-us/shop/p/pro-racing-wheel-refurb.996-000430",
+      "detail": "SKU-level JSON-LD offer LimitedAvailability with exact variant price"
+    },
+    "image": {
+      "url": "https://resource.logitechg.com/c_fill,q_auto,f_auto,dpr_1.0/d_transparent.gif/content/dam/gaming/en/products/pro-racing/pro-racing-wheel/2025-updates/gallery/for-xbox/pro-racing-wheel-xbox-front-angle-gallery-1.png",
+      "listingUrl": "https://www.logitechg.com/en-us/shop/p/pro-racing-wheel-refurb.996-000430",
+      "alt": {
+        "en": "Logitech G PRO Racing Wheel · Xbox / PC, retailer model photograph",
+        "ru": "Logitech G PRO Racing Wheel · Xbox / PC — фото модели из магазина"
+      }
+    },
+    "fulfillmentNote": {
+      "en": "Free standard shipping advertised on the US page; confirm your address, current timing and tax.",
+      "ru": "На странице для США заявлена бесплатная стандартная доставка; уточните адрес, сроки и налог."
+    },
+    "details": {
+      "en": "Limited stock. Xbox/PC, not PlayStation. Pedals sold separately. Use the conservative 1-year refurbished warranty; gaming-page warranty language conflicts. 30-day free returns from purchase. Brown-box packaging with standard accessories.",
+      "ru": "Ограниченное наличие. Xbox/PC, не PlayStation. Педали продаются отдельно. Считайте гарантию на восстановленный товар равной 1 году: сведения на странице противоречивы. Бесплатный возврат в течение 30 дней с покупки. Простая упаковка со стандартными принадлежностями."
+    },
+    "referencePrice": {
+      "cents": 119999,
+      "basis": "current-new",
+      "url": "https://www.logitechg.com/en-us/shop/p/pro-racing-wheel.941-000192",
+      "evidenceUrl": "https://www.logitechg.com/en-us/shop/p/pro-racing-wheel-refurb.996-000430"
+    },
+    "shipping": {
+      "country": "US",
+      "costCents": null,
+      "restrictions": "US page; exact address eligibility not checked"
+    }
+  },
+  {
+    "id": "996-000477",
+    "productKey": "logitech:996-000477",
+    "scopeKey": "parent-selected-20261012",
+    "recordType": "manual-observation",
+    "sourceId": "logitech-manual",
+    "brand": "Logitech",
+    "model": "MX Mechanical · Tactile Quiet · US QWERTY · Graphite",
+    "category": "computers",
+    "condition": "refurbished",
+    "conditionDetail": {
+      "en": "Certified refurbished",
+      "ru": "Восстановлен производителем"
+    },
+    "observedStock": "available",
+    "availability": "unknown",
+    "currency": "USD",
+    "observedPriceCents": 12999,
+    "url": "https://www.logitech.com/en-us/shop/p/mx-mechanical-refurbished.996-000477",
+    "reviewedAt": "2026-10-12T04:14:00Z",
+    "reviewUntil": "2026-10-13T04:14:00Z",
+    "stockEvidence": {
+      "url": "https://www.logitech.com/en-us/shop/p/mx-mechanical-refurbished.996-000477",
+      "detail": "SKU-level JSON-LD offer InStock with exact variant price"
+    },
+    "image": {
+      "url": "https://resource.logitech.com/c_fill,q_auto,f_auto,dpr_1.0/d_transparent.gif/content/dam/logitech/en/products/refurbished/mx-mechanical-refurbished/gallery/mx-mechanical-graphite-refurbished-gallery1.png",
+      "listingUrl": "https://www.logitech.com/en-us/shop/p/mx-mechanical-refurbished.996-000477",
+      "alt": {
+        "en": "Logitech MX Mechanical · Tactile Quiet · US QWERTY · Graphite, retailer model photograph",
+        "ru": "Logitech MX Mechanical · Tactile Quiet · US QWERTY · Graphite — фото модели из магазина"
+      }
+    },
+    "fulfillmentNote": {
+      "en": "Free standard shipping advertised on the US page; confirm your address, current timing and tax.",
+      "ru": "На странице для США заявлена бесплатная стандартная доставка; уточните адрес, сроки и налог."
+    },
+    "details": {
+      "en": "Full-size keyboard; low-profile tactile switches. 1-year certified refurbished warranty. 30-day free returns from purchase. Brown-box packaging with standard accessories.",
+      "ru": "Полноразмерная клавиатура; низкопрофильные тактильные переключатели. Гарантия на восстановленный товар 1 год. Бесплатный возврат в течение 30 дней с покупки. Простая упаковка со стандартными принадлежностями."
+    },
+    "referencePrice": {
+      "cents": 17999,
+      "basis": "current-new",
+      "url": "https://www.logitech.com/en-us/shop/p/mx-mechanical.920-010547",
+      "evidenceUrl": "https://www.logitech.com/en-us/shop/p/mx-mechanical-refurbished.996-000477"
+    },
+    "shipping": {
+      "country": "US",
+      "costCents": null,
+      "restrictions": "US page; exact address eligibility not checked"
+    }
+  },
+  {
+    "id": "113303",
+    "productKey": "nintendo:113303",
+    "scopeKey": "parent-selected-20261012",
+    "recordType": "manual-observation",
+    "sourceId": "nintendo-manual",
+    "brand": "Nintendo",
+    "model": "Switch Lite · Gray",
+    "category": "gaming",
+    "condition": "refurbished",
+    "conditionDetail": {
+      "en": "Manufacturer refurbished",
+      "ru": "Восстановлен производителем"
+    },
+    "observedStock": "available",
+    "availability": "unknown",
+    "currency": "USD",
+    "observedPriceCents": 16999,
+    "url": "https://www.nintendo.com/us/store/products/nintendo-switch-lite-gray-refurbished/",
+    "reviewedAt": "2026-10-12T04:16:30Z",
+    "reviewUntil": "2026-10-13T04:16:30Z",
+    "stockEvidence": {
+      "url": "https://www.nintendo.com/us/store/products/nintendo-switch-lite-gray-refurbished/",
+      "detail": "Exact Gray SKU 113303 InStock; Blue and Turquoise sold out"
+    },
+    "image": {
+      "url": "https://assets.nintendo.com/image/upload/q_auto:best/f_auto/dpr_2.0/ncom/en_US/products/hardware/nintendo-switch-lite-gray/110672-nintendo-switch-lite-gray-front-1200x675",
+      "listingUrl": "https://www.nintendo.com/us/store/products/nintendo-switch-lite-gray-refurbished/",
+      "alt": {
+        "en": "Nintendo Switch Lite · Gray, retailer model photograph",
+        "ru": "Nintendo Switch Lite · Gray — фото модели из магазина"
+      }
+    },
+    "fulfillmentNote": {
+      "en": "Free UPS Ground advertised on orders above $50. Confirm your address, timing and tax.",
+      "ru": "Для заказов от $50 заявлена бесплатная доставка UPS Ground. Уточните адрес, сроки и налог."
+    },
+    "details": {
+      "en": "1-year Nintendo limited warranty. Console and AC adapter; no games. Handheld only, no TV output; original Switch platform, not Switch 2. Returns within 30 days reject opened/unsealed or used items; keep original packaging and all parts.",
+      "ru": "Ограниченная гарантия Nintendo 1 год. Консоль и адаптер питания, без игр. Только портативный режим, без вывода на ТВ; оригинальная Switch, не Switch 2. Возврат 30 дней: распакованные или использованные товары не принимаются; нужны упаковка и все детали."
+    },
+    "retailerComparison": {
+      "cents": 22999,
+      "basis": "retailer-comparison",
+      "url": "https://www.nintendo.com/us/store/products/nintendo-switch-lite-gray/",
+      "label": {
+        "en": "Manufacturer list · new Gray sold out",
+        "ru": "Цена в каталоге · новый серый товар распродан"
+      },
+      "evidenceUrl": "https://www.nintendo.com/us/store/products/nintendo-switch-lite-gray-refurbished/"
+    },
+    "shipping": {
+      "country": "US",
+      "costCents": null,
+      "restrictions": "US listing; exact delivery destination eligibility not checked"
+    }
+  },
+  {
+    "id": "6580727-fair",
+    "productKey": "ge:gcst11n1wss",
+    "scopeKey": "california-selected-95628",
+    "recordType": "manual-observation",
+    "sourceId": "best-buy",
+    "brand": "GE",
+    "model": "1.1-cu-ft countertop microwave · Stainless steel (GCST11N1WSS)",
+    "category": "appliances",
+    "condition": "open-box",
+    "conditionDetail": {
+      "en": "Open-Box Fair · parts may be missing",
+      "ru": "Открытая упаковка · удовлетворительное состояние; возможна неполная комплектация"
+    },
+    "observedStock": "available",
+    "availability": "unknown",
+    "currency": "USD",
+    "observedPriceCents": 7499,
+    "referencePrice": {
+      "cents": 12499,
+      "basis": "current-new",
+      "url": "https://www.bestbuy.com/product/ge-1-1-cu-ft-countertop-microwave-with-convenience-cooking-controls-stainless-steel/J7645SPJ4S/sku/6580727/openbox?condition=fair"
+    },
+    "url": "https://www.bestbuy.com/product/ge-1-1-cu-ft-countertop-microwave-with-convenience-cooking-controls-stainless-steel/J7645SPJ4S/sku/6580727/openbox?condition=fair",
+    "reviewedAt": "2026-10-12T04:17:04.092Z",
+    "reviewUntil": "2026-10-13T04:17:04.092000Z",
+    "stockEvidence": {
+      "url": "https://www.bestbuy.com/product/ge-1-1-cu-ft-countertop-microwave-with-convenience-cooking-controls-stainless-steel/J7645SPJ4S/sku/6580727/openbox?condition=fair",
+      "detail": "Selected open-box condition available at checked price; one selected item shown",
+      "context": "Best Buy Citrus Heights"
+    },
+    "details": {
+      "en": "Buy New is the current-new comparison on this page. Exact item completeness is unverified; confirm included parts and accessories. Model photo; individual appearance may vary.",
+      "ru": "Buy New — текущая цена нового товара на этой странице. Комплектность экземпляра не проверена: уточните детали и принадлежности. На фото модель; внешний вид экземпляра может отличаться."
+    },
+    "image": {
+      "url": "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6580/6580727_sd.jpg;maxHeight=1920;maxWidth=900?format=webp",
+      "listingUrl": "https://www.bestbuy.com/product/ge-1-1-cu-ft-countertop-microwave-with-convenience-cooking-controls-stainless-steel/J7645SPJ4S/sku/6580727/openbox?condition=fair",
+      "alt": {
+        "en": "GE 1.1-cu-ft countertop microwave · Stainless steel, retailer model photograph",
+        "ru": "GE 1.1-cu-ft countertop microwave · Stainless steel — фото модели из магазина"
+      }
+    },
+    "pickup": {
+      "id": "364",
+      "name": "Best Buy Citrus Heights",
+      "address": "6110 Birdcage Centre Ln, Citrus Heights, CA 95610",
+      "point": null,
+      "pickupVerified": true
+    },
+    "fulfillmentNote": {
+      "en": "Pickup confirmed at Best Buy Citrus Heights. One item shown. Shipping unavailable. Distance from your selected location not verified.",
+      "ru": "Самовывоз подтверждён: Best Buy Citrus Heights. Показан один товар. Доставка недоступна. Расстояние от выбранного вами места не подтверждено."
+    }
+  },
+  {
+    "id": "6522416-fair",
+    "productKey": "sony:zv1f/b",
+    "scopeKey": "california-selected-95628",
+    "recordType": "manual-observation",
+    "sourceId": "best-buy",
+    "brand": "Sony",
+    "model": "ZV-1F compact digital camera · Black (ZV1F/B)",
+    "category": "cameras",
+    "condition": "open-box",
+    "conditionDetail": {
+      "en": "Open-Box Fair · parts may be missing",
+      "ru": "Открытая упаковка · удовлетворительное состояние; возможна неполная комплектация"
+    },
+    "observedStock": "available",
+    "availability": "unknown",
+    "currency": "USD",
+    "observedPriceCents": 33999,
+    "referencePrice": {
+      "cents": 54999,
+      "basis": "current-new",
+      "url": "https://www.bestbuy.com/product/sony-zv-1f-compact-digital-camera-black/J7XSRH5GJ6/sku/6522416/openbox?condition=fair"
+    },
+    "url": "https://www.bestbuy.com/product/sony-zv-1f-compact-digital-camera-black/J7XSRH5GJ6/sku/6522416/openbox?condition=fair",
+    "reviewedAt": "2026-10-12T04:21:28.119Z",
+    "reviewUntil": "2026-10-13T04:21:28.119000Z",
+    "stockEvidence": {
+      "url": "https://www.bestbuy.com/product/sony-zv-1f-compact-digital-camera-black/J7XSRH5GJ6/sku/6522416/openbox?condition=fair",
+      "detail": "Selected open-box condition available at checked price; one selected item shown",
+      "context": "Best Buy Stockton"
+    },
+    "details": {
+      "en": "Buy New is the current-new comparison on this page. Exact item completeness is unverified; confirm included parts and accessories. Model photo; individual appearance may vary.",
+      "ru": "Buy New — текущая цена нового товара на этой странице. Комплектность экземпляра не проверена: уточните детали и принадлежности. На фото модель; внешний вид экземпляра может отличаться."
+    },
+    "image": {
+      "url": "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6522/6522416_sd.jpg;maxHeight=1920;maxWidth=900?format=webp",
+      "listingUrl": "https://www.bestbuy.com/product/sony-zv-1f-compact-digital-camera-black/J7XSRH5GJ6/sku/6522416/openbox?condition=fair",
+      "alt": {
+        "en": "Sony ZV-1F compact digital camera · Black, retailer model photograph",
+        "ru": "Sony ZV-1F compact digital camera · Black — фото модели из магазина"
+      }
+    },
+    "pickup": {
+      "id": "528",
+      "name": "Best Buy Stockton",
+      "address": "5400 Pacific Ave, Stockton, CA 95207",
+      "point": null,
+      "pickupVerified": true
+    },
+    "fulfillmentNote": {
+      "en": "Pickup confirmed at Best Buy Stockton. One item shown. Shipping unavailable. Distance from your selected location not verified.",
+      "ru": "Самовывоз подтверждён: Best Buy Stockton. Показан один товар. Доставка недоступна. Расстояние от выбранного вами места не подтверждено."
+    }
+  },
+  {
+    "id": "6614842-fair",
+    "productKey": "sony:1000046706",
+    "scopeKey": "california-selected-95628",
+    "recordType": "manual-observation",
+    "sourceId": "best-buy",
+    "brand": "Sony",
+    "model": "DualSense Edge wireless controller · Midnight Black (1000046706)",
+    "category": "gaming",
+    "condition": "open-box",
+    "conditionDetail": {
+      "en": "Open-Box Fair · parts may be missing",
+      "ru": "Открытая упаковка · удовлетворительное состояние; возможна неполная комплектация"
+    },
+    "observedStock": "available",
+    "availability": "unknown",
+    "currency": "USD",
+    "observedPriceCents": 12399,
+    "referencePrice": {
+      "cents": 19999,
+      "basis": "current-new",
+      "url": "https://www.bestbuy.com/product/sony-interactive-entertainment-dualsense-edge-wireless-controller-for-ps5-pc-mac-mobile-midnight-black/JXHQ3CXX9X/sku/6614842/openbox?condition=fair"
+    },
+    "url": "https://www.bestbuy.com/product/sony-interactive-entertainment-dualsense-edge-wireless-controller-for-ps5-pc-mac-mobile-midnight-black/JXHQ3CXX9X/sku/6614842/openbox?condition=fair",
+    "reviewedAt": "2026-10-12T04:26:41.256Z",
+    "reviewUntil": "2026-10-13T04:26:41.256000Z",
+    "stockEvidence": {
+      "url": "https://www.bestbuy.com/product/sony-interactive-entertainment-dualsense-edge-wireless-controller-for-ps5-pc-mac-mobile-midnight-black/JXHQ3CXX9X/sku/6614842/openbox?condition=fair",
+      "detail": "Selected open-box condition available for shipping to ZIP 95628",
+      "context": "Shipping ZIP 95628"
+    },
+    "details": {
+      "en": "Buy New is the current-new comparison on this page. Exact item completeness is unverified; confirm included parts and accessories. Model photo; individual appearance may vary.",
+      "ru": "Buy New — текущая цена нового товара на этой странице. Комплектность экземпляра не проверена: уточните детали и принадлежности. На фото модель; внешний вид экземпляра может отличаться."
+    },
+    "image": {
+      "url": "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/dd0cef58-7bbf-47f6-ac97-5e313c0b87f4.jpg;maxHeight=1920;maxWidth=900?format=webp",
+      "listingUrl": "https://www.bestbuy.com/product/sony-interactive-entertainment-dualsense-edge-wireless-controller-for-ps5-pc-mac-mobile-midnight-black/JXHQ3CXX9X/sku/6614842/openbox?condition=fair",
+      "alt": {
+        "en": "Sony DualSense Edge wireless controller · Midnight Black, retailer model photograph",
+        "ru": "Sony DualSense Edge wireless controller · Midnight Black — фото модели из магазина"
+      }
+    },
+    "shipping": {
+      "country": "US",
+      "costCents": null,
+      "restrictions": "Shipping shown for ZIP 95628 only; other addresses not verified"
+    },
+    "fulfillmentNote": {
+      "en": "Shipping $0 shown for ZIP 95628 only. Confirm your address, current stock and tax.",
+      "ru": "Доставка $0 показана только для индекса 95628. Уточните свой адрес, текущее наличие и налог."
+    }
+  },
+  {
+    "id": "6601248-fair",
+    "productKey": "gopro:chdrb-131-my/chdrb-131-th",
+    "scopeKey": "california-selected-95628",
+    "recordType": "manual-observation",
+    "sourceId": "best-buy",
+    "brand": "GoPro",
+    "model": "HERO13 Black action-camera bundle (CHDRB-131-MY/CHDRB-131-TH)",
+    "category": "cameras",
+    "condition": "open-box",
+    "conditionDetail": {
+      "en": "Open-Box Fair · parts may be missing",
+      "ru": "Открытая упаковка · удовлетворительное состояние; возможна неполная комплектация"
+    },
+    "observedStock": "available",
+    "availability": "unknown",
+    "currency": "USD",
+    "observedPriceCents": 30899,
+    "referencePrice": {
+      "cents": 44999,
+      "basis": "current-new",
+      "url": "https://www.bestbuy.com/product/gopro-hero13-black-action-camera-bundle-black/J3GW35FQJK/sku/6601248/openbox?condition=fair"
+    },
+    "url": "https://www.bestbuy.com/product/gopro-hero13-black-action-camera-bundle-black/J3GW35FQJK/sku/6601248/openbox?condition=fair",
+    "reviewedAt": "2026-10-12T04:21:37.112Z",
+    "reviewUntil": "2026-10-13T04:21:37.112000Z",
+    "stockEvidence": {
+      "url": "https://www.bestbuy.com/product/gopro-hero13-black-action-camera-bundle-black/J3GW35FQJK/sku/6601248/openbox?condition=fair",
+      "detail": "Selected open-box condition available at checked price; one selected item shown",
+      "context": "Best Buy Elk Grove"
+    },
+    "details": {
+      "en": "Buy New is the current-new comparison on this page. Exact item completeness is unverified; confirm included parts and accessories. Model photo; individual appearance may vary.",
+      "ru": "Buy New — текущая цена нового товара на этой странице. Комплектность экземпляра не проверена: уточните детали и принадлежности. На фото модель; внешний вид экземпляра может отличаться."
+    },
+    "image": {
+      "url": "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6829f8b0-0f19-49a8-97f4-c1f63fe6a7ae.jpg;maxHeight=1920;maxWidth=900?format=webp",
+      "listingUrl": "https://www.bestbuy.com/product/gopro-hero13-black-action-camera-bundle-black/J3GW35FQJK/sku/6601248/openbox?condition=fair",
+      "alt": {
+        "en": "GoPro HERO13 Black action-camera bundle, retailer model photograph",
+        "ru": "GoPro HERO13 Black action-camera bundle — фото модели из магазина"
+      }
+    },
+    "pickup": {
+      "id": "349",
+      "name": "Best Buy Elk Grove",
+      "address": "9131 W Stockton Blvd, Elk Grove, CA 95758",
+      "point": null,
+      "pickupVerified": true
+    },
+    "fulfillmentNote": {
+      "en": "Pickup confirmed at Best Buy Elk Grove. One item shown. Shipping unavailable. Distance from your selected location not verified.",
+      "ru": "Самовывоз подтверждён: Best Buy Elk Grove. Показан один товар. Доставка недоступна. Расстояние от выбранного вами места не подтверждено."
+    }
+  },
+  {
+    "id": "6421815-fair",
+    "productKey": "ninja:ss101",
+    "scopeKey": "california-selected-95628",
+    "recordType": "manual-observation",
+    "sourceId": "best-buy",
+    "brand": "Ninja",
+    "model": "Foodi smoothie bowl maker and nutrient extractor · Silver (SS101)",
+    "category": "appliances",
+    "condition": "open-box",
+    "conditionDetail": {
+      "en": "Open-Box Fair · parts may be missing",
+      "ru": "Открытая упаковка · удовлетворительное состояние; возможна неполная комплектация"
+    },
+    "observedStock": "available",
+    "availability": "unknown",
+    "currency": "USD",
+    "observedPriceCents": 8199,
+    "referencePrice": {
+      "cents": 10999,
+      "basis": "current-new",
+      "url": "https://www.bestbuy.com/product/ninja-foodi-smoothie-bowl-maker-and-nutrient-extractor-1200wp-smarttorque-4-auto-iq-presets-silver/JXJVXGZ2HW/sku/6421815/openbox?condition=fair"
+    },
+    "url": "https://www.bestbuy.com/product/ninja-foodi-smoothie-bowl-maker-and-nutrient-extractor-1200wp-smarttorque-4-auto-iq-presets-silver/JXJVXGZ2HW/sku/6421815/openbox?condition=fair",
+    "reviewedAt": "2026-10-12T04:12:48.758Z",
+    "reviewUntil": "2026-10-13T04:12:48.758000Z",
+    "stockEvidence": {
+      "url": "https://www.bestbuy.com/product/ninja-foodi-smoothie-bowl-maker-and-nutrient-extractor-1200wp-smarttorque-4-auto-iq-presets-silver/JXJVXGZ2HW/sku/6421815/openbox?condition=fair",
+      "detail": "Selected open-box condition available at checked price; one selected item shown",
+      "context": "Best Buy Citrus Heights"
+    },
+    "details": {
+      "en": "Buy New is the current-new comparison on this page. Exact item completeness is unverified; confirm included parts and accessories. Model photo; individual appearance may vary.",
+      "ru": "Buy New — текущая цена нового товара на этой странице. Комплектность экземпляра не проверена: уточните детали и принадлежности. На фото модель; внешний вид экземпляра может отличаться."
+    },
+    "image": {
+      "url": "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6421/6421815cv1d.jpg;maxHeight=1920;maxWidth=900?format=webp",
+      "listingUrl": "https://www.bestbuy.com/product/ninja-foodi-smoothie-bowl-maker-and-nutrient-extractor-1200wp-smarttorque-4-auto-iq-presets-silver/JXJVXGZ2HW/sku/6421815/openbox?condition=fair",
+      "alt": {
+        "en": "Ninja Foodi smoothie bowl maker and nutrient extractor · Silver, retailer model photograph",
+        "ru": "Ninja Foodi smoothie bowl maker and nutrient extractor · Silver — фото модели из магазина"
+      }
+    },
+    "pickup": {
+      "id": "364",
+      "name": "Best Buy Citrus Heights",
+      "address": "6110 Birdcage Centre Ln, Citrus Heights, CA 95610",
+      "point": null,
+      "pickupVerified": true
+    },
+    "fulfillmentNote": {
+      "en": "Pickup confirmed at Best Buy Citrus Heights. One item shown. Shipping unavailable. Distance from your selected location not verified.",
+      "ru": "Самовывоз подтверждён: Best Buy Citrus Heights. Показан один товар. Доставка недоступна. Расстояние от выбранного вами места не подтверждено."
+    }
+  },
+  {
+    "id": "6529909-fair",
+    "productKey": "lg:dle6100w",
+    "scopeKey": "california-selected-95628",
+    "recordType": "manual-observation",
+    "sourceId": "best-buy",
+    "brand": "LG",
+    "model": "7.3-cu-ft electric dryer with Sensor Dry · White (DLE6100W)",
+    "category": "appliances",
+    "condition": "open-box",
+    "conditionDetail": {
+      "en": "Open-Box Fair · parts may be missing",
+      "ru": "Открытая упаковка · удовлетворительное состояние; возможна неполная комплектация"
+    },
+    "observedStock": "available",
+    "availability": "unknown",
+    "currency": "USD",
+    "observedPriceCents": 41199,
+    "referencePrice": {
+      "cents": 54999,
+      "basis": "current-new",
+      "url": "https://www.bestbuy.com/product/lg-7-3-cu-ft-electric-dryer-with-sensor-dry-white/JJ8VPZ6896/sku/6529909/openbox?condition=fair"
+    },
+    "url": "https://www.bestbuy.com/product/lg-7-3-cu-ft-electric-dryer-with-sensor-dry-white/JJ8VPZ6896/sku/6529909/openbox?condition=fair",
+    "reviewedAt": "2026-10-12T04:16:08.773Z",
+    "reviewUntil": "2026-10-13T04:16:08.773000Z",
+    "stockEvidence": {
+      "url": "https://www.bestbuy.com/product/lg-7-3-cu-ft-electric-dryer-with-sensor-dry-white/JJ8VPZ6896/sku/6529909/openbox?condition=fair",
+      "detail": "Selected open-box condition available at checked price; one selected item shown",
+      "context": "Best Buy Citrus Heights"
+    },
+    "details": {
+      "en": "Buy New is the current-new comparison on this page. Exact item completeness is unverified; confirm included parts and accessories. Model photo; individual appearance may vary. Delivery and installation not verified.",
+      "ru": "Buy New — текущая цена нового товара на этой странице. Комплектность экземпляра не проверена: уточните детали и принадлежности. На фото модель; внешний вид экземпляра может отличаться. Доставка и установка не проверены."
+    },
+    "image": {
+      "url": "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6529/6529909_sd.jpg;maxHeight=1920;maxWidth=900?format=webp",
+      "listingUrl": "https://www.bestbuy.com/product/lg-7-3-cu-ft-electric-dryer-with-sensor-dry-white/JJ8VPZ6896/sku/6529909/openbox?condition=fair",
+      "alt": {
+        "en": "LG 7.3-cu-ft electric dryer with Sensor Dry · White, retailer model photograph",
+        "ru": "LG 7.3-cu-ft electric dryer with Sensor Dry · White — фото модели из магазина"
+      }
+    },
+    "pickup": {
+      "id": "364",
+      "name": "Best Buy Citrus Heights",
+      "address": "6110 Birdcage Centre Ln, Citrus Heights, CA 95610",
+      "point": null,
+      "pickupVerified": true
+    },
+    "fulfillmentNote": {
+      "en": "Pickup confirmed at Best Buy Citrus Heights. One item shown. Shipping unavailable. Distance from your selected location not verified.",
+      "ru": "Самовывоз подтверждён: Best Buy Citrus Heights. Показан один товар. Доставка недоступна. Расстояние от выбранного вами места не подтверждено."
+    }
+  },
+  {
+    "id": "6618942-good",
+    "productKey": "samsung:sm-x520nzaaxar",
+    "scopeKey": "california-selected-95628",
+    "recordType": "manual-observation",
+    "sourceId": "best-buy",
+    "brand": "Samsung",
+    "model": "Galaxy Tab S10 FE 10.9-inch · 128GB Wi-Fi · Gray (SM-X520NZAAXAR)",
+    "category": "computers",
+    "condition": "open-box",
+    "conditionDetail": {
+      "en": "Open-Box Good",
+      "ru": "Открытая упаковка · хорошее состояние"
+    },
+    "observedStock": "available",
+    "availability": "unknown",
+    "currency": "USD",
+    "observedPriceCents": 42199,
+    "referencePrice": {
+      "cents": 54999,
+      "basis": "current-new",
+      "url": "https://www.bestbuy.com/product/samsung-galaxy-tab-s10-fe-10-9-128gb-wi-fi-with-s-pen-gray/J3ZYGXC9QH/sku/6618942/openbox?condition=good"
+    },
+    "url": "https://www.bestbuy.com/product/samsung-galaxy-tab-s10-fe-10-9-128gb-wi-fi-with-s-pen-gray/J3ZYGXC9QH/sku/6618942/openbox?condition=good",
+    "reviewedAt": "2026-10-12T04:26:50.305Z",
+    "reviewUntil": "2026-10-13T04:26:50.305000Z",
+    "stockEvidence": {
+      "url": "https://www.bestbuy.com/product/samsung-galaxy-tab-s10-fe-10-9-128gb-wi-fi-with-s-pen-gray/J3ZYGXC9QH/sku/6618942/openbox?condition=good",
+      "detail": "Selected open-box condition available at checked price; one selected item shown",
+      "context": "Best Buy Auburn"
+    },
+    "details": {
+      "en": "Buy New is the current-new comparison on this page. Exact item completeness is unverified; confirm included parts and accessories. Model photo; individual appearance may vary.",
+      "ru": "Buy New — текущая цена нового товара на этой странице. Комплектность экземпляра не проверена: уточните детали и принадлежности. На фото модель; внешний вид экземпляра может отличаться."
+    },
+    "image": {
+      "url": "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/319840d6-75bc-4106-ac8d-1bb195157b55.jpg;maxHeight=1920;maxWidth=900?format=webp",
+      "listingUrl": "https://www.bestbuy.com/product/samsung-galaxy-tab-s10-fe-10-9-128gb-wi-fi-with-s-pen-gray/J3ZYGXC9QH/sku/6618942/openbox?condition=good",
+      "alt": {
+        "en": "Samsung Galaxy Tab S10 FE 10.9-inch · 128GB Wi-Fi · Gray, retailer model photograph",
+        "ru": "Samsung Galaxy Tab S10 FE 10.9-inch · 128GB Wi-Fi · Gray — фото модели из магазина"
+      }
+    },
+    "pickup": {
+      "id": "1190",
+      "name": "Best Buy Auburn",
+      "address": "1760 Grass Valley Hwy, Auburn, CA 95603",
+      "point": null,
+      "pickupVerified": true
+    },
+    "fulfillmentNote": {
+      "en": "Pickup confirmed at Best Buy Auburn. One item shown. Shipping unavailable. Distance from your selected location not verified.",
+      "ru": "Самовывоз подтверждён: Best Buy Auburn. Показан один товар. Доставка недоступна. Расстояние от выбранного вами места не подтверждено."
+    }
+  },
+  {
+    "id": "6642253-fair",
+    "productKey": "asus:rc73xa-xb_allyx.z2e.24",
+    "scopeKey": "california-selected-95628",
+    "recordType": "manual-observation",
+    "sourceId": "best-buy",
+    "brand": "ASUS",
+    "model": "ROG Xbox Ally X 7-inch handheld · Ryzen AI Z2 Extreme · 24GB RAM · 1TB SSD (RC73XA-XB_ALLYX.Z2E.24)",
+    "category": "gaming",
+    "condition": "open-box",
+    "conditionDetail": {
+      "en": "Open-Box Fair · parts may be missing",
+      "ru": "Открытая упаковка · удовлетворительное состояние; возможна неполная комплектация"
+    },
+    "observedStock": "available",
+    "availability": "unknown",
+    "currency": "USD",
+    "observedPriceCents": 78999,
+    "referencePrice": {
+      "cents": 99999,
+      "basis": "current-new",
+      "url": "https://www.bestbuy.com/product/rog-xbox-ally-x-7-fhd-120hz-gaming-handheld-3-month-xbox-game-pass-premium-amd-ryzen-ai-z2-extreme-24gb-ram-1tb-ssd/JJGHGPLVHW/sku/6642253/openbox?condition=fair"
+    },
+    "url": "https://www.bestbuy.com/product/rog-xbox-ally-x-7-fhd-120hz-gaming-handheld-3-month-xbox-game-pass-premium-amd-ryzen-ai-z2-extreme-24gb-ram-1tb-ssd/JJGHGPLVHW/sku/6642253/openbox?condition=fair",
+    "reviewedAt": "2026-10-12T04:18:31.782Z",
+    "reviewUntil": "2026-10-13T04:18:31.782000Z",
+    "stockEvidence": {
+      "url": "https://www.bestbuy.com/product/rog-xbox-ally-x-7-fhd-120hz-gaming-handheld-3-month-xbox-game-pass-premium-amd-ryzen-ai-z2-extreme-24gb-ram-1tb-ssd/JJGHGPLVHW/sku/6642253/openbox?condition=fair",
+      "detail": "Selected open-box condition available at checked price; one selected item shown",
+      "context": "Best Buy Arden Fair"
+    },
+    "details": {
+      "en": "Buy New is the current-new comparison on this page. Exact item completeness is unverified; confirm included parts and accessories. Model photo; individual appearance may vary.",
+      "ru": "Buy New — текущая цена нового товара на этой странице. Комплектность экземпляра не проверена: уточните детали и принадлежности. На фото модель; внешний вид экземпляра может отличаться."
+    },
+    "image": {
+      "url": "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/c2a2f762-a4a4-4c6e-8e0b-3950366e1bae.jpg;maxHeight=1920;maxWidth=900?format=webp",
+      "listingUrl": "https://www.bestbuy.com/product/rog-xbox-ally-x-7-fhd-120hz-gaming-handheld-3-month-xbox-game-pass-premium-amd-ryzen-ai-z2-extreme-24gb-ram-1tb-ssd/JJGHGPLVHW/sku/6642253/openbox?condition=fair",
+      "alt": {
+        "en": "ASUS ROG Xbox Ally X 7-inch handheld · Ryzen AI Z2 Extreme · 24GB RAM · 1TB SSD, retailer model photograph",
+        "ru": "ASUS ROG Xbox Ally X 7-inch handheld · Ryzen AI Z2 Extreme · 24GB RAM · 1TB SSD — фото модели из магазина"
+      }
+    },
+    "pickup": {
+      "id": "133",
+      "name": "Best Buy Arden Fair",
+      "address": "1901 Arden Way, Sacramento, CA 95815",
+      "point": null,
+      "pickupVerified": true
+    },
+    "fulfillmentNote": {
+      "en": "Pickup confirmed at Best Buy Arden Fair. One item shown. Shipping unavailable. Distance from your selected location not verified.",
+      "ru": "Самовывоз подтверждён: Best Buy Arden Fair. Показан один товар. Доставка недоступна. Расстояние от выбранного вами места не подтверждено."
+    }
+  },
+  {
+    "id": "6437135-excellent",
+    "productKey": "insignia:ns-bc2zss1",
+    "scopeKey": "california-selected-95628",
+    "recordType": "manual-observation",
+    "sourceId": "best-buy",
+    "brand": "Insignia",
+    "model": "Dual-zone wine and beverage cooler · Stainless steel (NS-BC2ZSS1)",
+    "category": "appliances",
+    "condition": "open-box",
+    "conditionDetail": {
+      "en": "Open-Box Excellent",
+      "ru": "Открытая упаковка · отличное состояние"
+    },
+    "observedStock": "available",
+    "availability": "unknown",
+    "currency": "USD",
+    "observedPriceCents": 57799,
+    "referencePrice": {
+      "cents": 69999,
+      "basis": "current-new",
+      "url": "https://www.bestbuy.com/product/insignia-dual-zone-wine-and-beverage-cooler-with-glass-doors-stainless-steel/J2FPJKLZKG/sku/6437135/openbox?condition=excellent"
+    },
+    "url": "https://www.bestbuy.com/product/insignia-dual-zone-wine-and-beverage-cooler-with-glass-doors-stainless-steel/J2FPJKLZKG/sku/6437135/openbox?condition=excellent",
+    "reviewedAt": "2026-10-12T04:13:23.491Z",
+    "reviewUntil": "2026-10-13T04:13:23.491000Z",
+    "stockEvidence": {
+      "url": "https://www.bestbuy.com/product/insignia-dual-zone-wine-and-beverage-cooler-with-glass-doors-stainless-steel/J2FPJKLZKG/sku/6437135/openbox?condition=excellent",
+      "detail": "Selected open-box condition available at checked price; one selected item shown",
+      "context": "Best Buy Stockton"
+    },
+    "details": {
+      "en": "Buy New is the current-new comparison on this page. Exact item completeness is unverified; confirm included parts and accessories. Model photo; individual appearance may vary.",
+      "ru": "Buy New — текущая цена нового товара на этой странице. Комплектность экземпляра не проверена: уточните детали и принадлежности. На фото модель; внешний вид экземпляра может отличаться."
+    },
+    "image": {
+      "url": "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6437/6437135cv12d.jpg;maxHeight=1920;maxWidth=900?format=webp",
+      "listingUrl": "https://www.bestbuy.com/product/insignia-dual-zone-wine-and-beverage-cooler-with-glass-doors-stainless-steel/J2FPJKLZKG/sku/6437135/openbox?condition=excellent",
+      "alt": {
+        "en": "Insignia Dual-zone wine and beverage cooler · Stainless steel, retailer model photograph",
+        "ru": "Insignia Dual-zone wine and beverage cooler · Stainless steel — фото модели из магазина"
+      }
+    },
+    "pickup": {
+      "id": "528",
+      "name": "Best Buy Stockton",
+      "address": "5400 Pacific Ave, Stockton, CA 95207",
+      "point": null,
+      "pickupVerified": true
+    },
+    "fulfillmentNote": {
+      "en": "Pickup confirmed at Best Buy Stockton. One item shown. Shipping unavailable. Distance from your selected location not verified.",
+      "ru": "Самовывоз подтверждён: Best Buy Stockton. Показан один товар. Доставка недоступна. Расстояние от выбранного вами места не подтверждено."
+    }
   }
 ]
