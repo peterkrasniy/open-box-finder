@@ -652,5 +652,176 @@
         "ru": "Официальная страница точной модели Complete C3 Cat & Dog SGEE0 сообщает о постоянном отсутствии в продаже и не показывает текущую цену нового товара. MSRP или цена другой модели не подставляются. Маркировку местного экземпляра снизу ещё надо проверить."
       }
     }
+  },
+  {
+    "id": "ou-03a488d4-bf48-3af8-8a4b-51afec24c9d0",
+    "sourceId": "offerup-resale",
+    "platform": "offerup",
+    "title": {
+      "en": "Ableton Push 2 · hardware only",
+      "ru": "Ableton Push 2 · только аппаратура"
+    },
+    "category": "audio",
+    "currency": "USD",
+    "url": "https://offerup.com/item/detail/03a488d4-bf48-3af8-8a4b-51afec24c9d0",
+    "askingCents": 12000,
+    "resaleLowCents": 20000,
+    "resaleHighCents": 26500,
+    "resaleEstimateCents": 23000,
+    "reserveCents": 5000,
+    "location": "Sacramento, CA",
+    "checkedAt": "2026-10-12T07:36:00Z",
+    "status": "conditional",
+    "exactMatchCount": 0,
+    "comparisonStatus": "pending",
+    "photos": [
+      {
+        "url": "https://images.offerup.com/gnZthiVnMg2wP8dSgW_7YfsBNIM=/1920x1440/15cc/15cc54cf47084c858b00f44396b6dcab.jpg",
+        "alt": {
+          "en": "Actual unpowered Ableton Push 2 front with pads, encoders and display",
+          "ru": "Настоящее фото выключенного Ableton Push 2: пэды, энкодеры и дисплей"
+        }
+      },
+      {
+        "url": "https://images.offerup.com/01WTjOefwqHpYDmsghJoY-NO5AA=/1440x1920/5109/510942af74e24f43baf748996e9a351a.jpg",
+        "alt": {
+          "en": "Actual unpowered controller rear branding, USB and power connections",
+          "ru": "Настоящее фото выключенного контроллера: маркировка сзади, USB и питание"
+        }
+      }
+    ],
+    "notes": {
+      "en": "Seller reports normal-used condition and power supply, USB cable and original box; accessories are not pictured or confirmed. Both inspected product photos are unpowered. Display glare/haze or wear needs close inspection; no diagnosis from photos. All pads, encoders, buttons, display, coating, sockets and liquid damage remain untested. $230 is a reasoned hardware-only local cash exit, below $265/$299 Very Good sold examples; $200 Good sale with an included stand is retained as downside. Range $200–265; net at $200 is $30, not $60. Full separate $50 reserve: $15 pickup, $5 cleaning/testing, $30 contingency; no shared-pickup savings, platform/shipping fees or repair budget. At $120 asking, modeled net $60 before income tax and personal labor. Live page with no sold marker, but availability and pickup are not seller-confirmed. No software/license value assumed; registration transfer is not confirmed. The seller’s other amp/pedal listings are not a bundle agreement or two additional qualifying flips.",
+      "ru": "Продавец сообщает об обычном износе, блоке питания, USB-кабеле и оригинальной коробке; аксессуары на фото не видны и не подтверждены. На двух осмотренных фото устройство выключено. Блики/дымка или износ дисплея требуют осмотра; по фото диагноз не ставится. Пэды, энкодеры, кнопки, дисплей, покрытие, разъёмы и следы жидкости не проверены. $230 — обоснованная оценка местной продажи только аппаратуры, ниже продаж Very Good за $265/$299; продажа Good за $200 с подставкой сохранена как риск снижения цены. Диапазон $200–265; при $200 прибыль $30, а не $60. Полный отдельный резерв $50: $15 поездка, $5 очистка/проверка, $30 непредвиденное; без экономии на общей поездке, комиссии/доставки и бюджета ремонта. При цене $120 оценка прибыли $60 до налогов и оплаты труда. Страница активна без отметки Sold, но наличие и самовывоз продавцом не подтверждены. Стоимость ПО/лицензии не учитывается; передача регистрации не подтверждена. Другие объявления продавца об усилителе/педали не являются договорённостью о комплекте или двумя дополнительными подходящими вариантами."
+    },
+    "dimensions": {
+      "en": "Retailer specification, not manufacturer-certified: about 14.88 × 11.97 × 1.65 inches (378 × 304 × 42 mm), 2.7 kg. Flat compact controller; protect screen/knobs and allow extra room for the unmeasured box. No model-specific Tesla fit certification. Specification source: https://www.muziker.com/ableton-push-2",
+      "ru": "Характеристики продавца, не заверенные производителем: около 14,88 × 11,97 × 1,65 дюйма (378 × 304 × 42 мм), 2,7 кг. Плоский компактный контроллер; защитите экран/ручки и оставьте место для коробки неизвестного размера. Совместимость с конкретной Tesla не подтверждена. Источник: https://www.muziker.com/ableton-push-2"
+    },
+    "newPriceStatus": {
+      "status": "unverified",
+      "url": "https://help.ableton.com/hc/en-us/articles/8483109413148-Push-Ordering-and-Licensing-FAQ",
+      "checkedAt": "2026-10-12T07:36:00Z",
+      "notes": {
+        "en": "Ableton says Push 2 is no longer sold in its webshop but may be available from local distributors. No current new-stock price verified. Do not substitute Push 3 price or claim global discontinuation from this wording.",
+        "ru": "Ableton сообщает, что Push 2 больше не продаётся в его интернет-магазине, но может быть у местных дистрибьюторов. Текущая цена нового товара не проверена. Не подставлять цену Push 3 и не утверждать глобальное снятие с производства по этой формулировке."
+      }
+    },
+    "facebookComparisons": [],
+    "tests": [
+      {
+        "en": "Use the supplied USB cable and correct power supply with a computer running compatible Ableton Live. Confirm stable recognition and bright, legible display without flicker or dead zones.",
+        "ru": "Подключите комплектным USB-кабелем и правильным блоком питания к компьютеру с совместимой Ableton Live. Проверьте стабильное распознавание и яркий читаемый экран без мерцания и мёртвых зон."
+      },
+      {
+        "en": "Play all 64 pads lightly and firmly; test triggering, pressure, RGB lights, touch strip, every encoder and button.",
+        "ru": "Нажмите все 64 пэда слабо и сильно; проверьте срабатывание, давление, RGB-подсветку, сенсорную полоску, каждый энкодер и кнопку."
+      },
+      {
+        "en": "Check USB/power sockets for intermittent connection. Reject sticky/peeling housing, serious screen damage/haze, corrosion, liquid damage or unstable controls.",
+        "ru": "Проверьте USB/питание на пропадание связи. Откажитесь при липком/отслаивающемся корпусе, серьёзном повреждении/дымке экрана, коррозии, жидкости или нестабильных органах управления."
+      },
+      {
+        "en": "Confirm the original correct power supply, USB cable and box are actually included. Check voltage/polarity labels and cord condition; no unsafe substitute or paid repair.",
+        "ru": "Убедитесь в наличии правильного оригинального блока питания, USB-кабеля и коробки. Проверьте напряжение/полярность и шнур; без небезопасной замены и платного ремонта."
+      },
+      {
+        "en": "Verify ownership and request legitimate Push registration transfer through Ableton if possible. No Live license assumed. No deposit; pay only after local testing. Official testing guide: https://www.ableton.com/en/live-manual/12/using-push-2/",
+        "ru": "Проверьте право собственности и по возможности законную передачу регистрации Push через Ableton. Лицензия Live не предполагается. Без аванса; оплата после личной проверки. Официальное руководство: https://www.ableton.com/en/live-manual/12/using-push-2/"
+      }
+    ],
+    "soldComparisons": [
+      {
+        "source": "reverb",
+        "url": "https://reverb.com/p/ableton-push-2?ended_listing=91948111",
+        "amountCents": 26500,
+        "shippingCents": null,
+        "soldAt": "2026-10-10",
+        "basis": "sold",
+        "confidence": "related",
+        "notes": {
+          "en": "Reverb Transaction History Final Price for Push 2, Very Good; excludes shipping/tax. Table observed October 12 at 07:34:51 UTC. National online transaction, not a confirmed Sacramento closing; condition, accessories and software may differ.",
+          "ru": "Reverb Transaction History: Final Price для Push 2, Very Good; доставка/налоги исключены. Таблица просмотрена 12 октября в 07:34:51 UTC. Национальная онлайн-продажа, не подтверждённая сделка в Сакраменто; состояние, аксессуары и ПО могут отличаться."
+        }
+      },
+      {
+        "source": "reverb",
+        "url": "https://reverb.com/p/ableton-push-2?ended_listing=91948111",
+        "amountCents": 34900,
+        "shippingCents": null,
+        "soldAt": "2026-10-09",
+        "basis": "sold",
+        "confidence": "related",
+        "notes": {
+          "en": "Reverb Transaction History Final Price for Push 2, Excellent; excludes shipping/tax. Table observed October 12 at 07:34:51 UTC. National online transaction, not a confirmed Sacramento closing; condition, accessories and software may differ.",
+          "ru": "Reverb Transaction History: Final Price для Push 2, Excellent; доставка/налоги исключены. Таблица просмотрена 12 октября в 07:34:51 UTC. Национальная онлайн-продажа, не подтверждённая сделка в Сакраменто; состояние, аксессуары и ПО могут отличаться."
+        }
+      },
+      {
+        "source": "reverb",
+        "url": "https://reverb.com/p/ableton-push-2?ended_listing=91948111",
+        "amountCents": 20000,
+        "shippingCents": 4318,
+        "soldAt": "2026-10-08",
+        "basis": "sold",
+        "confidence": "related",
+        "notes": {
+          "en": "Reverb Transaction History Final Price for Push 2, Good; excludes shipping/tax. Table observed October 12 at 07:34:51 UTC. The $200 Good sold page was inspected: removable angled stand, box, power supply and USB included; cosmetic wear. $43.18 shipping separate. This is a material downside, not discarded. Sold page: https://reverb.com/item/102684242-ableton-push-2-controller-with-angled-stand?show_sold=true",
+          "ru": "Reverb Transaction History: Final Price для Push 2, Good; доставка/налоги исключены. Таблица просмотрена 12 октября в 07:34:51 UTC. Страница продажи Good за $200 осмотрена: съёмная наклонная подставка, коробка, блок питания и USB, косметический износ. Доставка $43,18 отдельно. Это существенный риск снижения цены, не исключённое сравнение."
+        }
+      },
+      {
+        "source": "reverb",
+        "url": "https://reverb.com/p/ableton-push-2?ended_listing=91948111",
+        "amountCents": 37500,
+        "shippingCents": null,
+        "soldAt": "2026-10-07",
+        "basis": "sold",
+        "confidence": "related",
+        "notes": {
+          "en": "Reverb Transaction History Final Price for Push 2, Excellent; excludes shipping/tax. Table observed October 12 at 07:34:51 UTC. National online transaction, not a confirmed Sacramento closing; condition, accessories and software may differ.",
+          "ru": "Reverb Transaction History: Final Price для Push 2, Excellent; доставка/налоги исключены. Таблица просмотрена 12 октября в 07:34:51 UTC. Национальная онлайн-продажа, не подтверждённая сделка в Сакраменто; состояние, аксессуары и ПО могут отличаться."
+        }
+      },
+      {
+        "source": "reverb",
+        "url": "https://reverb.com/p/ableton-push-2?ended_listing=91948111",
+        "amountCents": 29900,
+        "shippingCents": null,
+        "soldAt": "2026-10-04",
+        "basis": "sold",
+        "confidence": "related",
+        "notes": {
+          "en": "Reverb Transaction History Final Price for Push 2, Very Good; excludes shipping/tax. Table observed October 12 at 07:34:51 UTC. National online transaction, not a confirmed Sacramento closing; condition, accessories and software may differ.",
+          "ru": "Reverb Transaction History: Final Price для Push 2, Very Good; доставка/налоги исключены. Таблица просмотрена 12 октября в 07:34:51 UTC. Национальная онлайн-продажа, не подтверждённая сделка в Сакраменто; состояние, аксессуары и ПО могут отличаться."
+        }
+      },
+      {
+        "source": "reverb",
+        "url": "https://reverb.com/p/ableton-push-2?ended_listing=91948111",
+        "amountCents": 29900,
+        "shippingCents": null,
+        "soldAt": "2026-10-04",
+        "basis": "sold",
+        "confidence": "related",
+        "notes": {
+          "en": "Reverb Transaction History Final Price for Push 2, Excellent; excludes shipping/tax. Table observed October 12 at 07:34:51 UTC. National online transaction, not a confirmed Sacramento closing; condition, accessories and software may differ.",
+          "ru": "Reverb Transaction History: Final Price для Push 2, Excellent; доставка/налоги исключены. Таблица просмотрена 12 октября в 07:34:51 UTC. Национальная онлайн-продажа, не подтверждённая сделка в Сакраменто; состояние, аксессуары и ПО могут отличаться."
+        }
+      },
+      {
+        "source": "reverb",
+        "url": "https://reverb.com/p/ableton-push-2?ended_listing=91948111",
+        "amountCents": 32900,
+        "shippingCents": null,
+        "soldAt": "2026-10-04",
+        "basis": "sold",
+        "confidence": "related",
+        "notes": {
+          "en": "Reverb Transaction History Final Price for Push 2, Excellent; excludes shipping/tax. Table observed October 12 at 07:34:51 UTC. National online transaction, not a confirmed Sacramento closing; condition, accessories and software may differ.",
+          "ru": "Reverb Transaction History: Final Price для Push 2, Excellent; доставка/налоги исключены. Таблица просмотрена 12 октября в 07:34:51 UTC. Национальная онлайн-продажа, не подтверждённая сделка в Сакраменто; состояние, аксессуары и ПО могут отличаться."
+        }
+      }
+    ]
   }
 ]

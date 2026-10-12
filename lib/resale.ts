@@ -17,6 +17,7 @@ export interface ResaleListing {
   askingCents: number;
   resaleLowCents: number;
   resaleHighCents: number;
+  resaleEstimateCents?: number;
   reserveCents: number;
   location: string;
   checkedAt: string;
@@ -51,7 +52,7 @@ const sourceIds: Record<ResalePlatform, ResaleListing['sourceId']> = {
   craigslist: 'craigslist-resale', facebook: 'facebook-resale', offerup: 'offerup-resale',
 };
 const fields = ['id', 'sourceId', 'platform', 'title', 'category', 'currency', 'url', 'photos', 'askingCents',
-  'resaleLowCents', 'resaleHighCents', 'reserveCents', 'location', 'checkedAt', 'status', 'archived',
+  'resaleLowCents', 'resaleHighCents', 'resaleEstimateCents', 'reserveCents', 'location', 'checkedAt', 'status', 'archived',
   'exactMatchCount', 'comparisonStatus', 'notes', 'tests', 'dimensions', 'soldComparisons',
   'facebookComparisons', 'newPriceReference', 'dimensionsSource', 'newPriceStatus'];
 const categories = ['appliances', 'tv', 'computers', 'phones', 'cameras', 'audio', 'smart-home', 'gaming', 'tools', 'home', 'other'];
@@ -109,7 +110,8 @@ export function validResaleRecord(value: unknown): value is ResaleListing {
   if (p.sourceId !== sourceIds[platform] || !text(p.id, 160) || !bilingual(p.title)
     || !categories.includes(String(p.category)) || p.currency !== 'USD' || !listingUrl(platform, p.url)
     || !money(p.askingCents) || !money(p.resaleLowCents) || !money(p.resaleHighCents)
-    || !money(p.reserveCents, true) || p.resaleLowCents > p.resaleHighCents || !text(p.location, 160)
+    || !money(p.reserveCents, true) || p.resaleLowCents > p.resaleHighCents
+    || p.resaleEstimateCents !== undefined && (!money(p.resaleEstimateCents) || p.resaleEstimateCents < p.resaleLowCents || p.resaleEstimateCents > p.resaleHighCents) || !text(p.location, 160)
     || !timestamp(p.checkedAt) || !['inspect-first', 'conditional', 'hold'].includes(String(p.status))
     || p.archived !== undefined && typeof p.archived !== 'boolean'
     || p.exactMatchCount !== 0 || p.comparisonStatus !== 'pending'

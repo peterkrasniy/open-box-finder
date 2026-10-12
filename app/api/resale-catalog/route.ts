@@ -6,10 +6,12 @@ export async function GET(request: Request) {
   if (new URL(request.url).search) return new Response(null, { status: 400, headers });
   // Existing v23 pages retain their eBay-only schema instead of rejecting the whole update.
   const schema = request.headers.get('X-Resale-Schema');
-  const current = schema === '2' || schema === '3';
+  const current = schema === '2' || schema === '3' || schema === '4';
   const body = JSON.stringify({ records: RESALE_RECORDS.filter(validResaleRecord).filter(record => current || record.dimensionsSource === undefined && record.soldComparisons.every(sample => sample.source === undefined && sample.basis !== 'displayed-sold-price' && new URL(sample.url).origin === 'https://www.ebay.com')).map(record => {
-    if (schema === '3') return record;
+    if (schema === '4') return record;
     const compatible = { ...record };
+    delete compatible.resaleEstimateCents;
+    if (schema === '3') return compatible;
     delete compatible.newPriceStatus;
     if (compatible.newPriceReference) { compatible.newPriceReference = { ...compatible.newPriceReference }; delete compatible.newPriceReference.checkedAt; delete compatible.newPriceReference.match; }
     return compatible;
