@@ -823,5 +823,125 @@
         }
       }
     ]
+  },
+  {
+    "id": "ou-ee99d566-bdbc-3c35-b4ae-81d75f973fcc",
+    "sourceId": "offerup-resale",
+    "platform": "offerup",
+    "title": {
+      "en": "Vertuo Creatista · carton only, contents/US label unverified",
+      "ru": "Vertuo Creatista · только коробка, содержимое/US-маркировка не проверены"
+    },
+    "category": "appliances",
+    "currency": "USD",
+    "url": "https://offerup.com/item/detail/ee99d566-bdbc-3c35-b4ae-81d75f973fcc",
+    "askingCents": 20000,
+    "resaleLowCents": 30000,
+    "resaleHighCents": 30000,
+    "reserveCents": 3000,
+    "location": "Sacramento, CA · exact pickup unconfirmed",
+    "checkedAt": "2026-10-12T07:48:00Z",
+    "status": "conditional",
+    "exactMatchCount": 0,
+    "comparisonStatus": "pending",
+    "verificationWarning": {
+      "en": "Candidate only: actual photos show the carton, not the machine. Torn carry opening; factory seals, contents and US SKU/120V label are unverified. $70 profit estimate applies only to a complete, genuine US machine that is unused or clean open-box and passes testing. Used, dirty or incomplete contents require a new valuation.",
+      "ru": "Только кандидат: на настоящих фото коробка, не сама машина. Разорванная ручка; заводские пломбы, содержимое и US-модель/120V не проверены. Оценка прибыли $70 применима только к полной оригинальной US-машине, неиспользованной либо чистой с открытой упаковкой и успешной проверкой. Б/у, грязный или неполный товар требует новой оценки."
+    },
+    "photos": [
+      {
+        "url": "https://images.offerup.com/CnAb9B1icgLKZTe16TFV-vKGq9A=/540x720/c092/c09245f381e14586b1abe71d1320e876.jpg",
+        "alt": {
+          "en": "Actual carton front: Vertuo Creatista name and printed stainless machine illustration; no machine contents shown",
+          "ru": "Настоящее фото коробки спереди: Vertuo Creatista и напечатанная иллюстрация машины; содержимое не видно"
+        }
+      },
+      {
+        "url": "https://images.offerup.com/B2csHgb4YRRy6L1LhVHAsgRwDw0=/540x720/fe15/fe15ece1d09f45ec912ad4a6f1069a7b.jpg",
+        "alt": {
+          "en": "Actual worn/torn carton carry opening and old $499.99 retail sticker; not current new-price evidence",
+          "ru": "Настоящее фото потёртой/разорванной ручки коробки и старого ценника $499,99; это не текущая цена нового товара"
+        }
+      },
+      {
+        "url": "https://images.offerup.com/v-3EOLfRjN16FRLowyWzjubLt98=/480x640/8b54/8b54c3fe01664823a07eb3fac0396ee9.jpg",
+        "alt": {
+          "en": "Actual carton side with beverage illustrations; these do not prove a mug or carafe is included",
+          "ru": "Настоящее фото боковой стороны коробки с напитками; иллюстрации не доказывают наличие кружки/карафа"
+        }
+      }
+    ],
+    "notes": {
+      "en": "Carton confirms Vertuo Creatista family, likely Breville BVE850 brushed stainless; exact machine, factory US SKU BVE850BSS1BNA1, serial and 120V label are unseen. Do not confuse Original-line Creatista Plus/Pro. Seller claims unopened/new and a carafe; no seals, contents or extras verified. Assign zero extra carafe/mug/coffee value. $200 asking OBO; $175 negotiation target is not agreed, max $200 only if all checks pass. $300 local cash exit is an analyst estimate near the $298 displayed open-box sold reference and below $399 new other-color reference; not guaranteed proceeds or dealer warranty. Full $30 reserve: $15 travel and $15 test pods/cleaning/consumables, no repairs, platform fees or shipping. Modeled $70 at ask/$95 at target before income tax and labor. Live public detail with Ask/Make offer, no sold marker; availability and pickup not seller-confirmed. Candidate only, not fully verified exact-SKU/contents quota progress.",
+      "ru": "Коробка подтверждает семейство Vertuo Creatista, вероятно Breville BVE850 в матовой стали; сама машина, заводская US-модель BVE850BSS1BNA1, серийный номер и 120V не видны. Не путать с Original-line Creatista Plus/Pro. Продавец заявляет новое/неоткрытое состояние и караф; пломбы, содержимое и дополнения не проверены. Дополнительная стоимость карафа/кружки/кофе нулевая. Цена $200 OBO; цель переговоров $175 не согласована, предел $200 только после всех проверок. Местная продажа за $300 — оценка около показанной продажи open-box за $298 и ниже новой другой расцветки за $399; не гарантия поступлений или гарантии дилера. Полный резерв $30: $15 поездка и $15 тестовые капсулы/очистка/расходники, без ремонта, комиссии и доставки. Оценка $70 при цене продавца/$95 при цели до налогов и оплаты труда. Активная страница Ask/Make offer без Sold; наличие/самовывоз продавцом не подтверждены. Только кандидат, не полностью проверенный вклад в квоту по точной модели/содержимому."
+    },
+    "dimensions": {
+      "en": "Official BVE850 body dimensions about 8.98 × 16.41 × 12.64 inches; exact boxed contents/US label not confirmed. Carton dimensions unavailable; check opening clearance and protect the machine if removed. Exact Tesla model/trunk fit unverified.",
+      "ru": "Официальные размеры корпуса BVE850 около 8,98 × 16,41 × 12,64 дюйма; содержимое коробки/US-маркировка не подтверждены. Размеры коробки неизвестны; проверьте проём и защитите извлечённую машину. Точная модель Tesla/совместимость багажника не проверены."
+    },
+    "newPriceReference": {
+      "url": "https://www.breville.com/en-us/product/bve850?sku=BVE850BSS1BNA1",
+      "cents": 52495,
+      "basis": "current-new",
+      "checkedAt": "2026-10-12T07:48:00Z",
+      "match": "model-unverified",
+      "notes": {
+        "en": "Official US BVE850BSS1BNA1 page observed $524.95 sale price with Add to Cart, original $699.95. The local carton family is confirmed but factory SKU/voltage and machine are not. The carton $499.99 sticker is not current-new-price evidence; no replacement or Original-line model substitution.",
+        "ru": "На официальной US-странице BVE850BSS1BNA1 отмечена цена акции $524,95 с Add to Cart, прежняя $699,95. Семейство на местной коробке подтверждено, но заводская модель/напряжение и машина нет. Ценник $499,99 на коробке не является текущей ценой нового товара; другая/Original-line модель не подставляется."
+      }
+    },
+    "facebookComparisons": [],
+    "soldComparisons": [
+      {
+        "url": "https://www.ebay.com/itm/398186837327",
+        "amountCents": 29800,
+        "shippingCents": 0,
+        "soldAt": "2026-07-20",
+        "basis": "displayed-sold-price",
+        "confidence": "related",
+        "notes": {
+          "en": "Displayed SOLD $298, open box, brushed-stainless BVE850 family, free shipping; no accepted-offer marker. Imperfect comp: item specifics conflict with 240V and a burr grinder, although this is a capsule machine. Not proof of exact US voltage. Dealer 30-day returns/warranty value is not transferred.",
+          "ru": "Показано SOLD $298, open-box, семейство BVE850 в матовой стали, бесплатная доставка; отметки принятого предложения нет. Неточное сравнение: характеристики противоречат 240V и жерновой кофемолке, хотя это капсульная машина. Не доказательство US-напряжения. Ценность 30-дневного возврата/гарантии дилера не переносится."
+        }
+      },
+      {
+        "url": "https://www.ebay.com/itm/167658537404",
+        "amountCents": 39900,
+        "shippingCents": 0,
+        "soldAt": "2026-07-23",
+        "basis": "displayed-sold-price",
+        "confidence": "stronger-condition",
+        "notes": {
+          "en": "Displayed SOLD $399, new BVE850 black stainless, free shipping; no accepted-offer marker. Different color and stronger condition: secondary family comparison only, not exact color or assumed $399 local exit.",
+          "ru": "Показано SOLD $399, новая BVE850 в чёрной стали, бесплатная доставка; отметки принятого предложения нет. Другой цвет и лучшее состояние: только второстепенное сравнение семейства, не точный цвет и не предполагаемая местная цена $399."
+        }
+      }
+    ],
+    "tests": [
+      {
+        "en": "Read the actual machine factory SKU, serial and US 120V label before committing; carton name is insufficient.",
+        "ru": "Прочитайте заводскую модель, серийный номер и US 120V на самой машине до покупки; названия на коробке недостаточно."
+      },
+      {
+        "en": "Inspect seals and contents, request purchase evidence if available. No deposit or prepayment.",
+        "ru": "Осмотрите пломбы и содержимое, по возможности подтверждение покупки. Без аванса/предоплаты."
+      },
+      {
+        "en": "If opened, brew a genuine Vertuo pod and test steam wand, milk sensor and automatic purge. Reject leaks, errors or any fault.",
+        "ru": "Если открыта, сварите кофе с оригинальной Vertuo-капсулой, проверьте паровую трубку, датчик молока и автоматическую промывку. Откажитесь при утечке, ошибке или неисправности."
+      },
+      {
+        "en": "Confirm tank, drip tray, cup support, milk jug, cleaning tool and documentation; inspect cracks/heavy residue.",
+        "ru": "Проверьте бак, поддон, подставку для чашки, молочный кувшин, инструмент очистки и документы; трещины/следы сильного использования."
+      },
+      {
+        "en": "Used, dirty or incomplete contents invalidate the $70 estimate: revalue or pass. No repair budget or warranty transfer assumed.",
+        "ru": "Б/у, грязное или неполное содержимое отменяет оценку $70: пересчитайте или откажитесь. Ремонт/передача гарантии не предполагаются."
+      },
+      {
+        "en": "No extra value for unshown coffee, mug or carafe. Photos/recall search are not a safety certification; exact model/serial remain inspection gates.",
+        "ru": "Без дополнительной стоимости невидимых кофе, кружки или карафа. Фото/поиск отзывов не являются подтверждением безопасности; точная модель/серийный номер проверяются лично."
+      }
+    ]
   }
 ]

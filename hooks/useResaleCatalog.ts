@@ -16,7 +16,7 @@ export function useResaleCatalog(ready: boolean) {
       running = true; controller = new AbortController();
       const timeout = window.setTimeout(() => controller?.abort(), 15_000);
       try {
-        const response = await fetch('/api/resale-catalog', { cache: 'no-cache', headers: { 'X-Resale-Schema': '4', ...(etag ? { 'If-None-Match': etag } : {}) }, signal: controller.signal });
+        const response = await fetch('/api/resale-catalog', { cache: 'no-cache', headers: { 'X-Resale-Schema': '5', ...(etag ? { 'If-None-Match': etag } : {}) }, signal: controller.signal });
         if (response.status === 304) { if (!stopped) setFailed(false); return; }
         if (!response.ok || !response.headers.get('Content-Type')?.includes('application/json')) throw new Error('Invalid catalog response');
         const raw = await response.text();

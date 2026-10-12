@@ -26,6 +26,7 @@ export interface ResaleListing {
   exactMatchCount: 0;
   comparisonStatus: 'pending';
   notes: ResaleText;
+  verificationWarning?: ResaleText;
   tests: ResaleText[];
   dimensions: ResaleText;
   dimensionsSource?: string;
@@ -54,7 +55,7 @@ const sourceIds: Record<ResalePlatform, ResaleListing['sourceId']> = {
 const fields = ['id', 'sourceId', 'platform', 'title', 'category', 'currency', 'url', 'photos', 'askingCents',
   'resaleLowCents', 'resaleHighCents', 'resaleEstimateCents', 'reserveCents', 'location', 'checkedAt', 'status', 'archived',
   'exactMatchCount', 'comparisonStatus', 'notes', 'tests', 'dimensions', 'soldComparisons',
-  'facebookComparisons', 'newPriceReference', 'dimensionsSource', 'newPriceStatus'];
+  'facebookComparisons', 'newPriceReference', 'dimensionsSource', 'newPriceStatus', 'verificationWarning'];
 const categories = ['appliances', 'tv', 'computers', 'phones', 'cameras', 'audio', 'smart-home', 'gaming', 'tools', 'home', 'other'];
 const object = (value: unknown): value is Record<string, unknown> => value !== null && typeof value === 'object' && !Array.isArray(value);
 const text = (value: unknown, limit = 1500): value is string => typeof value === 'string' && value.trim().length > 0 && value.length <= limit && !/[\u0000-\u001f]/.test(value);
@@ -115,7 +116,7 @@ export function validResaleRecord(value: unknown): value is ResaleListing {
     || !timestamp(p.checkedAt) || !['inspect-first', 'conditional', 'hold'].includes(String(p.status))
     || p.archived !== undefined && typeof p.archived !== 'boolean'
     || p.exactMatchCount !== 0 || p.comparisonStatus !== 'pending'
-    || !bilingual(p.notes) || !bilingual(p.dimensions)) return false;
+    || !bilingual(p.notes) || !bilingual(p.dimensions) || p.verificationWarning !== undefined && !bilingual(p.verificationWarning)) return false;
   if (!Array.isArray(p.photos) || p.photos.length < 1 || p.photos.length > 12
     || !p.photos.every(photo => shape(photo, ['url', 'alt']) && photoUrl(platform, photo.url) && bilingual(photo.alt))
     || new Set(p.photos.map(photo => photo.url)).size !== p.photos.length) return false;
