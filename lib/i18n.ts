@@ -19,7 +19,7 @@ const en = {
   bestBuyOutlet: 'Best Buy Outlet', outletLocations: 'Outlet locations', bestBuyCategories: 'Best Buy open-box categories',
   communityLinks: 'Community discussion', communityLinksHelp: 'A link to a posted discussion. Current price and stock are unverified.',
   outboundNotice: 'Links open another website. They are not listings and do not use your inventory filters.',
-  manualProducts: 'Manually reviewed products', manualProductCount: 'manually reviewed products',
+  manualProducts: 'Manually reviewed products',
   manualProductsHelp: 'Manually checked retailer pages, not automatic inventory feeds. Prices and stock may change; confirm delivery and fees. Only clearly labeled references affect savings sorting.',
   observedInStock: 'Available when checked · confirm current stock', referenceSavings: 'Compared with this retailer reference', pickupNotVerified: 'Pickup not verified', manualOnly: 'Manual check', certifiedRefurbished: 'Certified refurbished', observedPrice: 'Observed page price',
   observedNewModel: 'New model price · observed', sameNewPrice: 'same price as refurbished',
@@ -50,7 +50,7 @@ const en = {
   storageUnavailable: 'Browser storage is unavailable. Changes will last for this visit.',
   liveLimit: 'Verified source coverage is still being connected.',
   skip: 'Skip to listings', language: 'Language', selectedRetailers: 'Selected retailers',
-  noneSelected: 'No retailers selected', more: 'More information', count: 'listings', noImage: 'Retailer image unavailable',
+  noneSelected: 'No retailers selected', more: 'More information', noImage: 'Retailer image unavailable',
   saveUnavailable: 'Saving is unavailable for this source.', saveLimit: 'Your saved list is full. Remove a listing to save another.',
   lastObservedPrice: 'Last observed price',
   showMore: 'Show more listings', electronics: 'Electronics',
@@ -81,7 +81,7 @@ const ru: Record<keyof typeof en, string> = {
   bestBuyOutlet: 'Best Buy Outlet', outletLocations: 'Адреса аутлетов', bestBuyCategories: 'Open-box категории Best Buy',
   communityLinks: 'Обсуждение сообщества', communityLinksHelp: 'Ссылка на опубликованное обсуждение. Актуальные цена и наличие не проверены.',
   outboundNotice: 'Ссылки открывают другой сайт. Это не каталог товаров; фильтры каталога к ним не применяются.',
-  manualProducts: 'Товары с ручной проверкой', manualProductCount: 'товара с ручной проверкой',
+  manualProducts: 'Товары с ручной проверкой',
   manualProductsHelp: 'Страницы магазинов проверены вручную, не автоматические каталоги. Цены и наличие могут измениться; уточните доставку и сборы. Сортировка экономии учитывает только цены с явным основанием.',
   observedInStock: 'Был в наличии при проверке · уточните текущее наличие', referenceSavings: 'В сравнении с этой ценой магазина', pickupNotVerified: 'Самовывоз не подтверждён', manualOnly: 'Ручная проверка', certifiedRefurbished: 'Сертифицированный восстановленный товар', observedPrice: 'Цена на просмотренной странице',
   observedNewModel: 'Цена новой модели · при проверке', sameNewPrice: 'та же цена, что у восстановленного',
@@ -112,7 +112,7 @@ const ru: Record<keyof typeof en, string> = {
   storageUnavailable: 'Хранилище браузера недоступно. Изменения сохранятся только на время посещения.',
   liveLimit: 'Проверенные источники ещё подключаются.',
   skip: 'Перейти к предложениям', language: 'Язык', selectedRetailers: 'Выбранные магазины',
-  noneSelected: 'Магазины не выбраны', more: 'Дополнительная информация', count: 'предложений', noImage: 'Изображение магазина недоступно',
+  noneSelected: 'Магазины не выбраны', more: 'Дополнительная информация', noImage: 'Изображение магазина недоступно',
   saveUnavailable: 'Сохранение недоступно для этого источника.', saveLimit: 'Список сохранённого заполнен. Удалите предложение, чтобы сохранить другое.',
   lastObservedPrice: 'Последняя наблюдаемая цена',
   showMore: 'Показать ещё', electronics: 'Электроника',
@@ -126,6 +126,15 @@ const ru: Record<keyof typeof en, string> = {
 
 export type TextKey = keyof typeof en;
 export function text(language: Language, key: TextKey): string { return language === 'ru' ? ru[key] : en[key]; }
+
+const countRules = { en: new Intl.PluralRules('en'), ru: new Intl.PluralRules('ru') };
+export function listingCount(language: Language, count: number, manual = false): string {
+  const form = countRules[language].select(count);
+  if (language === 'en') return `${count} ${manual ? `manually reviewed ${form === 'one' ? 'product' : 'products'}` : form === 'one' ? 'listing' : 'listings'}`;
+  const noun = manual ? form === 'one' ? 'товар' : form === 'few' ? 'товара' : 'товаров'
+    : form === 'one' ? 'предложение' : form === 'few' ? 'предложения' : 'предложений';
+  return `${count} ${noun}${manual ? ' с ручной проверкой' : ''}`;
+}
 
 const categories: Record<Category, [string, string]> = {
   appliances: ['Appliances', 'Бытовая техника'], tv: ['TV & Home Theater', 'ТВ и домашний кинотеатр'],

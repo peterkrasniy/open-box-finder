@@ -44,3 +44,8 @@ TV pages are not admitted from category prices alone. BuyDig's category lists Sa
 ## Verification boundary
 
 Unit tests cover snapshot expiry, same-source saves, image/reference payload exclusion from device pointers, manual/automatic separation, explicit-only savings sorting, category/retailer/price selection, US state shipping exclusions and absence of invented pickup. Playwright in the existing portable preview tests each card/link/frame at 320/390/1280 in EN/RU without mocked image content. The executor proxy fails ordinary remote images, so those checks prove responsive layout and the honest failure state, not successful photo pixels. Parent Windows hosted readback is required for new photos and exact link destinations. V17's four original photos already passed the parent's hosted QA.
+
+
+## Parent hosted v18 QA and v19 count correction
+
+Parent Windows QA passed the deployed v18: 16 cards from six retailers, all actual images, desktop and 320/390 English/Russian layouts, filters, exact link destinations and saved-state preservation. Fifteen prices were freshly reverified; Target Ninja required human verification and could not be freshly rechecked. Its existing bounded manual snapshot and expiry remain unchanged, with no challenge bypass or false fresh check. V19 only corrects Russian cardinal product/listing counts using Intl.PluralRules, including 1, 2, 5, 11, 16, 21 and 22; inventory and review timestamps are unchanged.

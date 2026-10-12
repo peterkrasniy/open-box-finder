@@ -5,7 +5,7 @@ import type { Filters, Offer, Language } from '../lib/offer.ts';
 import { savedIdentity, offerIdentity } from '../lib/storage.ts';
 import { filterAndSort, validPoint } from '../lib/filter.ts';
 import { editPrice, parsePrice, validateRange } from '../lib/money.ts';
-import { categoryLabel, SORTS, sortLabel, text } from '../lib/i18n.ts';
+import { categoryLabel, listingCount, SORTS, sortLabel, text } from '../lib/i18n.ts';
 import type { TextKey } from '../lib/i18n.ts';
 import { useCatalog } from '../hooks/useCatalog';
 import { usePreferences } from '../hooks/usePreferences';
@@ -151,7 +151,7 @@ export function OpenBoxApp() {
         {!storageAvailable && <p className="notice" role="status">{t('storageUnavailable')}</p>}
         {saveError && <p className="notice error" role="alert">{t(saveError)}</p>}
         <div className="catalog-status" role="status" aria-live="polite" aria-atomic="true">
-          {status === 'loading' ? t('updating') : status === 'offline' ? t('offline') : status === 'error' ? t('updateFailed') : route.view === 'deals' && !catalog.offers.length && manualProducts.length ? `${manualProducts.length} ${t('manualProductCount')}` : route.view === 'saved' ? `${saved.length} ${t('count')}` : catalog.sequence === 0 ? t('noSourceConnected') : `${listings.length} ${t('count')}`}
+          {status === 'loading' ? t('updating') : status === 'offline' ? t('offline') : status === 'error' ? t('updateFailed') : route.view === 'deals' && !catalog.offers.length && manualProducts.length ? listingCount(language, manualProducts.length, true) : route.view === 'saved' ? listingCount(language, saved.length) : catalog.sequence === 0 ? t('noSourceConnected') : listingCount(language, listings.length)}
           {(status === 'error' || status === 'offline') && <button type="button" className="text-action" onClick={refresh}>{t('refresh')}</button>}
         </div>
         {route.view === 'deals' && catalog.offers.length > 0 && <SourceCoverage catalog={catalog} language={language} now={now}/>}
