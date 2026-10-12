@@ -27,9 +27,10 @@ export interface ResaleListing {
   notes: ResaleText;
   tests: ResaleText[];
   dimensions: ResaleText;
+  dimensionsSource?: string;
   soldComparisons: {
-    url: string; amountCents: number; shippingCents: number | null; soldAt: string;
-    basis: 'sold' | 'accepted-offer-upper-bound';
+    url: string; amountCents: number; shippingCents: number | null; soldAt: string; source?: 'ebay' | 'reverb';
+    basis: 'sold' | 'accepted-offer-upper-bound' | 'displayed-sold-price';
     confidence: 'related' | 'stronger-condition' | 'lower-bundle';
     notes: ResaleText;
   }[];
@@ -50,7 +51,7 @@ const sourceIds: Record<ResalePlatform, ResaleListing['sourceId']> = {
 const fields = ['id', 'sourceId', 'platform', 'title', 'category', 'currency', 'url', 'photos', 'askingCents',
   'resaleLowCents', 'resaleHighCents', 'reserveCents', 'location', 'checkedAt', 'status', 'archived',
   'exactMatchCount', 'comparisonStatus', 'notes', 'tests', 'dimensions', 'soldComparisons',
-  'facebookComparisons', 'newPriceReference'];
+  'facebookComparisons', 'newPriceReference', 'dimensionsSource'];
 const categories = ['appliances', 'tv', 'computers', 'phones', 'cameras', 'audio', 'smart-home', 'gaming', 'tools', 'home', 'other'];
 const object = (value: unknown): value is Record<string, unknown> => value !== null && typeof value === 'object' && !Array.isArray(value);
 const text = (value: unknown, limit = 1500): value is string => typeof value === 'string' && value.trim().length > 0 && value.length <= limit && !/[\u0000-\u001f]/.test(value);
@@ -90,9 +91,11 @@ function photoUrl(platform: ResalePlatform, value: unknown): boolean {
   if (platform === 'offerup') return url.hostname === 'images.offerup.com';
   return url.hostname === 'fbcdn.net' || url.hostname.endsWith('.fbcdn.net');
 }
-function soldUrl(value: unknown): boolean {
+function soldUrl(value: unknown, source: unknown): boolean {
   const url = parsedPublicUrl(value);
-  return !!url && url.origin === 'https://www.ebay.com' && /^\/itm\/\d+\/?$/.test(url.pathname) && !url.search;
+  if (!url) return false;
+  if (source === 'reverb') return url.origin === 'https://reverb.com' && /^\/p\/[a-z0-9-]+$/.test(url.pathname) && /^\?ended_listing=\d+$/.test(url.search);
+  return (source === undefined || source === 'ebay') && url.origin === 'https://www.ebay.com' && /^\/itm\/\d+\/?$/.test(url.pathname) && !url.search;
 }
 
 /** A strict public snapshot boundary; source observations never establish seller-confirmed stock. */
@@ -114,14 +117,15 @@ export function validResaleRecord(value: unknown): value is ResaleListing {
     || new Set(p.photos.map(photo => photo.url)).size !== p.photos.length) return false;
   if (!Array.isArray(p.tests) || p.tests.length < 1 || p.tests.length > 20 || !p.tests.every(bilingual)) return false;
   if (!Array.isArray(p.soldComparisons) || p.soldComparisons.length > 20
-    || !p.soldComparisons.every(comp => shape(comp, ['url', 'amountCents', 'shippingCents', 'soldAt', 'basis', 'confidence', 'notes'])
-      && soldUrl(comp.url) && money(comp.amountCents) && (comp.shippingCents === null || money(comp.shippingCents, true))
-      && text(comp.soldAt, 80) && ['sold', 'accepted-offer-upper-bound'].includes(String(comp.basis))
+    || !p.soldComparisons.every(comp => shape(comp, ['url', 'amountCents', 'shippingCents', 'soldAt', 'source', 'basis', 'confidence', 'notes'])
+      && soldUrl(comp.url, comp.source) && money(comp.amountCents) && (comp.shippingCents === null || money(comp.shippingCents, true))
+      && text(comp.soldAt, 80) && ['sold', 'accepted-offer-upper-bound', 'displayed-sold-price'].includes(String(comp.basis))
       && ['related', 'stronger-condition', 'lower-bundle'].includes(String(comp.confidence)) && bilingual(comp.notes))) return false;
   if (!Array.isArray(p.facebookComparisons) || p.facebookComparisons.length > 20
     || !p.facebookComparisons.every(comp => shape(comp, ['url', 'askingCents', 'location', 'checkedAt', 'match', 'notes'])
       && facebookUrl(comp.url) && money(comp.askingCents) && text(comp.location, 160) && timestamp(comp.checkedAt)
       && ['related-family', 'regional', 'different-bundle'].includes(String(comp.match)) && bilingual(comp.notes))) return false;
+  if (p.dimensionsSource !== undefined && (!parsedPublicUrl(p.dimensionsSource) || new URL(p.dimensionsSource as string).origin !== 'https://www.mieleusa.com' || !/^\/product\/\d+\//.test(new URL(p.dimensionsSource as string).pathname))) return false;
   if (p.newPriceReference !== undefined && (!shape(p.newPriceReference, ['url', 'cents', 'basis', 'notes'])
     || !parsedPublicUrl(p.newPriceReference.url) || !money(p.newPriceReference.cents)
     || !['current-new', 'historical-catalog'].includes(String(p.newPriceReference.basis)) || !bilingual(p.newPriceReference.notes))) return false;
