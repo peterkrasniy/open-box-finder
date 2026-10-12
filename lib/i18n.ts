@@ -20,11 +20,11 @@ const en = {
   communityLinks: 'Community discussion', communityLinksHelp: 'A link to a posted discussion. Current price and stock are unverified.',
   outboundNotice: 'Links open another website. They are not listings and do not use your inventory filters.',
   manualProducts: 'Manually reviewed products', manualProductCount: 'manually reviewed products',
-  manualProductsHelp: 'Manually observed prices can change. Check stock, variants and fulfillment with the retailer. The retailer’s comparison price has an unspecified basis. New-model prices are shown separately; savings are not ranked.',
-  manualOnly: 'Manual check', certifiedRefurbished: 'Certified refurbished', observedPrice: 'Observed page price',
+  manualProductsHelp: 'Manually checked retailer pages, not automatic inventory feeds. Prices and stock may change; confirm delivery and fees. Only clearly labeled references affect savings sorting.',
+  observedInStock: 'Available when checked · confirm current stock', referenceSavings: 'Compared with this retailer reference', pickupNotVerified: 'Pickup not verified', manualOnly: 'Manual check', certifiedRefurbished: 'Certified refurbished', observedPrice: 'Observed page price',
   observedNewModel: 'New model price · observed', sameNewPrice: 'same price as refurbished',
   retailerComparisonPrice: 'Retailer comparison price', retailerProductPhoto: 'Retailer product photo',
-  productImageUnavailable: 'Product photo unavailable', productPhotoNote: 'Listing photo; refurbished appearance may vary.',
+  productImageUnavailable: 'Product photo unavailable', productPhotoNote: 'Listing photo; individual item appearance may vary.',
   manualUnknown: 'Availability and fulfillment unknown', manualChecked: 'Page reviewed', viewProductAtRetailer: 'View product at retailer',
   manualReviewExpired: 'Manual review expired. Check price and availability with the retailer.', browseMoreLinks: 'More retailer browsing links',
   openRetailer: 'Visit retailer', details: 'View details', retailer: 'Retailer', condition: 'Condition',
@@ -82,11 +82,11 @@ const ru: Record<keyof typeof en, string> = {
   communityLinks: 'Обсуждение сообщества', communityLinksHelp: 'Ссылка на опубликованное обсуждение. Актуальные цена и наличие не проверены.',
   outboundNotice: 'Ссылки открывают другой сайт. Это не каталог товаров; фильтры каталога к ним не применяются.',
   manualProducts: 'Товары с ручной проверкой', manualProductCount: 'товара с ручной проверкой',
-  manualProductsHelp: 'Цены при ручной проверке могут измениться. Наличие, варианты, самовывоз и доставку уточняйте у магазина. Основание цены сравнения магазин не уточняет. Цены новых моделей указаны отдельно; скидки не ранжируются.',
-  manualOnly: 'Ручная проверка', certifiedRefurbished: 'Сертифицированный восстановленный товар', observedPrice: 'Цена на просмотренной странице',
+  manualProductsHelp: 'Страницы магазинов проверены вручную, не автоматические каталоги. Цены и наличие могут измениться; уточните доставку и сборы. Сортировка экономии учитывает только цены с явным основанием.',
+  observedInStock: 'Был в наличии при проверке · уточните текущее наличие', referenceSavings: 'В сравнении с этой ценой магазина', pickupNotVerified: 'Самовывоз не подтверждён', manualOnly: 'Ручная проверка', certifiedRefurbished: 'Сертифицированный восстановленный товар', observedPrice: 'Цена на просмотренной странице',
   observedNewModel: 'Цена новой модели · при проверке', sameNewPrice: 'та же цена, что у восстановленного',
   retailerComparisonPrice: 'Цена сравнения магазина', retailerProductPhoto: 'Фото товара из магазина',
-  productImageUnavailable: 'Фото товара недоступно', productPhotoNote: 'Фото из объявления; восстановленный товар может выглядеть иначе.',
+  productImageUnavailable: 'Фото товара недоступно', productPhotoNote: 'Фото из объявления; конкретный экземпляр может выглядеть иначе.',
   manualUnknown: 'Наличие и способ получения неизвестны', manualChecked: 'Страница просмотрена', viewProductAtRetailer: 'Открыть товар в магазине',
   manualReviewExpired: 'Ручная проверка устарела. Уточните цену и наличие у магазина.', browseMoreLinks: 'Другие ссылки на магазины',
   openRetailer: 'Открыть магазин', details: 'Подробнее', retailer: 'Магазин', condition: 'Состояние',
@@ -131,7 +131,7 @@ const categories: Record<Category, [string, string]> = {
   appliances: ['Appliances', 'Бытовая техника'], tv: ['TV & Home Theater', 'ТВ и домашний кинотеатр'],
   computers: ['Computers & Tablets', 'Компьютеры и планшеты'], phones: ['Phones & Wearables', 'Телефоны и часы'],
   audio: ['Audio', 'Аудио'], 'smart-home': ['Smart Home', 'Умный дом'], gaming: ['Gaming', 'Игры'],
-  tools: ['Tools & Home Improvement', 'Инструменты и ремонт'], other: ['Other', 'Другое'],
+  tools: ['Tools & Home Improvement', 'Инструменты и ремонт'], home: ['Home & Kitchen', 'Дом и кухня'], other: ['Other', 'Другое'],
 };
 export const CATEGORIES = Object.keys(categories) as Category[];
 export function categoryLabel(language: Language, category: Category): string { return categories[category][language === 'ru' ? 1 : 0]; }
@@ -144,7 +144,7 @@ export function conditionLabel(language: Language, condition: Condition): string
 const references: Record<ReferenceBasis, [string, string]> = {
   'current-new': ['Current new price', 'Текущая цена нового товара'], msrp: ['MSRP', 'Рекомендованная цена (MSRP)'],
   'retailer-list': ['Retailer list price', 'Указанная магазином цена'], 'retailer-regular': ['Retailer regular price', 'Обычная цена магазина'],
-  'retailer-was': ['Retailer previous price', 'Прежняя цена магазина'],
+  'retailer-was': ['Retailer was price', 'Цена «было» от магазина'],
 };
 export function referenceLabel(language: Language, basis: ReferenceBasis): string { return references[basis][language === 'ru' ? 1 : 0]; }
 const sorts: Record<Sort, [string, string]> = {

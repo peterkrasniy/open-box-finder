@@ -5,26 +5,26 @@ import { defaultPreferences, decodeSaved, savedSourceUrl } from '../lib/storage.
 import { SOURCE_BY_ID } from '../lib/sources.ts';
 import { validOffer } from '../lib/validation.ts';
 
-const product = MANUAL_PRODUCTS[0];
+const product = MANUAL_PRODUCTS.find(product => product.id === 'accentum-plus-refurbished')!;
 const reviewed = Date.parse(product.reviewedAt);
 test('retailer comparison notes retain ambiguous basis, expire and never change savings order or saved pointers', () => {
-  assert.deepEqual(manualRetailerComparison(product, reviewed), { cents: product.retailerComparison.cents, url: product.url });
+  assert.deepEqual(manualRetailerComparison(product, reviewed), { cents: product.retailerComparison!.cents, url: product.url });
   assert.equal(manualRetailerComparison(product, Date.parse(product.reviewUntil)), null);
-  assert.equal(manualRetailerComparison({ ...product, retailerComparison: { ...product.retailerComparison, cents: product.observedPriceCents } }, reviewed), null);
-  assert.equal(manualRetailerComparison({ ...product, retailerComparison: { ...product.retailerComparison, url: 'https://unrelated.test/' } }, reviewed), null);
-  assert.equal(manualRetailerComparison({ ...product, retailerComparison: { ...product.retailerComparison, cents: Infinity } }, reviewed), null);
+  assert.equal(manualRetailerComparison({ ...product, retailerComparison: { ...product.retailerComparison!, cents: product.observedPriceCents } }, reviewed), null);
+  assert.equal(manualRetailerComparison({ ...product, retailerComparison: { ...product.retailerComparison!, url: 'https://unrelated.test/' } }, reviewed), null);
+  assert.equal(manualRetailerComparison({ ...product, retailerComparison: { ...product.retailerComparison!, cents: Infinity } }, reviewed), null);
   const filters = defaultPreferences().filters;
-  assert.deepEqual(manualProductsForFilters(filters, 'percent', reviewed).map(note => note.id), MANUAL_PRODUCTS.map(note => note.id));
-  assert.deepEqual(manualProductsForFilters(filters, 'dollars', reviewed).map(note => note.id), MANUAL_PRODUCTS.map(note => note.id));
+  assert.deepEqual(manualProductsForFilters(filters, 'percent', reviewed).map(note => note.id), MANUAL_PRODUCTS.filter(note => manualProductActive(note, reviewed)).map(note => note.id));
+  assert.deepEqual(manualProductsForFilters(filters, 'dollars', reviewed).map(note => note.id), MANUAL_PRODUCTS.filter(note => manualProductActive(note, reviewed)).map(note => note.id));
   assert.equal('retailerComparison' in manualSavedPointer(product, reviewed)!, false);
 });
 test('new-model references have a bounded explicit basis and equal prices do not claim a discount', () => {
   assert.equal(manualNewModelComparison(product, reviewed)?.lowerRefurbished, true);
-  const equal = MANUAL_PRODUCTS.find(note => note.observedPriceCents === note.newModelReference.cents)!;
+  const equal = MANUAL_PRODUCTS.find(note => note.observedPriceCents === note.newModelReference?.cents)!;
   assert.equal(manualNewModelComparison(equal, reviewed)?.lowerRefurbished, false);
   assert.equal(manualNewModelComparison(product, Date.parse(product.reviewUntil)), null);
-  assert.equal(manualNewModelComparison({ ...product, newModelReference: { ...product.newModelReference, url: 'https://unrelated.test/' } }, reviewed), null);
-  assert.equal(manualNewModelComparison({ ...product, newModelReference: { ...product.newModelReference, cents: NaN } }, reviewed), null);
+  assert.equal(manualNewModelComparison({ ...product, newModelReference: { ...product.newModelReference!, url: 'https://unrelated.test/' } }, reviewed), null);
+  assert.equal(manualNewModelComparison({ ...product, newModelReference: { ...product.newModelReference!, cents: NaN } }, reviewed), null);
   const pointer = manualSavedPointer(product, reviewed)!;
   assert.equal('newModelReference' in pointer, false);
   assert.equal('video' in pointer, false);
@@ -45,7 +45,7 @@ test('manual observations fail closed outside the bounded review window and neve
 });
 test('manual filtering respects explicit selections and does not imply pickup or shipping', () => {
   const filters = defaultPreferences().filters;
-  assert.equal(manualProductsForFilters(filters, 'percent', reviewed).length, MANUAL_PRODUCTS.length);
+  assert.equal(manualProductsForFilters(filters, 'percent', reviewed).length, MANUAL_PRODUCTS.filter(note => manualProductActive(note, reviewed)).length);
   for (const fulfillment of ['pickup', 'shipped'] as const) assert.deepEqual(manualProductsForFilters({ ...filters, fulfillment }, 'percent', reviewed), []);
   assert.deepEqual(manualProductsForFilters({ ...filters, retailers: { mode: 'selected', ids: [] } }, 'percent', reviewed), []);
   assert.deepEqual(manualProductsForFilters({ ...filters, categories: { mode: 'selected', ids: ['computers'] } }, 'percent', reviewed), []);

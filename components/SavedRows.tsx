@@ -16,7 +16,7 @@ export function SavedRows({ saved, catalog, status, language, now, onOpen, onRem
   const current = new Map(catalog.offers.map(offer => [offerIdentity(offer), offer]));
   return <div className="saved-rows">{saved.map(record => {
     const offer = current.get(savedIdentity(record)) ?? null;
-    const manual = record.sourceId === 'sennheiser-manual' ? MANUAL_PRODUCTS.find(product => product.id === record.sourceOfferId && product.url === record.url) : null;
+    const manual = MANUAL_PRODUCTS.find(product => product.sourceId === record.sourceId && product.id === record.sourceOfferId && product.url === record.url);
     const health = catalog.sources.find(source => source.sourceId === record.sourceId);
     const absence = status === 'loading' || status === 'idle' ? 'checkingSaved' : status === 'error' || status === 'offline' ? 'savedCheckFailed'
       : health?.lastCompleteAt && health.lastCompleteSequence > (record.savedAgainstSequence ?? catalog.sequence) ? 'notInCatalog' : 'savedUnknown';

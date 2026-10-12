@@ -80,7 +80,8 @@ export function savedSourceUrl(sourceId: string, value: unknown): string | null 
   try {
     const parsed = new URL(url);
     if (parsed.origin !== new URL(source.website).origin) return null;
-    const prefixes: Record<string, string> = { 'sennheiser-manual': '/collections/refurbished-by-sennheiser/products/', 'a4l-sac': '/p/', 'buydig': '/shop/product/', 'blues-appliance': '/collections/', 'outdoor-speaker-depot': '/', 'best-buy': '/site/' };
+    if (sourceId === 'newegg-manual') return /^\/(?:[^/]+\/)?p\/[A-Za-z0-9-]+\/?$/.test(parsed.pathname) ? url : null;
+    const prefixes: Record<string, string> = { 'vitamix-manual': '/us/en_us/shop/certified-reconditioned-series/', 'target-manual': '/p/', 'dyson-manual': '/outlet/refurbished-', 'direct-tools-manual': '/products/', 'sennheiser-manual': '/collections/refurbished-by-sennheiser/products/', 'a4l-sac': '/p/', 'buydig': '/shop/product/', 'blues-appliance': '/collections/', 'outdoor-speaker-depot': '/', 'best-buy': '/site/' };
     return prefixes[sourceId] && parsed.pathname.startsWith(prefixes[sourceId]) ? url : null;
   } catch { return null; }
 }

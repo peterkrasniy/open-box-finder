@@ -230,3 +230,5 @@ legend { padding:0; margin-bottom:8px; font-weight:650; font-size:15px; }
 
 .coverage-summary{display:block;font-size:13px;margin-top:4px;color:#596579}.source-status h2{font-size:18px;line-height:1.4}
 .syndicated-deal>.small>a{text-decoration:underline;text-underline-offset:3px}
+
+.manual-saving { font-size:13px; font-weight:650; color:var(--blue-dark); margin:0 0 14px; }.manual-saving span { font-weight:400; color:var(--muted); }.manual-fulfillment,.manual-details { font-size:12px; line-height:1.5; color:var(--muted); margin-top:8px; }

@@ -11,6 +11,11 @@ export interface SourceDefinition {
 
 /** Source-admission registry. No runtime fetch is enabled by a research observation. */
 export const SOURCES: readonly SourceDefinition[] = [
+  { id: 'vitamix-manual', name: 'Vitamix', website: 'https://www.vitamix.com/', catalogUrl: null, admission: 'manual-only', enabled: false, presentation: 'manual-curation' },
+  { id: 'target-manual', name: 'Target', website: 'https://www.target.com/', catalogUrl: null, admission: 'manual-only', enabled: false, presentation: 'manual-curation' },
+  { id: 'newegg-manual', name: 'Newegg', website: 'https://www.newegg.com/', catalogUrl: null, admission: 'manual-only', enabled: false, presentation: 'manual-curation' },
+  { id: 'dyson-manual', name: 'Dyson', website: 'https://www.dyson.com/', catalogUrl: null, admission: 'manual-only', enabled: false, presentation: 'manual-curation' },
+  { id: 'direct-tools-manual', name: 'Direct Tools Factory Outlet', website: 'https://www.directtoolsoutlet.com/', catalogUrl: null, admission: 'manual-only', enabled: false, presentation: 'manual-curation' },
   { id: 'sennheiser-manual', name: 'Sennheiser', website: 'https://us.sennheiser-hearing.com/', catalogUrl: null, admission: 'manual-only', enabled: false, presentation: 'manual-curation' },
   { id: 'a4l-sac', name: 'Appliances 4 Less Sacramento', website: 'https://www.appliances4less-sac.com/', catalogUrl: 'https://www.appliances4less-sac.com/products', admission: 'transport-unverified', enabled: false, presentation: 'normalized-inventory' },
   { id: 'blues-appliance', name: "Blue's Appliance", website: 'https://shopbluesappliance.com/', catalogUrl: null, admission: 'transport-unverified', enabled: false, presentation: 'normalized-inventory' },
