@@ -6,6 +6,8 @@ import { netCashRange, resaleSavedPointer } from '../lib/resale.ts';
 import { savedIdentity } from '../lib/storage.ts';
 import { text } from '../lib/i18n.ts';
 import { Icon } from './Icon';
+import { DeleteListing, type DeleteListingAction } from './DeleteListing';
+import { resaleDismissIdentity } from '../lib/dismissals.ts';
 import { HideCategory, type HideCategoryAction } from './HideCategory';
 
 function ResalePhoto({ listing, language }: { listing: ResaleListing; language: Language }) {
@@ -15,7 +17,7 @@ function ResalePhoto({ listing, language }: { listing: ResaleListing; language: 
     // eslint-disable-next-line @next/next/no-img-element
     <img src={photo.url} alt={photo.alt[language]} width="600" height="450" loading="lazy" decoding="async" onError={() => setFailed(true)}/> : <p className="manual-image-unavailable">{text(language, 'productImageUnavailable')}</p>}</div><figcaption className="manual-photo-caption"><a href={listing.url} target="_blank" rel="noopener noreferrer">{language === 'ru' ? 'Фото объявления' : 'Listing photo'} · {listing.platform === 'craigslist' ? 'Craigslist' : listing.platform === 'facebook' ? 'Facebook' : 'OfferUp'}</a></figcaption></figure>;
 }
-export function ResaleFacts({ listing, language }: { listing: ResaleListing; language: Language }) {
+export function ResaleFacts({ listing, language, onDelete, deleted = false, onRestore }: { listing: ResaleListing; language: Language; onDelete?: DeleteListingAction; deleted?: boolean; onRestore?: (identity: string) => void }) {
   const ru = language === 'ru', money = (cents: number) => new Intl.NumberFormat(ru ? 'ru-RU' : 'en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: cents % 100 ? 2 : 0 }).format(cents / 100);
   const net = netCashRange(listing);
   const range = (low: number, high: number) => low === high ? money(low) : `${money(low)}–${money(high)}`;
@@ -40,19 +42,20 @@ export function ResaleFacts({ listing, language }: { listing: ResaleListing; lan
       {listing.newPriceReference && <p><a href={listing.newPriceReference.url} target="_blank" rel="noopener noreferrer">{money(listing.newPriceReference.cents)}</a> — {listing.newPriceReference.notes[language]}</p>}
       <h4>{ru ? 'Размеры и перевозка' : 'Size & transport'}</h4><p>{listing.dimensions[language]}</p>{listing.dimensionsSource && <p><a href={listing.dimensionsSource} target="_blank" rel="noopener noreferrer">{ru ? 'Размеры производителя' : 'Manufacturer dimensions'}</a></p>}<p>{ru ? 'Модель Tesla неизвестна. Совместимость с конкретным багажником не подтверждена.' : 'Tesla model unknown. Fit in a particular trunk is unverified.'}</p>
       <h4>{ru ? 'Проверить до покупки' : 'Test before buying'}</h4><ul>{listing.tests.map((item, index) => <li key={index}>{item[language]}</li>)}</ul>
+      <DeleteListing identity={resaleDismissIdentity(listing)} title={listing.title[language]} language={language} onDelete={onDelete} deleted={deleted} onRestore={onRestore}/>
     </details>
     <p className="manual-review">{ru ? 'Объявление просмотрено' : 'Listing observed'} <time dateTime={listing.checkedAt}>{new Date(listing.checkedAt).toLocaleString(ru ? 'ru-RU' : 'en-US', { timeZone: 'UTC', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false })} UTC</time>. {ru ? 'Продавец наличие не подтвердил.' : 'Availability not confirmed by seller.'}</p>
   </>;
 }
-export function ResaleProducts({ listings, records, language, now, savedIds, onSave, onHide }: { listings: readonly ResaleListing[]; records: readonly ResaleListing[]; language: Language; now: number; savedIds: ReadonlySet<string>; onSave: (listing: ResaleListing) => void; onHide?: HideCategoryAction }) {
+export function ResaleProducts({ listings, records, language, now, savedIds, onSave, onHide, onDelete }: { listings: readonly ResaleListing[]; records: readonly ResaleListing[]; language: Language; now: number; savedIds: ReadonlySet<string>; onSave: (listing: ResaleListing) => void; onHide?: HideCategoryAction; onDelete?: DeleteListingAction }) {
   return <section aria-label={language === 'ru' ? 'Объявления для перепродажи' : 'Resale inspection leads'} className="manual-products"><h2 className="sr-only">{language === 'ru' ? 'Варианты для проверки' : 'Inspection leads'}</h2><div className="manual-product-grid">{listings.map(listing => {
     const pointer = resaleSavedPointer(listing, now, records), saved = pointer ? savedIds.has(savedIdentity(pointer)) : false;
-    return <article className="manual-product-card resale-card" key={listing.id} data-category={listing.category} data-listing-key={`resale:${listing.id}`}>
+    return <article className="manual-product-card resale-card" key={listing.id} data-category={listing.category} data-dismiss-key={resaleDismissIdentity(listing)} data-listing-key={`resale:${listing.id}`}>
       <div className="manual-card-top"><p className="retailer-badge">{listing.platform === 'craigslist' ? 'Craigslist' : listing.platform === 'facebook' ? 'Facebook' : 'OfferUp'}</p><button type="button" className="manual-save" aria-label={`${text(language, saved ? 'unsave' : 'save')}: ${listing.title[language]}`} aria-pressed={saved} onClick={() => onSave(listing)}><Icon name="bookmark" size={21}/></button></div>
       <h3><a href={listing.url} target="_blank" rel="noopener noreferrer">{listing.title[language]}</a></h3>
       <p className={`resale-inspect${listing.status === 'hold' ? ' resale-hold' : ''}`}>{listing.status === 'hold' ? (language === 'ru' ? 'Приостановлено · риск авансового платежа' : 'On hold · advance-deposit risk') : listing.status === 'inspect-first' ? (language === 'ru' ? 'Проверить лично' : 'Inspect first') : (language === 'ru' ? 'Условный вариант · нужна проверка' : 'Conditional · inspection required')}</p>
-      <ResalePhoto key={listing.photos[0]?.url} listing={listing} language={language}/><ResaleFacts listing={listing} language={language}/>
-      <a className="manual-retailer" href={listing.url} target="_blank" rel="noopener noreferrer">{language === 'ru' ? 'Открыть объявление' : 'Open listing'}<Icon name="external" size={17}/></a><HideCategory category={listing.category} language={language} onHide={onHide}/>
+      <ResalePhoto key={listing.photos[0]?.url} listing={listing} language={language}/><ResaleFacts listing={listing} language={language} onDelete={onDelete}/>
+      <a className="manual-retailer" href={listing.url} target="_blank" rel="noopener noreferrer">{language === 'ru' ? 'Открыть объявление' : 'Open listing'}<Icon name="external" size={17}/></a><div className="listing-personal-actions"><HideCategory category={listing.category} language={language} onHide={onHide}/><DeleteListing identity={resaleDismissIdentity(listing)} title={listing.title[language]} language={language} onDelete={onDelete}/></div>
     </article>;
   })}</div></section>;
 }

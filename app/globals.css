@@ -287,3 +287,10 @@ legend { padding:0; margin-bottom:8px; font-weight:650; font-size:15px; }
 .resale-method{margin:16px 0;line-height:1.7}
 .resale-details a{text-decoration:underline;text-underline-offset:3px}
 .resale-hold{color:#9b2929;font-weight:650}
+
+.listing-personal-actions{display:flex;align-items:center;gap:8px;margin-top:4px}
+.listing-personal-actions>.hide-category{flex:1;text-align:left;width:auto}
+.delete-listing,.restore-listing{min-height:44px;padding:8px;display:inline-flex;align-items:center;justify-content:center;gap:5px;font-size:12px;flex-shrink:0}
+.delete-listing{color:#a42e35}.delete-listing:hover{color:#761c24;background:#fff2f3;border-radius:8px}
+.restore-listing,.deleted-listing-settings>button{color:var(--blue-dark);min-height:44px}
+.listing-undo>span{min-width:0}.listing-undo small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11px;color:var(--muted);margin-top:3px}

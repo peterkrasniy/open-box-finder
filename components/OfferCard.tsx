@@ -5,20 +5,22 @@ import { pickupDistance } from '../lib/filter.ts';
 import { shippingEligibility } from '../lib/shipping.ts';
 import { conditionLabel, text } from '../lib/i18n.ts';
 import { SOURCE_BY_ID } from '../lib/sources.ts';
+import { DeleteListing, type DeleteListingAction } from './DeleteListing';
+import { offerDismissIdentity } from '../lib/dismissals.ts';
 import { HideCategory, type HideCategoryAction } from './HideCategory';
 import { Icon } from './Icon';
 import { OfferMedia } from './OfferMedia';
 import { Price } from './Price';
 
-export const OfferCard = memo(function OfferCard({ offer, language, filters, now, saved, onSave, onOpen, priority = false, onHide }: {
-  onHide?: HideCategoryAction; offer: Offer; language: Language; filters: Filters; now: number; saved: boolean;
+export const OfferCard = memo(function OfferCard({ offer, language, filters, now, saved, onSave, onOpen, priority = false, onHide, onDelete }: {
+  onDelete?: DeleteListingAction; onHide?: HideCategoryAction; offer: Offer; language: Language; filters: Filters; now: number; saved: boolean;
   onSave: (offer: Offer) => void; onOpen: (offer: Offer) => void; priority?: boolean;
 }) {
   const distance = pickupDistance(offer, filters);
   const shipping = shippingEligibility(offer.shipping, filters.origin);
   const discount = displayDiscount(offer, now);
   const retailer = SOURCE_BY_ID.get(offer.retailerId)?.name ?? SOURCE_BY_ID.get(offer.sourceId)?.name ?? offer.retailerId;
-  return <article className="offer-card" data-category={offer.category} data-listing-key={`offer:${offer.id}`}>
+  return <article className="offer-card" data-category={offer.category} data-dismiss-key={offerDismissIdentity(offer)} data-listing-key={`offer:${offer.id}`}>
     <button type="button" className="media-action" aria-label={`${text(language, 'details')}: ${offer.title}`} onClick={() => onOpen(offer)}><OfferMedia offer={offer} language={language} priority={priority} actionLabel={text(language,'details')}/></button>
     <div className="offer-card-body">
       <div className="offer-source"><span>{retailer}</span><button type="button" className={`icon-button save-button${saved ? ' is-saved' : ''}`} aria-label={`${text(language, saved ? 'unsave' : 'save')}: ${offer.title}`} aria-pressed={saved} onClick={() => onSave(offer)}><Icon name="heart"/></button></div>
@@ -35,7 +37,7 @@ export const OfferCard = memo(function OfferCard({ offer, language, filters, now
         {!offer.pickup?.pickupVerified && !offer.shipping && <p>{text(language, offer.localDelivery ? 'localDelivery' : 'fulfillmentUnknown')}</p>}
       </div>
       <p className={`availability${offer.availability === 'unknown' || !isFresh(offer, now) ? ' muted' : ''}`}>{!isFresh(offer, now) ? text(language, 'stale') : text(language, offer.availability === 'available' ? 'available' : 'unknownStock')}</p>
-      <HideCategory category={offer.category} language={language} onHide={onHide}/>
+      <div className="listing-personal-actions"><HideCategory category={offer.category} language={language} onHide={onHide}/><DeleteListing identity={offerDismissIdentity(offer)} title={offer.title} language={language} onDelete={onDelete}/></div>
       <button type="button" className="detail-action" onClick={() => onOpen(offer)}>{text(language, 'details')}<Icon name="right" size={18}/></button>
     </div>
   </article>;
