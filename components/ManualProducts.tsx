@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { savedIdentity } from '../lib/storage.ts';
 import { conditionLabel, referenceLabel, text } from '../lib/i18n.ts';
 import { Icon } from './Icon';
+import { HideCategory, type HideCategoryAction } from './HideCategory';
 import { RetailerBadge } from './RetailerBadge';
 import { directionsUrl } from '../lib/filter.ts';
 import { SOURCE_BY_ID } from '../lib/sources.ts';
@@ -39,8 +40,8 @@ export function ManualProductVisual({ product, language }: { product: ManualProd
     <figcaption className="manual-photo-caption"><a href={photo.listingUrl} target="_blank" rel="noopener noreferrer">{text(language, 'retailerProductPhoto')} · {SOURCE_BY_ID.get(product.sourceId)?.name ?? product.brand}</a><span>{text(language, 'productPhotoNote')}</span></figcaption>
   </figure>;
 }
-export function ManualProducts({ products, records, filterKey, failedSources, checkFailed, language, now, savedIds, onSave }: {
-  records: readonly ManualProduct[]; filterKey: string; failedSources: readonly string[]; checkFailed: boolean; products: readonly ManualProduct[]; language: Language; now: number; savedIds: ReadonlySet<string>; onSave: (product: ManualProduct) => void;
+export function ManualProducts({ products, records, filterKey, failedSources, checkFailed, language, now, savedIds, onSave, onHide }: {
+  onHide?: HideCategoryAction; records: readonly ManualProduct[]; filterKey: string; failedSources: readonly string[]; checkFailed: boolean; products: readonly ManualProduct[]; language: Language; now: number; savedIds: ReadonlySet<string>; onSave: (product: ManualProduct) => void;
 }) {
   const [page, setPage] = useState({ filterKey, count: 24 });
   const count = page.filterKey === filterKey ? page.count : 24;
@@ -50,13 +51,14 @@ export function ManualProducts({ products, records, filterKey, failedSources, ch
     <div className="manual-product-grid">{products.slice(0, count).map(product => {
       const pointer = manualSavedPointer(product, now, records), saved = pointer ? savedIds.has(savedIdentity(pointer)) : false;
       const title = `${product.brand} ${product.model}`;
-      return <article className="manual-product-card" key={`${product.sourceId}:${product.id}`} data-product-key={product.productKey}>
+      return <article className="manual-product-card" key={`${product.sourceId}:${product.id}`} data-product-key={product.productKey} data-category={product.category} data-listing-key={`manual:${product.sourceId}:${product.id}`}>
         <div className="manual-card-top"><RetailerBadge sourceId={product.sourceId}/><button type="button" className="manual-save" aria-label={`${text(language, saved ? 'unsave' : 'save')}: ${title}`} aria-pressed={saved} onClick={() => onSave(product)}><Icon name="bookmark" size={21}/></button></div>
         <h3><a href={product.url} target="_blank" rel="noopener noreferrer">{product.brand} {product.model}</a></h3>
         <ManualProductVisual key={product.image.url} product={product} language={language}/>
         {failedSources.includes(product.sourceId) && <p className="notice">{language === 'ru' ? 'Последняя проверка магазина не удалась. Данные ниже — из предыдущей проверки.' : 'Latest retailer check failed. Details below are from the previous check.'}</p>}
         <ManualProductFacts product={product} language={language} now={now}/>
         <a className="manual-retailer" href={product.url} target="_blank" rel="noopener noreferrer">{text(language, 'viewProductAtRetailer')}<Icon name="external" size={17}/></a>
+        <HideCategory category={product.category} language={language} onHide={onHide}/>
       </article>;
     })}</div>
     {products.length > count && <button type="button" className="secondary-button show-more" onClick={() => setPage({ filterKey, count: count + 24 })}>{text(language, 'showMore')} · {Math.min(count, products.length)} / {products.length}</button>}

@@ -5,6 +5,8 @@ import type { Preferences, SavedListing, StorageLike } from '../lib/storage.ts';
 import { defaultPreferences, PREFERENCES_KEY, readStorage, SAVED_KEY, savedIdentity, savedPointer, writePreferences, writeSavedEntry, readSavedEntries, SAVED_ENTRY_PREFIX,compactSavedTombstones } from '../lib/storage.ts';
 import {openSavedGuard,withSavedGuard} from '../lib/saved-guard.ts';
 import { manualSavedPointer } from '../lib/manual-products.ts';
+import { resaleSavedPointer } from '../lib/resale.ts';
+import type { ResaleListing } from '../lib/resale.ts';
 import type { ManualProduct } from '../lib/manual-products.ts';
 
 export function usePreferences() {
@@ -79,5 +81,11 @@ export function usePreferences() {
     if (!pointer) { setSaveError('saveUnavailable'); return; }
     void mutateEntry(savedIdentity(pointer), pointer, true);
   }, [mutateEntry]);
-  return { preferences, setPreferences, saved, ready, storageAvailable, saveError, toggleSaved, toggleManualSaved, removeSaved };
+  const toggleResaleSaved = useCallback((listing: ResaleListing, now: number, records?: readonly ResaleListing[]) => {
+    setSaveError(null);
+    const pointer = resaleSavedPointer(listing, now, records);
+    if (!pointer) { setSaveError('saveUnavailable'); return; }
+    void mutateEntry(savedIdentity(pointer), pointer, true);
+  }, [mutateEntry]);
+  return { preferences, setPreferences, saved, ready, storageAvailable, saveError, toggleSaved, toggleManualSaved, toggleResaleSaved, removeSaved };
 }

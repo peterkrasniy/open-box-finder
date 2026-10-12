@@ -1,16 +1,16 @@
-export interface AppRoute { view: 'deals' | 'saved'; offerId: string | null; panel: 'filters' | 'location' | null; offerIdentity?: string | null }
+export interface AppRoute { view: 'deals' | 'resale' | 'saved'; offerId: string | null; panel: 'filters' | 'location' | null; offerIdentity?: string | null }
 export function readRoute(url: string): AppRoute {
   const params = new URL(url).searchParams;
   const candidate = params.get('offer');
   const panel = params.get('panel');
-  return { view: params.get('view') === 'saved' ? 'saved' : 'deals',
+  return { view: params.get('view') === 'saved' ? 'saved' : params.get('view') === 'resale' ? 'resale' : 'deals',
     offerId: candidate && candidate.length <= 200 && !/[\u0000-\u0020]/.test(candidate) ? candidate : null,
     offerIdentity: candidate && (params.get('unit')?.length ?? 0) <= 1500 ? params.get('unit') : null,
     panel: candidate ? null : panel === 'filters' || panel === 'location' ? panel : null };
 }
 export function routeUrl(route: AppRoute): string {
   const params = new URLSearchParams();
-  if (route.view === 'saved') params.set('view', 'saved');
+  if (route.view !== 'deals') params.set('view', route.view);
   if (route.offerId) { params.set('offer', route.offerId); if (route.offerIdentity) params.set('unit', route.offerIdentity); }
   else if (route.panel) params.set('panel', route.panel);
   return `/${params.size ? `?${params}` : ''}`;

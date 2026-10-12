@@ -92,6 +92,6 @@ export function manualSavedPointer(product: ManualProduct, now: number, records:
   const reviewed = records.find(item => item.id === product.id && item.sourceId === product.sourceId);
   if (!reviewed || reviewed.url !== product.url || !manualProductActive(reviewed, now)) return null;
   return { offerId: `manual:${reviewed.id}`, sourceId: reviewed.sourceId, sourceOfferId: reviewed.id,
-    variantKey: reviewed.id, condition: reviewed.condition, storeId: reviewed.pickup?.id ?? null, url: reviewed.url,
+    variantKey: reviewed.id, condition: reviewed.condition, category: reviewed.category, storeId: reviewed.pickup?.id ?? null, url: reviewed.url,
     title: `${reviewed.brand} ${reviewed.model}`, savedAt: new Date(now).toISOString() };
 }

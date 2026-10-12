@@ -1,7 +1,7 @@
 import { US_STATES } from './shipping.ts';
 import { CATEGORIES } from './i18n.ts';
 import { DEFAULT_FILTERS } from './offer.ts';
-import type { Filters, Language, Offer, Selection, Sort } from './offer.ts';
+import type { Category, Filters, Language, Offer, Selection, Sort } from './offer.ts';
 import { validCents } from './offer.ts';
 import { validPoint } from './filter.ts';
 import { validateRange } from './money.ts';
@@ -10,11 +10,11 @@ import { SOURCE_BY_ID } from './sources.ts';
 export const PREFERENCES_KEY = 'open-box-finder:preferences:v1';
 export const SAVED_KEY = 'open-box-finder:saved:v1';
 export const SAVED_ENTRY_PREFIX = 'open-box-finder:saved:v2:';
-export interface Preferences { version: 1; language: Language; filters: Filters; sort: Sort }
+export interface Preferences { version: 1; language: Language; filters: Filters; sort: Sort; hiddenCategories?: Category[]; resalePlatform?: 'all' | 'craigslist' | 'facebook' | 'offerup' }
 /** Store only identity/link pointers; price, image and offer payload are not cached. */
 export interface SavedListing {
   offerId: string; sourceId: string; variantKey: string; storeId: string | null; url: string; savedAt: string;
-  sourceOfferId?: string; condition?: Offer['condition']; title?: string; savedAgainstSequence?: number;
+  sourceOfferId?: string; condition?: Offer['condition']; title?: string; savedAgainstSequence?: number; category?: Category;
 }
 export function savedIdentity(record: Pick<SavedListing, 'offerId' | 'sourceId' | 'variantKey' | 'storeId' | 'sourceOfferId' | 'condition'>): string {
   return JSON.stringify([record.offerId, record.sourceId, record.sourceOfferId ?? null, record.variantKey, record.storeId, record.condition ?? null]);
@@ -27,7 +27,7 @@ const plain = (value: unknown): value is Record<string, unknown> => Boolean(valu
 const smallText = (value: unknown, max: number): value is string => typeof value === 'string' && value.length <= max && !/[\u0000-\u001f]/.test(value);
 
 export function defaultPreferences(): Preferences {
-  return { version: 1, language: 'en', filters: structuredClone(DEFAULT_FILTERS), sort: 'percent' };
+  return { version: 1, language: 'en', filters: structuredClone(DEFAULT_FILTERS), sort: 'percent', hiddenCategories: [], resalePlatform: 'all' };
 }
 
 function selection(value: unknown, allowed: Set<string>): Selection | null {
@@ -55,6 +55,8 @@ export function decodePreferences(raw: string | null): Preferences {
       || !(f.minCents === null || validCents(f.minCents)) || !(f.maxCents === null || validCents(f.maxCents))
       || validateRange(f.minCents as number | null, f.maxCents as number | null)) return fallback;
     return { version: 1, language: value.language as Language, sort: value.sort as Sort,
+      resalePlatform: ['craigslist', 'facebook', 'offerup'].includes(String(value.resalePlatform)) ? value.resalePlatform as 'craigslist' | 'facebook' | 'offerup' : 'all',
+      hiddenCategories: Array.isArray(value.hiddenCategories) ? [...new Set(value.hiddenCategories.filter((category): category is Category => typeof category === 'string' && CATEGORIES.includes(category as Category)))] : [],
       filters: { retailers, categories, query: f.query, fulfillment: f.fulfillment as Filters['fulfillment'],
         origin: { label: f.origin.label, latitude: f.origin.latitude, longitude: f.origin.longitude, shippingState: typeof f.origin.shippingState === 'string' && US_STATES.has(f.origin.shippingState) ? f.origin.shippingState : null },
         radiusMiles: f.radiusMiles, minCents: f.minCents as number | null, maxCents: f.maxCents as number | null } };
@@ -80,6 +82,9 @@ export function savedSourceUrl(sourceId: string, value: unknown): string | null 
   try {
     const parsed = new URL(url);
     if (parsed.origin !== new URL(source.website).origin && !source.additionalOrigins?.includes(parsed.origin)) return null;
+    if (sourceId === 'craigslist-resale') return /^\/view\/d\/[^/]+\/[A-Za-z0-9]+\/?$/.test(parsed.pathname) || /^\/[^/]+\/d\/[^/]+\/\d+\.html$/.test(parsed.pathname) ? url : null;
+    if (sourceId === 'facebook-resale') return /^\/marketplace\/item\/\d+\/?$/.test(parsed.pathname) ? url : null;
+    if (sourceId === 'offerup-resale') return /^\/item\/detail\/[A-Za-z0-9-]+\/?$/.test(parsed.pathname) ? url : null;
     if (sourceId === 'newegg-manual') return /^\/(?:[^/]+\/)?p\/[A-Za-z0-9-]+\/?$/.test(parsed.pathname) ? url : null;
     if (sourceId === 'best-buy' && /^\/product\/[^/]+\/(?:[A-Za-z0-9]+\/sku\/)?\d+\/openbox\/?$/.test(parsed.pathname)) return url;
     const prefixes: Record<string, string> = { 'nintendo-manual': '/us/store/products/', 'kitchenaid-manual': '/countertop-appliances/', 'canon-manual': '/shop/p/', 'logitech-manual': '/en-us/shop/p/', 'roborock-manual': '/products/', 'cuckoo-manual': '/collections/certified-renewed/products/', 'epson-manual': '/Certified-ReNew/', 'vitamix-manual': '/us/en_us/shop/certified-reconditioned-series/', 'target-manual': '/p/', 'dyson-manual': '/outlet/refurbished-', 'direct-tools-manual': '/products/', 'sennheiser-manual': '/collections/refurbished-by-sennheiser/products/', 'a4l-sac': '/p/', 'buydig': '/shop/product/', 'blues-appliance': '/collections/', 'outdoor-speaker-depot': '/', 'best-buy': '/site/' };
@@ -98,7 +103,7 @@ export function decodeSaved(raw: string | null): SavedListing[] {
         || !smallText(record.variantKey, 200) || !record.variantKey || !(record.storeId === null || smallText(record.storeId, 160))
         || !smallText(record.savedAt, 40) || !Number.isFinite(Date.parse(record.savedAt))) continue;
       const url = savedSourceUrl(record.sourceId, record.url);
-      const metadata = { ...(smallText(record.sourceOfferId, 200) && record.sourceOfferId ? { sourceOfferId: record.sourceOfferId } : {}),
+      const metadata = { ...(typeof record.category === 'string' && CATEGORIES.includes(record.category as Category) ? { category: record.category as Category } : {}), ...(smallText(record.sourceOfferId, 200) && record.sourceOfferId ? { sourceOfferId: record.sourceOfferId } : {}),
         ...(['open-box', 'refurbished', 'used', 'scratch-and-dent', 'new-clearance', 'unspecified'].includes(String(record.condition)) ? { condition: record.condition as Offer['condition'] } : {}),
         ...(smallText(record.title, 240) && record.title ? { title: record.title } : {}),
         ...(typeof record.savedAgainstSequence === 'number' && Number.isSafeInteger(record.savedAgainstSequence) && record.savedAgainstSequence >= 0 ? { savedAgainstSequence: record.savedAgainstSequence } : {}) };
@@ -115,7 +120,7 @@ export function savedPointer(offer: Offer, now: number, sequence = 0): SavedList
   // Shopify's no-cache permission is unverified; do not persist even a pointer through this path.
   if (offer.sourceId === 'shopify-catalog' || !SOURCE_BY_ID.has(offer.sourceId) || !Number.isFinite(now)) return null;
   const url = savedSourceUrl(offer.sourceId, offer.url);
-  return url ? { offerId: offer.id, sourceId: offer.sourceId, variantKey: offer.variantKey, storeId: offer.pickup?.id ?? null, url, savedAt: new Date(now).toISOString(), sourceOfferId: offer.sourceOfferId, condition: offer.condition, title: offer.title, savedAgainstSequence: sequence } : null;
+  return url ? { offerId: offer.id, sourceId: offer.sourceId, variantKey: offer.variantKey, storeId: offer.pickup?.id ?? null, url, savedAt: new Date(now).toISOString(), sourceOfferId: offer.sourceOfferId, condition: offer.condition, category: offer.category, title: offer.title, savedAgainstSequence: sequence } : null;
 }
 
 export function readStorage(store: StorageLike | null): { preferences: Preferences; saved: SavedListing[]; available: boolean } {

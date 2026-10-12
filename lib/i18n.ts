@@ -1,7 +1,7 @@
 import type { Category, Condition, Language, ReferenceBasis, Sort } from './offer.ts';
 
 const en = {
-  brand: 'Open Box Finder', deals: 'Deals', saved: 'Saved', search: 'Search deals', searchHint: 'Product, brand, or keyword',
+  brand: 'Open Box Finder', deals: 'Deals', resale: 'Resale', saved: 'Saved', search: 'Search deals', searchHint: 'Product, brand, or keyword',
   editorialDeals: 'Deals from DealNews', editorialHelp: 'Original editorial listings. Feed membership does not verify current price or stock. Inventory filters and deal sorting do not apply to this section.', providedBy: 'Provided by', sourceDescription:'Source description',sourceFullContent:'Full source content',
   filtersChanged: 'Filters changed in another tab. Choose which to keep.', useUpdatedFilters: 'Use updated filters', keepMyEdits: 'Keep my edits', sourcesReady: 'Checked', sourcesAttention: 'Needs attention', sourcesDisconnected: 'Not connected', partialCatalog: 'Partial catalog check', sourceCoverage: 'Source coverage and check status',
   filters: 'Filters', sort: 'Sort', all: 'All', clear: 'Clear', retailers: 'Retailers', categories: 'Categories',
@@ -20,6 +20,7 @@ const en = {
   communityLinks: 'Community discussion', communityLinksHelp: 'A link to a posted discussion. Current price and stock are unverified.',
   outboundNotice: 'Links open another website. They are not listings and do not use your inventory filters.',
   manualProducts: 'Manually reviewed products',
+  hideCategory: 'Hide this category', undo: 'Undo', hiddenCategories: 'Hidden categories', restore: 'Restore', restoreAll: 'Restore all',
   manualProductsHelp: 'Manually checked retailer pages, not automatic inventory feeds. Prices and stock may change; confirm delivery and fees. Only clearly labeled references affect savings sorting.',
   observedInStock: 'Available when checked · confirm current stock', referenceSavings: 'Compared with this retailer reference', pickupNotVerified: 'Pickup not verified', manualOnly: 'Manual check', certifiedRefurbished: 'Certified refurbished', observedPrice: 'Observed page price',
   observedNewModel: 'New model price · observed', sameNewPrice: 'same price as refurbished',
@@ -63,7 +64,7 @@ const en = {
 } as const;
 
 const ru: Record<keyof typeof en, string> = {
-  brand: 'Open Box Finder', deals: 'Предложения', saved: 'Сохранённое', search: 'Поиск предложений', searchHint: 'Товар, бренд или слово',
+  brand: 'Open Box Finder', deals: 'Предложения', resale: 'Перепродажа', saved: 'Сохранённое', search: 'Поиск предложений', searchHint: 'Товар, бренд или слово',
   editorialDeals: 'Предложения от DealNews', editorialHelp: 'Исходные редакционные объявления. Публикация в ленте не подтверждает текущую цену или наличие. Фильтры наличия и сортировка скидок не применяются к этому разделу.', providedBy: 'Источник:', sourceDescription:'Описание источника',sourceFullContent:'Полный текст источника',
   filtersChanged: 'Фильтры изменены в другой вкладке. Выберите, какие сохранить.', useUpdatedFilters: 'Использовать новые фильтры', keepMyEdits: 'Сохранить мои правки', sourcesReady: 'Проверено', sourcesAttention: 'Требуют проверки', sourcesDisconnected: 'Не подключено', partialCatalog: 'Проверена часть каталога', sourceCoverage: 'Источники и состояние проверок',
   filters: 'Фильтры', sort: 'Сортировка', all: 'Все', clear: 'Очистить', retailers: 'Магазины', categories: 'Категории',
@@ -82,6 +83,7 @@ const ru: Record<keyof typeof en, string> = {
   communityLinks: 'Обсуждение сообщества', communityLinksHelp: 'Ссылка на опубликованное обсуждение. Актуальные цена и наличие не проверены.',
   outboundNotice: 'Ссылки открывают другой сайт. Это не каталог товаров; фильтры каталога к ним не применяются.',
   manualProducts: 'Товары с ручной проверкой',
+  hideCategory: 'Скрыть эту категорию', undo: 'Отменить', hiddenCategories: 'Скрытые категории', restore: 'Показать', restoreAll: 'Показать все',
   manualProductsHelp: 'Страницы магазинов проверены вручную, не автоматические каталоги. Цены и наличие могут измениться; уточните доставку и сборы. Сортировка экономии учитывает только цены с явным основанием.',
   observedInStock: 'Был в наличии при проверке · уточните текущее наличие', referenceSavings: 'В сравнении с этой ценой магазина', pickupNotVerified: 'Самовывоз не подтверждён', manualOnly: 'Ручная проверка', certifiedRefurbished: 'Сертифицированный восстановленный товар', observedPrice: 'Цена на просмотренной странице',
   observedNewModel: 'Цена новой модели · при проверке', sameNewPrice: 'та же цена, что у восстановленного',

@@ -25,14 +25,14 @@ export function useRoute() {
     const state=history.state&&typeof history.state==='object'?history.state:{};
     if(!state.openBoxFinder)history.replaceState({...state,openBoxFinder:{depth:0,scrollY:window.scrollY}},'',window.location.href);
   },[]);
-  const navigate=useCallback((next:AppRoute,replace=false)=>{
+  const navigate=useCallback((next:AppRoute,replace=false,preserveScroll=false)=>{
     if(closing.current)return;
     const previous=history.state&&typeof history.state==='object'?history.state:{},depth=historyDepth(previous);
     history.replaceState({...previous,openBoxFinder:{depth,scrollY:window.scrollY}},'',window.location.href);
     const value={...previous,openBoxFinder:{depth:replace?depth:depth+1,scrollY:window.scrollY}};
     if(replace)history.replaceState(value,'',routeUrl(next));else history.pushState(value,'',routeUrl(next));
     window.dispatchEvent(new Event(ROUTE_EVENT));
-    if(!next.offerId&&!next.panel)requestAnimationFrame(()=>window.scrollTo(0,0));
+    if(!next.offerId&&!next.panel&&!preserveScroll)requestAnimationFrame(()=>window.scrollTo(0,0));
   },[]);
   const dismiss=useCallback(()=>{
     if(closing.current)return;

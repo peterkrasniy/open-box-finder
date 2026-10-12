@@ -1,6 +1,6 @@
 # Offline checked-product refresh
 
-The authorized parent agent performs two refresh runs per day. The parent controls the scheduled times and timezone, collection permissions, repository synchronization, and the existing owner-private deployment. This command consumes checked observations from a JSON file. It does not collect retailer pages, schedule itself, enable an inventory adapter, or call an administration endpoint.
+The authorized parent agent performs retailer refresh runs at **8:00 a.m. and 8:00 p.m. Pacific daily**, using `America/Los_Angeles` so daylight-saving changes follow local Pacific time. A separate parent-controlled three-marketplace scan runs at **8:00 a.m. Pacific daily**. These schedules are configured outside Sites. The parent owns collection permissions, repository synchronization, and the existing owner-private deployment. This command consumes checked observations from a JSON file. It does not collect retailer pages, schedule itself, enable an inventory adapter, or call an administration endpoint.
 
 ## Parent procedure for each run
 
@@ -12,7 +12,7 @@ The authorized parent agent performs two refresh runs per day. The parent contro
 6. Apply the reviewed local batch with `--apply`. Run the focused refresh tests plus the repository's applicable validation. The parent then synchronizes the exact reviewed revision and uses the established deployment workflow to update the existing owner-private site. This CLI does not publish or modify audience settings. Check the hosted result and existing saved links after deployment; preserve private audience, profiles, device saves, and private research evidence.
 7. Retain the factual, permission, completeness, and photo-verification evidence privately with its check timestamps. Never place customer identities, profile/location data, credentials, request headers, copied page payloads, or private research traces in the checked-product batch or public catalog/history. The structural whitelist rejects additional fields; accepted factual text still requires the parent's privacy review.
 
-No scheduled automation is installed by this implementation. Configure the two daily parent runs through the parent's authorized scheduling workflow. A scheduler alone grants no new retailer permission or deployment access.
+The parent has configured those daily schedules outside Sites; this implementation creates no additional automation. A scheduler alone grants no new retailer permission or deployment access. Neither schedule runs retailer acquisition inside Sites.
 
 ## Command and batch contract
 
@@ -77,7 +77,16 @@ The subsequent update imports 16 additional distinct offers: seven KitchenAid, t
 
 The published endpoint keeps v20's source schema for already-open v20 pages; the current client requests schema 2. Those older pages keep receiving updates to their supported sources rather than rejecting a catalog containing unknown newly-added retailer types. A frontend release that adds new retailer types or controls still needs the updated client page; ordinary future checked-product updates within its supported sources appear without reload.
 
-Dated behavioral tests use fixed checked-evidence fixtures so legitimate new observation dates or prices do not rewrite their historical assertions. The separate published-catalog gate uses the actual current clock and requires at least 100 available, unexpired distinct products. A depleted or expired catalog fails that publication gate; the refresh agent must report the limit instead of inventing availability.
+Dated behavioral tests use fixed checked-evidence fixtures so legitimate new observation dates or prices do not rewrite their historical assertions. Routine `npm test` checks the retained catalog's structural safety and unique identities independently of current availability or a numeric target. Expiry, failed checks, confirmed unavailability, and honest archive/removal publications must remain publishable even when the current count falls below 100.
+
+The separate read-only target check uses the actual current clock:
+
+```sh
+node scripts/verify-manual-catalog.mjs --minimum 100
+node scripts/verify-manual-catalog.mjs --minimum 100 --require-minimum
+```
+
+It validates the raw stored records and reports the unique active, observed-available product count, target status, shortfall, and excluded expired/archived/unavailable observations. The first command reports a shortfall with a successful exit when the records are structurally valid. `--require-minimum` exits 1 below target for an explicit completion qualification; it is not a routine publication gate. Neither command collects source data, writes files, renews timestamps, or changes stock. `--records FILE` can inspect a separate local JSON array. Report a depleted or expired catalog honestly and publish necessary removals rather than retaining invalid availability to satisfy the target.
 
 
 Nine further Best Buy priority offers add microwaves, a dryer, a cooler, gaming hardware, a tablet, and cameras. They retain ZIP 95628 shipping or the exact named pickup store. Official new address evidence: [Elk Grove](https://stores.bestbuy.com/ca/elk-grove.html), [Auburn](https://stores.bestbuy.com/ca/auburn.html), and [Arden Fair](https://stores.bestbuy.com/ca/sacramento.html). Displayed previous-browser distances are omitted. Fair-condition cards disclose that parts may be missing and exact completeness is unverified. Eleven distant pickup candidates remain held; they are not needed to inflate the available-product count.

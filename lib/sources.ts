@@ -35,4 +35,9 @@ export const SOURCES: readonly SourceDefinition[] = [
   { id: 'shopify-catalog', name: 'Shopify Catalog', website: 'https://shopify.dev/docs/agents/catalog/global-catalog', catalogUrl: 'https://shopify.dev/docs/agents/catalog/global-catalog', admission: 'credentials-required', enabled: false, presentation: 'normalized-inventory' },
 ];
 
-export const SOURCE_BY_ID = new Map(SOURCES.map(source => [source.id, source]));
+export const RESALE_SOURCES: readonly SourceDefinition[] = [
+  { id: 'craigslist-resale', name: 'Craigslist', website: 'https://www.craigslist.org/', additionalOrigins: ['https://sacramento.craigslist.org'], catalogUrl: null, admission: 'manual-only', enabled: false, presentation: 'manual-curation' },
+  { id: 'facebook-resale', name: 'Facebook Marketplace', website: 'https://www.facebook.com/', catalogUrl: null, admission: 'manual-only', enabled: false, presentation: 'manual-curation' },
+  { id: 'offerup-resale', name: 'OfferUp', website: 'https://offerup.com/', catalogUrl: null, admission: 'manual-only', enabled: false, presentation: 'manual-curation' },
+];
+export const SOURCE_BY_ID = new Map([...SOURCES, ...RESALE_SOURCES].map(source => [source.id, source]));

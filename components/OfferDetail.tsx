@@ -6,12 +6,13 @@ import { conditionLabel, text } from '../lib/i18n.ts';
 import { formatPrice } from '../lib/money.ts';
 import { safeExternalUrl } from '../lib/storage.ts';
 import { SOURCE_BY_ID } from '../lib/sources.ts';
+import { HideCategory, type HideCategoryAction } from './HideCategory';
 import { Icon } from './Icon';
 import { OfferMedia } from './OfferMedia';
 import { Price } from './Price';
 
-export function OfferDetail({ offer, language, now, saved, onSave, onBack, savedView, origin, loading }: {
-  offer: Offer | null; language: Language; now: number; saved: boolean; onSave: (offer: Offer) => void; onBack: () => void; savedView: boolean; origin: Origin; loading: boolean;
+export function OfferDetail({ offer, language, now, saved, onSave, onBack, savedView, origin, loading, onHide }: {
+  onHide?: HideCategoryAction; offer: Offer | null; language: Language; now: number; saved: boolean; onSave: (offer: Offer) => void; onBack: () => void; savedView: boolean; origin: Origin; loading: boolean;
 }) {
   if (!offer) return <div className="detail-missing"><h3>{text(language, loading ? 'checkingListing' : 'listingUnmatched')}</h3><p>{text(language, 'listingUnmatchedHelp')}</p><button type="button" className="secondary-button" onClick={onBack}>{text(language, savedView ? 'backSaved' : 'back')}</button></div>;
   const retailer = SOURCE_BY_ID.get(offer.retailerId)?.name ?? SOURCE_BY_ID.get(offer.sourceId)?.name ?? offer.retailerId;
@@ -31,6 +32,7 @@ export function OfferDetail({ offer, language, now, saved, onSave, onBack, saved
         {!offer.pickup?.pickupVerified && !offer.shipping && !offer.localDelivery && <p className="muted">{text(language, 'fulfillmentUnknown')}</p>}
         <div className="detail-actions">{url && <a className="primary-button" href={url} target="_blank" rel="noopener noreferrer">{text(language, 'openRetailer')}<Icon name="external" size={18}/></a>}<button type="button" className="secondary-button" aria-pressed={saved} onClick={() => onSave(offer)}><Icon name="heart" size={19}/>{text(language, saved ? 'unsave' : 'save')}</button></div>
         <p className="muted small">{text(language, 'checked')}: <time dateTime={offer.observedAt}>{Number.isFinite(observed.getTime()) ? new Intl.DateTimeFormat(language === 'ru' ? 'ru-RU' : 'en-US', { dateStyle: 'medium', timeStyle: 'short' }).format(observed) : text(language, 'neverChecked')}</time></p>
+        <HideCategory category={offer.category} language={language} onHide={onHide}/>
         <dl className="identity-details"><dt>{text(language, 'variant')}</dt><dd>{offer.variantKey}</dd><dt>{text(language, 'sourceListing')}</dt><dd>{offer.sourceOfferId}</dd></dl>
       </div>
     </div>

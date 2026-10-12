@@ -1,0 +1,383 @@
+[
+  {
+    "id": "cl-7977804363",
+    "sourceId": "craigslist-resale",
+    "platform": "craigslist",
+    "title": {
+      "en": "Bose Wave Music System IV with remote · label pending",
+      "ru": "Bose Wave Music System IV с пультом · модель надо проверить"
+    },
+    "category": "audio",
+    "currency": "USD",
+    "url": "https://www.craigslist.org/view/d/sacramento-bose-wave-music-system-iv/m41Vp51GLyNyjKDPXCxWoa",
+    "photos": [
+      {
+        "url": "https://images.craigslist.org/00808_lIfUC4J3JcU_0CI0t2_600x450.jpg",
+        "alt": {
+          "en": "Bose system in the public Craigslist seller photo",
+          "ru": "Система Bose на публичном фото продавца Craigslist"
+        }
+      },
+      {
+        "url": "https://images.craigslist.org/00X0X_jLPH6jGIUWb_0t20CI_600x450.jpg",
+        "alt": {
+          "en": "Second seller photo of the Bose system and included items",
+          "ru": "Второе фото системы Bose и комплекта от продавца"
+        }
+      }
+    ],
+    "askingCents": 15000,
+    "resaleLowCents": 22500,
+    "resaleHighCents": 27500,
+    "reserveCents": 2500,
+    "location": "Sacramento · Pocket–Greenhaven (approximate)",
+    "checkedAt": "2026-10-12T04:55:00Z",
+    "status": "inspect-first",
+    "exactMatchCount": 0,
+    "comparisonStatus": "pending",
+    "notes": {
+      "en": "Seller asks $150 and describes almost-new condition, remote included, no box. System IV label and CD operation remain unproven. Strongest inspection lead if every test passes; no deposit. Public listing observed, seller availability unconfirmed. Local-cash estimate deducts $25 for pickup, cleaning and consumables; before income tax and labor, with no guarantee.",
+      "ru": "Продавец просит $150, заявляет почти новое состояние, пульт в комплекте, коробки нет. Модель IV и работа CD ещё не подтверждены. Самый сильный кандидат на осмотр, если пройдёт все проверки; без предоплаты. Объявление просмотрено, наличие у продавца не подтверждено. Из оценки наличной перепродажи вычтены $25 на дорогу, чистку и расходники; налог и труд не учтены, гарантии нет."
+    },
+    "dimensions": {
+      "en": "Approx. 14.6 W × 8.7 D × 4.2 H in. Check the actual unit and vehicle; Tesla model unknown, fit unconfirmed.",
+      "ru": "Около 14,6 × 8,7 × 4,2 дюйма (Ш×Г×В). Измерьте устройство и машину; модель Tesla неизвестна, размещение не подтверждено."
+    },
+    "tests": [
+      {
+        "en": "Verify rear label 417788-WMS and System IV identity; inspect odor and damage.",
+        "ru": "Проверьте задний шильдик 417788-WMS и модель IV; оцените запах и повреждения."
+      },
+      {
+        "en": "Cold boot; play a store-bought CD for 10 minutes including first and last tracks; eject twice.",
+        "ru": "Запустите холодное устройство; проиграйте заводской CD 10 минут, включая первый и последний треки; дважды извлеките диск."
+      },
+      {
+        "en": "Test FM, AUX, both speakers and every essential remote control function. Pay only after inspection.",
+        "ru": "Проверьте FM, AUX, оба динамика и основные функции пульта. Платите только после осмотра."
+      }
+    ],
+    "soldComparisons": [
+      {
+        "url": "https://www.ebay.com/itm/257649625423",
+        "amountCents": 25000,
+        "shippingCents": null,
+        "soldAt": "Aug 3",
+        "basis": "sold",
+        "confidence": "related",
+        "notes": {
+          "en": "Observed sold price $250. Local unit's label, CD function, condition and exact bundle remain pending; shipping amount unverified.",
+          "ru": "Наблюдаемая цена продажи $250. Шильдик, CD, состояние и точный комплект местного устройства ещё надо проверить; доставка неизвестна."
+        }
+      },
+      {
+        "url": "https://www.ebay.com/itm/198676663745",
+        "amountCents": 26000,
+        "shippingCents": null,
+        "soldAt": "Sep 30",
+        "basis": "sold",
+        "confidence": "related",
+        "notes": {
+          "en": "Observed sold price $260; related model evidence, not a verified exact local match.",
+          "ru": "Наблюдаемая цена продажи $260; сравнение по родственной модели, а не подтверждённое точное совпадение."
+        }
+      },
+      {
+        "url": "https://www.ebay.com/itm/157731136802",
+        "amountCents": 31514,
+        "shippingCents": null,
+        "soldAt": "Sep 14",
+        "basis": "sold",
+        "confidence": "related",
+        "notes": {
+          "en": "Observed $315.14 sold example with remote; exact condition/bundle comparability still pending.",
+          "ru": "Проданный пример с пультом за $315,14; совпадение состояния и комплекта ещё не подтверждено."
+        }
+      }
+    ],
+    "facebookComparisons": [
+      {
+        "url": "https://www.facebook.com/marketplace/item/854019113637909/",
+        "askingCents": 24000,
+        "location": "Vallejo",
+        "checkedAt": "2026-10-12T05:11:00Z",
+        "match": "regional",
+        "notes": {
+          "en": "Regional related asking price $240, described like new. Not a sold price, not Sacramento-local, and not a matched average.",
+          "ru": "Региональная цена предложения $240, заявлено состояние как новое. Это не продажа, не местный пример из Sacramento и не средняя точных аналогов."
+        }
+      }
+    ],
+    "newPriceReference": {
+      "url": "https://assets.bose.com/content/dam/Bose_DAM/Web/consumer_electronics/global/content_pages/corporate/premiums_incentives/pdf/CC018936_Catalog_ENG_US_FINAL.pdf",
+      "cents": 49900,
+      "basis": "historical-catalog",
+      "notes": {
+        "en": "Bose Spring 2017 catalog price $499; historical context only, not a current-new price or present savings claim.",
+        "ru": "Цена $499 из каталога Bose весны 2017 года; только исторический контекст, не текущая цена нового товара и не заявленная сегодняшняя скидка."
+      }
+    }
+  },
+  {
+    "id": "cl-7974744564",
+    "sourceId": "craigslist-resale",
+    "platform": "craigslist",
+    "title": {
+      "en": "Breville Barista Touch · likely BES880, label pending",
+      "ru": "Breville Barista Touch · вероятно BES880, шильдик не проверен"
+    },
+    "category": "appliances",
+    "currency": "USD",
+    "url": "https://www.craigslist.org/view/d/sacramento-breville-barista-touch/smXNZNzohT2aSvgw9F7m4e",
+    "photos": [
+      {
+        "url": "https://images.craigslist.org/00H0H_jfUNN84WUvX_0fa0kE_600x450.jpg",
+        "alt": {
+          "en": "Seller photo of touchscreen Breville machine, portafilter, pitcher and baskets",
+          "ru": "Фото кофемашины Breville с сенсорным экраном, холдером, питчером и корзинами от продавца"
+        }
+      }
+    ],
+    "askingCents": 20000,
+    "resaleLowCents": 35000,
+    "resaleHighCents": 42500,
+    "reserveCents": 5000,
+    "location": "Sacramento",
+    "checkedAt": "2026-10-12T04:55:00Z",
+    "status": "hold",
+    "exactMatchCount": 0,
+    "comparisonStatus": "pending",
+    "notes": {
+      "en": "$200 asking, negotiable. Seller title says Impress, but the single photo shows a touchscreen and no Impress tamp lever; likely ordinary Barista Touch BES880, unverified. Portafilter, pitcher and baskets are visible. Low asking price, title conflict and one photo warrant ownership and full function checks; no deposit or purchase before testing. $50 reserve covers pickup, cleaning and consumables; estimate before income tax and labor, with no guarantee. Seller requested an advance deposit; pickup remains unconfirmed. Do not pay before in-person inspection. This is not proof of fraud, but lowers confidence.",
+      "ru": "Продавец просит $200, возможен торг. В заголовке указано Impress, но на единственном фото виден сенсорный экран и нет рычага трамбовки Impress; вероятно обычная Barista Touch BES880, пока не подтверждено. Видны холдер, питчер и корзины. Низкая цена, ошибка в заголовке и одно фото требуют проверки владельца и всех функций; без предоплаты и покупки до теста. Резерв $50 — на дорогу, чистку и расходники; налог и труд не учтены, гарантии нет. Продавец запросил предварительный задаток; возможность встречи не подтверждена. Не платите до личного осмотра. Это не доказывает мошенничество, но снижает доверие."
+    },
+    "dimensions": {
+      "en": "BES880 reference: approx. 15.7 × 12.6 × 12.4 in, 21.8 lb. Verify model and dimensions; transport upright. Vehicle fit unconfirmed.",
+      "ru": "Ориентир для BES880: около 15,7 × 12,6 × 12,4 дюйма, 21,8 фунта. Проверьте модель и размеры; перевозите вертикально. Размещение в машине не подтверждено."
+    },
+    "tests": [
+      {
+        "en": "Confirm BES880 label, ownership and complete accessories. No deposit.",
+        "ru": "Проверьте шильдик BES880, владельца и комплект аксессуаров. Без предоплаты."
+      },
+      {
+        "en": "Cold start; test touchscreen, grinder, espresso extraction, automatic steam temperature and hot water.",
+        "ru": "Запустите холодную машину; проверьте экран, кофемолку, экстракцию эспрессо, температуру автоматического пара и горячую воду."
+      },
+      {
+        "en": "Check leaks, scale, maintenance history, portafilter, pitcher and baskets. Buy only after every check passes.",
+        "ru": "Проверьте протечки, накипь, обслуживание, холдер, питчер и корзины. Покупайте лишь после успешной проверки всех пунктов."
+      }
+    ],
+    "soldComparisons": [
+      {
+        "url": "https://www.ebay.com/itm/407063310907",
+        "amountCents": 39999,
+        "shippingCents": null,
+        "soldAt": "Jul 13",
+        "basis": "accepted-offer-upper-bound",
+        "confidence": "related",
+        "notes": {
+          "en": "Listed sold at $399.99 with Best Offer accepted; actual accepted price is hidden. $399.99 is only an upper bound, never an exact sold price.",
+          "ru": "Отображается $399,99 и принятое Best Offer; фактическая принятая цена скрыта. $399,99 — только верхняя граница, а не точная цена продажи."
+        }
+      },
+      {
+        "url": "https://www.ebay.com/itm/267546276282",
+        "amountCents": 53999,
+        "shippingCents": null,
+        "soldAt": "Aug 15",
+        "basis": "sold",
+        "confidence": "stronger-condition",
+        "notes": {
+          "en": "$539.99 never-used open-box example is in stronger condition than the untested local machine; do not use it as an equivalent used-unit value.",
+          "ru": "Пример за $539,99 — не использовавшийся open-box, в лучшем состоянии, чем непроверенная местная машина; это не равная стоимость б/у устройства."
+        }
+      }
+    ],
+    "facebookComparisons": [
+      {
+        "url": "https://www.facebook.com/marketplace/item/1077550334806483/",
+        "askingCents": 60000,
+        "location": "Sacramento",
+        "checkedAt": "2026-10-12T05:11:00Z",
+        "match": "related-family",
+        "notes": {
+          "en": "Related Barista Touch family asking $600, described used like new; accessories not itemized and BES880 label unverified. Asking price, not sold.",
+          "ru": "Предложение родственной серии Barista Touch за $600, заявлено б/у как новое; аксессуары не перечислены, шильдик BES880 не проверен. Предложение, не продажа."
+        }
+      },
+      {
+        "url": "https://www.facebook.com/marketplace/item/1426071819457162/",
+        "askingCents": 65000,
+        "location": "Sacramento",
+        "checkedAt": "2026-10-12T05:11:00Z",
+        "match": "related-family",
+        "notes": {
+          "en": "Related family asking $650; seller says working and maintained. Exact model label/bundle unverified; not a sold comp.",
+          "ru": "Предложение родственной серии за $650; продавец заявляет исправность и обслуживание. Точная модель и комплект не проверены; это не проданный аналог."
+        }
+      },
+      {
+        "url": "https://www.facebook.com/marketplace/item/2283256659142651/",
+        "askingCents": 60000,
+        "location": "Roseville",
+        "checkedAt": "2026-10-12T05:11:00Z",
+        "match": "related-family",
+        "notes": {
+          "en": "Related family asking $600, described working, portafilter visible. Exact BES880 label and full bundle unverified. Three family asks average $616.67, range $600–650; zero exact matches and no sold-price basis.",
+          "ru": "Предложение родственной серии за $600, заявлена исправность, виден холдер. Шильдик BES880 и полный комплект не проверены. Среднее трёх предложений серии $616,67, диапазон $600–650; точных совпадений нет, это не цены продаж."
+        }
+      }
+    ],
+    "newPriceReference": {
+      "url": "https://www.breville.com/en-us/product/BES880",
+      "cents": 99995,
+      "basis": "current-new",
+      "notes": {
+        "en": "Official BES880 new price $999.95; local model identity remains unverified. Do not label the local machine Impress or claim exact new-model equivalence.",
+        "ru": "Официальная цена нового BES880 $999,95; модель местной машины ещё не подтверждена. Не называйте её Impress и не заявляйте точное совпадение с новой моделью."
+      }
+    }
+  },
+  {
+    "id": "cl-7969564188",
+    "sourceId": "craigslist-resale",
+    "platform": "craigslist",
+    "title": {
+      "en": "Dyson V15 Detect with tools · battery and identity pending",
+      "ru": "Dyson V15 Detect с насадками · батарея и подлинность не проверены"
+    },
+    "category": "appliances",
+    "currency": "USD",
+    "url": "https://www.craigslist.org/view/d/elk-grove-dyson-v15-detect-vacuum/qneBSoSDkN9U5nFYArNCmF",
+    "photos": [
+      {
+        "url": "https://images.craigslist.org/01515_1Vq0cdDdP2D_0CI0CI_600x450.jpg",
+        "alt": {
+          "en": "Craigslist seller photo 1 of Dyson vacuum and visible tools",
+          "ru": "Фото 1 пылесоса Dyson и видимых насадок от продавца Craigslist"
+        }
+      },
+      {
+        "url": "https://images.craigslist.org/00T0T_aPrFG2NUjI8_0CI0CI_600x450.jpg",
+        "alt": {
+          "en": "Craigslist seller photo 2 of Dyson vacuum and visible tools",
+          "ru": "Фото 2 пылесоса Dyson и видимых насадок от продавца Craigslist"
+        }
+      },
+      {
+        "url": "https://images.craigslist.org/00a0a_1uBj0nTijQf_0CI0CI_600x450.jpg",
+        "alt": {
+          "en": "Craigslist seller photo 3 of Dyson vacuum and visible tools",
+          "ru": "Фото 3 пылесоса Dyson и видимых насадок от продавца Craigslist"
+        }
+      },
+      {
+        "url": "https://images.craigslist.org/00C0C_9RB5aIN9D82_0CI0CI_600x450.jpg",
+        "alt": {
+          "en": "Craigslist seller photo 4 of Dyson vacuum and visible tools",
+          "ru": "Фото 4 пылесоса Dyson и видимых насадок от продавца Craigslist"
+        }
+      },
+      {
+        "url": "https://images.craigslist.org/00t0t_iPht3wv2DSF_0CI0CI_600x450.jpg",
+        "alt": {
+          "en": "Craigslist seller photo 5 of Dyson vacuum and visible tools",
+          "ru": "Фото 5 пылесоса Dyson и видимых насадок от продавца Craigslist"
+        }
+      }
+    ],
+    "askingCents": 16000,
+    "resaleLowCents": 25000,
+    "resaleHighCents": 30000,
+    "reserveCents": 4000,
+    "location": "Elk Grove · 95624",
+    "checkedAt": "2026-10-12T05:02:50Z",
+    "status": "inspect-first",
+    "exactMatchCount": 0,
+    "comparisonStatus": "pending",
+    "notes": {
+      "en": "$160 firm. Photos show wand, laser soft roller, separate carpet head, small motor head, filter/tools and a charger-shaped item; genuineness and battery runtime are unconfirmed. No wall mount. A lit laser/LCD does not prove runtime. $40 reserve covers pickup, cleaning and consumables, not battery replacement; a replacement could erase the margin. Public listing observed, seller availability unconfirmed. Local-cash estimate before income tax and labor; no guarantee.",
+      "ru": "Цена $160 без торга. На фото видны труба, мягкий валик с лазером, отдельная насадка для ковра, малая моторная насадка, фильтр/аксессуары и предмет, похожий на зарядное устройство; подлинность и время работы батареи не проверены. Настенного крепления нет. Светящийся лазер/экран не доказывает время работы. Резерв $40 — на дорогу, чистку и расходники, не на замену батареи; её замена может съесть прибыль. Объявление просмотрено, наличие у продавца не подтверждено. Налог и труд не учтены, гарантии нет."
+    },
+    "dimensions": {
+      "en": "Assembled reference: 49.61 × 10.2 × 9.8 in, 6.83 lb. Detach wand for the trunk; verify actual vehicle space. Tesla model/fit unconfirmed.",
+      "ru": "Ориентир в сборе: 49,61 × 10,2 × 9,8 дюйма, 6,83 фунта. Отсоедините трубу для багажника и измерьте место в машине. Модель Tesla и размещение не подтверждены."
+    },
+    "tests": [
+      {
+        "en": "Verify V15 label/serial, genuine battery and correct genuine charger; skip counterfeit, water damage or missing charger.",
+        "ru": "Проверьте шильдик/серийный номер V15, оригинальную батарею и подходящую оригинальную зарядку; откажитесь при подделке, следах воды или отсутствии зарядки."
+      },
+      {
+        "en": "Run 10 minutes in Auto with both heads and test Boost; verify charging, LCD/particle display and actual battery behavior.",
+        "ru": "Проверьте 10 минут Auto с обеими насадками и режим Boost; проверьте зарядку, экран/индикацию частиц и фактическую работу батареи."
+      },
+      {
+        "en": "Inspect bin latch, seals, trigger, clogs, odors and signs of liquid. Pay only after full inspection; no deposit.",
+        "ru": "Проверьте защёлку контейнера, уплотнения, курок, засоры, запахи и следы жидкости. Платите после полного осмотра; без предоплаты."
+      }
+    ],
+    "soldComparisons": [
+      {
+        "url": "https://www.ebay.com/itm/257668444834",
+        "amountCents": 22499,
+        "shippingCents": 2499,
+        "soldAt": "Aug 16",
+        "basis": "sold",
+        "confidence": "lower-bundle",
+        "notes": {
+          "en": "$224.99 plus $24.99 shipping; fair used unit with one head and charger. Lower bundle, not an exact local match; shipping is separate from item price.",
+          "ru": "$224,99 плюс доставка $24,99; б/у в удовлетворительном состоянии, одна насадка и зарядка. Более бедный комплект, не точное совпадение; доставка отделена от цены товара."
+        }
+      },
+      {
+        "url": "https://www.ebay.com/itm/257633286229",
+        "amountCents": 29999,
+        "shippingCents": null,
+        "soldAt": "Jul 25",
+        "basis": "sold",
+        "confidence": "related",
+        "notes": {
+          "en": "$299.99 sold used example described as Dyson refurbished; refurbishment quality and bundle are not verified equal to this private local unit.",
+          "ru": "Проданный пример б/у за $299,99 описан как восстановленный Dyson; качество восстановления и комплект не подтверждены как равные местному устройству частного продавца."
+        }
+      },
+      {
+        "url": "https://www.ebay.com/itm/366626371817",
+        "amountCents": 32000,
+        "shippingCents": null,
+        "soldAt": "Aug 29",
+        "basis": "sold",
+        "confidence": "stronger-condition",
+        "notes": {
+          "en": "$320 factory-refurbished sold example has different quality assurance; do not treat it as equivalent to untested private-sale condition.",
+          "ru": "Проданный заводской восстановленный пример за $320 имеет другую проверку качества; это не равное состояние непроверенной частной продажи."
+        }
+      }
+    ],
+    "facebookComparisons": [
+      {
+        "url": "https://www.facebook.com/marketplace/item/1803551584112910/",
+        "askingCents": 32000,
+        "location": "Sacramento",
+        "checkedAt": "2026-10-12T05:11:00Z",
+        "match": "different-bundle",
+        "notes": {
+          "en": "Related $320 asking price, used good, one head and crevice tool; charger and second head unconfirmed. Different bundle, zero exact matches; asking price only, not sold evidence.",
+          "ru": "Родственное предложение за $320, б/у в хорошем состоянии, одна насадка и щелевая насадка; зарядка и вторая насадка не подтверждены. Другой комплект, точных совпадений нет; предложение, не цена продажи."
+        }
+      }
+    ],
+    "newPriceReference": {
+      "url": "https://www.dyson.com/vacuum-cleaners/cordless/v15/absolute-car-cleaning-kit",
+      "cents": 59999,
+      "basis": "current-new",
+      "notes": {
+        "en": "Official new price $599.99 for this published bundle; included accessories may differ from the local private-sale unit.",
+        "ru": "Официальная цена нового опубликованного комплекта $599,99; аксессуары могут отличаться от комплекта местного частного продавца."
+      }
+    }
+  }
+]

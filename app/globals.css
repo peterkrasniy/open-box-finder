@@ -264,3 +264,26 @@ legend { padding:0; margin-bottom:8px; font-weight:650; font-size:15px; }
 .manual-card-top>.retailer-badge{margin:0;flex:1;padding-right:8px}
 .manual-card-top{gap:8px;margin-bottom:8px}
 .manual-card-top>.manual-save{flex:0 0 44px}
+
+.hide-category{display:block;min-height:44px;width:100%;padding:8px 4px;color:var(--muted);font-size:12px;text-decoration:underline;text-underline-offset:3px;text-align:center}
+.hide-category:hover{color:var(--blue-dark)}
+.category-undo{position:fixed;z-index:20;bottom:calc(76px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);display:flex;align-items:center;justify-content:space-between;gap:12px;width:min(470px,calc(100% - 32px));padding:8px 12px;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 4px 18px #0b12201a;font-size:13px}
+.category-undo button,.restore-category button,.hidden-category-settings>button{min-height:44px;color:var(--blue-dark);font-size:13px;flex-shrink:0}
+.restore-category{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:13px}
+@media(min-width:1024px){.category-undo{bottom:24px}}
+
+.resale-inspect{font-size:12px;color:var(--blue-dark);margin:0 0 10px}
+.resale-estimates{padding:12px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:12px 0}
+.resale-estimates p{display:flex;justify-content:space-between;gap:12px;align-items:baseline;margin:6px 0;font-size:13px}
+.resale-estimates strong{white-space:nowrap}
+.resale-net strong{color:#1a6651;font-size:17px}
+.resale-caveat{font-size:12px;color:var(--muted);line-height:1.6}
+.resale-details{margin:14px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.resale-details summary{min-height:44px;cursor:pointer;padding:12px 0;font-size:13px;color:var(--blue-dark)}
+.resale-details p,.resale-details li{font-size:13px;line-height:1.7;overflow-wrap:anywhere}
+.resale-details h4{font-size:14px;margin:18px 0 8px}
+.resale-details ul{padding-left:20px;margin:8px 0 14px}
+.resale-details li{margin-bottom:10px}
+.resale-method{margin:16px 0;line-height:1.7}
+.resale-details a{text-decoration:underline;text-underline-offset:3px}
+.resale-hold{color:#9b2929;font-weight:650}
