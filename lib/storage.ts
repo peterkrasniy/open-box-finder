@@ -81,7 +81,8 @@ export function savedSourceUrl(sourceId: string, value: unknown): string | null 
     const parsed = new URL(url);
     if (parsed.origin !== new URL(source.website).origin) return null;
     if (sourceId === 'newegg-manual') return /^\/(?:[^/]+\/)?p\/[A-Za-z0-9-]+\/?$/.test(parsed.pathname) ? url : null;
-    const prefixes: Record<string, string> = { 'vitamix-manual': '/us/en_us/shop/certified-reconditioned-series/', 'target-manual': '/p/', 'dyson-manual': '/outlet/refurbished-', 'direct-tools-manual': '/products/', 'sennheiser-manual': '/collections/refurbished-by-sennheiser/products/', 'a4l-sac': '/p/', 'buydig': '/shop/product/', 'blues-appliance': '/collections/', 'outdoor-speaker-depot': '/', 'best-buy': '/site/' };
+    if (sourceId === 'best-buy' && /^\/product\/[^/]+\/(?:[A-Za-z0-9]+\/sku\/)?\d+\/openbox\/?$/.test(parsed.pathname)) return url;
+    const prefixes: Record<string, string> = { 'cuckoo-manual': '/collections/certified-renewed/products/', 'epson-manual': '/Certified-ReNew/', 'vitamix-manual': '/us/en_us/shop/certified-reconditioned-series/', 'target-manual': '/p/', 'dyson-manual': '/outlet/refurbished-', 'direct-tools-manual': '/products/', 'sennheiser-manual': '/collections/refurbished-by-sennheiser/products/', 'a4l-sac': '/p/', 'buydig': '/shop/product/', 'blues-appliance': '/collections/', 'outdoor-speaker-depot': '/', 'best-buy': '/site/' };
     return prefixes[sourceId] && parsed.pathname.startsWith(prefixes[sourceId]) ? url : null;
   } catch { return null; }
 }

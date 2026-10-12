@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "revision": "ab8b3a41f66d3a93973e0fdd33989a07f8a196a74769d22e744707c8ad47b8e3",
+  "sources": [
+    {
+      "sourceId": "direct-tools-manual",
+      "scopeKey": "parent-selected-20261012",
+      "attemptedAt": "2026-10-12T03:37:25Z",
+      "status": "success",
+      "lastSuccessAt": "2026-10-12T03:37:25Z"
+    },
+    {
+      "sourceId": "cuckoo-manual",
+      "scopeKey": "verified-renewed-selection",
+      "attemptedAt": "2026-10-12T03:40:05Z",
+      "status": "success",
+      "lastSuccessAt": "2026-10-12T03:40:05Z"
+    },
+    {
+      "sourceId": "epson-manual",
+      "scopeKey": "verified-renewed-selection",
+      "attemptedAt": "2026-10-12T03:44:45Z",
+      "status": "success",
+      "lastSuccessAt": "2026-10-12T03:44:45Z"
+    },
+    {
+      "sourceId": "best-buy",
+      "scopeKey": "california-selected-95628",
+      "attemptedAt": "2026-10-12T03:53:17.300Z",
+      "status": "success",
+      "lastSuccessAt": "2026-10-12T03:53:17.300Z"
+    }
+  ]
+}

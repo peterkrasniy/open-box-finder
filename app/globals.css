@@ -232,3 +232,35 @@ legend { padding:0; margin-bottom:8px; font-weight:650; font-size:15px; }
 .syndicated-deal>.small>a{text-decoration:underline;text-underline-offset:3px}
 
 .manual-saving { font-size:13px; font-weight:650; color:var(--blue-dark); margin:0 0 14px; }.manual-saving span { font-weight:400; color:var(--muted); }.manual-fulfillment,.manual-details { font-size:12px; line-height:1.5; color:var(--muted); margin-top:8px; }
+
+.retailer-badge{display:flex;align-items:center;gap:9px;color:#344158;font-size:12px;font-weight:650;line-height:1.4;margin:10px 0 4px;min-width:0}
+.retailer-mark{width:40px;height:32px;flex:0 0 40px;border:1px solid #e4e8ef;border-radius:8px;background:#fff;display:grid;place-items:center;overflow:hidden}
+.retailer-mark img{width:36px;height:28px;object-fit:contain}
+.retailer-mark>span{font-size:11px;color:#455a77;letter-spacing:.02em}
+
+/* Compact shopping chrome: one title, essential controls, then products. */
+.app-header{min-height:60px;padding-top:env(safe-area-inset-top);gap:18px}
+.brand{font-size:20px;line-height:1.2;gap:8px;letter-spacing:-.35px}
+.brand svg{width:24px;height:24px}
+.search-location{display:grid;grid-template-columns:minmax(0,1fr) 180px 44px 180px;gap:8px;margin:12px 0}
+.search-field,.location-button{min-height:44px;height:44px}
+.search-field input{height:42px}
+.location-button{padding:5px 10px;gap:6px;min-width:0}
+.location-button>span{min-width:0}
+.location-button strong{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.location-button small{display:none}
+.compact-filter{padding:0;width:44px}
+.compact-sort{display:flex;min-width:0;align-items:center;border:1px solid var(--line);border-radius:10px;background:var(--surface);height:44px}
+.compact-sort select{min-width:0;width:100%;height:42px;border:0;border-radius:10px;background:transparent;padding:5px 8px;font-size:13px}
+.catalog-status{min-height:20px;font-size:12px;margin:0 0 8px;gap:8px}
+.manual-products{margin:0 0 24px}
+.manual-product-card h3{font-size:19px;line-height:1.3;margin-bottom:12px}
+.manual-card-top{margin-bottom:4px}
+.manual-brand{font-size:12px}
+.manual-photo-caption>span{display:none}
+@media(max-width:1023px){.app-header{min-height:56px}.search-location{grid-template-columns:minmax(0,1fr) 160px 44px 155px;margin:8px 0}.compact-sort{display:flex}}
+@media(max-width:600px){.app-header{min-height:54px}.brand{font-size:19px}.language-switch{padding:2px}.language-switch button{padding:3px 8px}.search-location{grid-template-columns:minmax(0,1fr) 44px minmax(122px,1fr);gap:6px;margin:2px 0 8px}.search-field{grid-column:1/-1}.location-button{padding:5px 8px;gap:5px}.location-button>svg:last-child{display:none}.location-button>svg:first-child{width:17px;height:17px}.location-button strong{font-size:12px}.manual-product-card{padding:16px}.manual-product-card h3{font-size:18px}.catalog-status{margin-bottom:6px}}
+
+.manual-card-top>.retailer-badge{margin:0;flex:1;padding-right:8px}
+.manual-card-top{gap:8px;margin-bottom:8px}
+.manual-card-top>.manual-save{flex:0 0 44px}

@@ -5,7 +5,7 @@ import type { Filters, Offer, Language } from '../lib/offer.ts';
 import { savedIdentity, offerIdentity } from '../lib/storage.ts';
 import { filterAndSort, validPoint } from '../lib/filter.ts';
 import { editPrice, parsePrice, validateRange } from '../lib/money.ts';
-import { categoryLabel, listingCount, SORTS, sortLabel, text } from '../lib/i18n.ts';
+import { listingCount, SORTS, sortLabel, text } from '../lib/i18n.ts';
 import type { TextKey } from '../lib/i18n.ts';
 import { useCatalog } from '../hooks/useCatalog';
 import { usePreferences } from '../hooks/usePreferences';
@@ -24,7 +24,8 @@ import { SourceCoverage } from './SourceCoverage';
 import { SourceStatus } from './SourceStatus';
 import { OutboundLinks } from './OutboundLinks';
 import { ManualProducts } from './ManualProducts';
-import { MANUAL_PRODUCTS, manualProductActive, manualProductsForFilters } from '../lib/manual-products.ts';
+import { useManualCatalog } from '../hooks/useManualCatalog';
+import { manualProductActive, manualProductsForFilters } from '../lib/manual-products.ts';
 
 function filterFingerprint(value: Filters): string {
   const { retailers, categories, fulfillment, minCents, maxCents, radiusMiles } = value;
@@ -39,8 +40,9 @@ export function OpenBoxApp() {
   const { route, navigate, dismiss } = useRoute();
   const { catalog, status, now, refresh } = useCatalog(ready);
   const { language, filters, sort } = preferences;
-  const manualProducts = useMemo(() => manualProductsForFilters(filters, sort, now), [filters, sort, now]);
-  const hasReviewedProducts = MANUAL_PRODUCTS.some(product => manualProductActive(product, now));
+  const manualCatalog = useManualCatalog(ready);
+  const manualProducts = useMemo(() => manualProductsForFilters(filters, sort, now, manualCatalog.records), [filters, sort, now, manualCatalog.records]);
+  const hasReviewedProducts = manualCatalog.records.some(product => manualProductActive(product, now));
   const t = (key: TextKey) => text(language, key);
   const [edited, setEdited] = useState<{ value: FilterDraft; base: string } | null>(null);
   const fingerprint = filterFingerprint(filters);
@@ -134,20 +136,15 @@ export function OpenBoxApp() {
   const filterError = error && route.panel !== 'location' ? t(error) : null;
   return <div className="app-shell">
     <a className="skip-link" href="#listings">{t('skip')}</a>
-    <header className="app-header"><div className="brand"><Icon name="box" size={32}/><span>{t('brand')}</span></div>
+    <header className="app-header"><h1 className="brand"><Icon name="box" size={24}/><span>{t('brand')}</span></h1>
       <nav className="desktop-nav" aria-label={t('deals')}><button type="button" aria-current={route.view === 'deals' ? 'page' : undefined} onClick={() => navigate({ view: 'deals', offerId: null, panel: null })}>{t('deals')}</button><button type="button" aria-current={route.view === 'saved' ? 'page' : undefined} onClick={() => navigate({ view: 'saved', offerId: null, panel: null })}>{t('saved')}{saved.length > 0 && <span>{saved.length}</span>}</button></nav>
       <div className="language-switch" role="group" aria-label={t('language')}>{(['en', 'ru'] as const).map(value => <button type="button" key={value} lang={value} aria-pressed={language === value} onClick={() => setPreferences(previous => ({ ...previous, language: value }))}>{value === 'en' ? 'EN' : 'РУ'}</button>)}</div>
     </header>
-    <div className="search-location" role="search" aria-label={t('search')}><label className="search-field"><Icon name="search"/><span className="sr-only">{t('search')}</span><input type="search" value={filters.query} placeholder={t('searchHint')} maxLength={160} onChange={event => updateFilters({ query: event.target.value })}/></label><button type="button" className="location-button" onClick={() => openPanel('location')}><Icon name="pin"/><span><strong>{filters.origin.label}</strong><small>{filters.radiusMiles} {t('miles')}</small></span><Icon name="down" size={18}/></button></div>
+    <div className="search-location" role="search" aria-label={t('search')}><label className="search-field"><Icon name="search"/><span className="sr-only">{t('search')}</span><input type="search" value={filters.query} placeholder={t('searchHint')} maxLength={160} onChange={event => updateFilters({ query: event.target.value })}/></label><button type="button" className="location-button" onClick={() => openPanel('location')}><Icon name="pin"/><span><strong>{filters.origin.label}</strong><small>{filters.radiusMiles} {t('miles')}</small></span><Icon name="down" size={18}/></button>{route.view === 'deals' && <><button type="button" className="secondary-button compact-filter" data-filter-opener aria-label={t('filters')} title={t('filters')} onClick={() => openPanel('filters')}><Icon name="filters" size={20}/></button><label className="sort-mobile compact-sort"><span className="sr-only">{t('sort')}</span><select value={sort} onChange={event => setPreferences(previous => ({ ...previous, sort: event.target.value as typeof sort }))}>{SORTS.map(value => <option key={value} value={value}>{sortLabel(language, value)}</option>)}</select></label></>}</div>
     <div className="shopping-layout">
       {route.view === 'deals' && <aside className="filter-rail" aria-label={t('filters')}>{route.panel !== 'filters' && <><FilterFields draft={draft} language={language} onChange={setDraft} error={filterError} errorField={errorField} idPrefix="rail"/>{conflict && <div className="notice" role="alert" data-filter-conflict tabIndex={-1}><p>{t('filtersChanged')}</p><button type="button" className="text-action" onClick={() => resolveConflict(false)}>{t('useUpdatedFilters')}</button><button type="button" className="text-action" onClick={() => resolveConflict(true)}>{t('keepMyEdits')}</button></div>}<div className="filter-actions"><button type="button" className="secondary-button" onClick={cancelFilters}>{t('cancel')}</button><button type="button" className="primary-button" onClick={applyFilters}>{t('apply')}</button></div></>}</aside>}
       <main id="listings" className={`listing-main${route.view === 'saved' ? ' saved-main' : ''}`} tabIndex={-1}>
-        {route.view === 'deals' && <div className="mobile-controls"><button type="button" className="secondary-button" data-filter-opener onClick={() => openPanel('filters')}><Icon name="filters" size={20}/>{t('filters')}</button><label className="sort-mobile"><span className="sr-only">{t('sort')}</span><Icon name="sort" size={20}/><select value={sort} onChange={event => setPreferences(previous => ({ ...previous, sort: event.target.value as typeof sort }))}>{SORTS.map(value => <option key={value} value={value}>{sortLabel(language, value)}</option>)}</select></label></div>}
-        <div className="listing-toolbar"><h1>{t(route.view === 'saved' ? 'saved' : 'deals')}</h1>{route.view === 'deals' && <label className="sort-desktop">{t('sort')}<select value={sort} onChange={event => setPreferences(previous => ({ ...previous, sort: event.target.value as typeof sort }))}>{SORTS.map(value => <option key={value} value={value}>{sortLabel(language, value)}</option>)}</select></label>}</div>
-        {route.view === 'deals' && <div className="category-chips" aria-label={t('categories')}>
-          <button type="button" aria-pressed={filters.categories.mode === 'all'} onClick={() => updateFilters({ categories: { mode: 'all', ids: [] } })}>{t('all')}</button>
-          {(['computers', 'tv', 'appliances', 'tools', 'home', 'audio'] as const).map(category => <button key={category} type="button" aria-pressed={filters.categories.mode === 'selected' && filters.categories.ids.length === 1 && filters.categories.ids[0] === category} onClick={() => updateFilters({ categories: { mode: 'selected', ids: [category] } })}>{categoryLabel(language, category)}</button>)}
-        </div>}
+        {route.view === 'saved' && <div className="listing-toolbar"><h2>{t('saved')}</h2></div>}
         {!storageAvailable && <p className="notice" role="status">{t('storageUnavailable')}</p>}
         {saveError && <p className="notice error" role="alert">{t(saveError)}</p>}
         <div className="catalog-status" role="status" aria-live="polite" aria-atomic="true">
@@ -155,10 +152,10 @@ export function OpenBoxApp() {
           {(status === 'error' || status === 'offline') && <button type="button" className="text-action" onClick={refresh}>{t('refresh')}</button>}
         </div>
         {route.view === 'deals' && catalog.offers.length > 0 && <SourceCoverage catalog={catalog} language={language} now={now}/>}
-        {route.view === 'deals' && <ManualProducts products={manualProducts} language={language} now={now} savedIds={savedIds} onSave={product => toggleManualSaved(product, now)}/>}
+        {route.view === 'deals' && <ManualProducts products={manualProducts} records={manualCatalog.records} filterKey={JSON.stringify([filters, sort])} failedSources={manualCatalog.failedSources} checkFailed={manualCatalog.failed} language={language} now={now} savedIds={savedIds} onSave={product => toggleManualSaved(product, now, manualCatalog.records)}/>}
         {route.view === 'saved' ? <>
           <p className="saved-privacy"><Icon name="bookmark" size={18}/>{t('savedPrivacy')}</p>
-          {saved.length ? <SavedRows saved={saved} catalog={catalog} status={status} language={language} now={now} onOpen={openOffer} onRemove={removeSaved}/>
+          {saved.length ? <SavedRows manualRecords={manualCatalog.records} saved={saved} catalog={catalog} status={status} language={language} now={now} onOpen={openOffer} onRemove={removeSaved}/>
             : <section className="empty-state"><span className="empty-icon"><Icon name="bookmark" size={38}/></span><h2>{t('noSaved')}</h2><p>{t('noSavedHelp')}</p></section>}
         </> : listings.length ? <>
           <div className="offer-grid">{listings.slice(0, visibleCount).map((offer, index) => <OfferCard key={offer.id} offer={offer} language={language} now={now} filters={filters} saved={savedIds.has(offerIdentity(offer))} priority={index === 0} onOpen={openOffer} onSave={saveOffer}/>)}</div>
@@ -167,7 +164,7 @@ export function OpenBoxApp() {
           {!manualProducts.length && <section className="empty-state"><span className="empty-icon"><Icon name="openBox" size={42}/></span><h2>{t(catalog.offers.length || hasReviewedProducts ? 'noMatches' : 'noVerified')}</h2><p>{t(catalog.offers.length || hasReviewedProducts ? 'noMatchesHelp' : 'noVerifiedHelp')}</p>{(catalog.offers.length > 0 || hasReviewedProducts) && <button type="button" className="secondary-button" onClick={resetFilters}>{t('reset')}</button>}</section>}
         </>}
         {route.view === 'deals' && <details className="browse-more"><summary>{t('browseMoreLinks')}</summary><OutboundLinks language={language} now={now}/></details>}
-        {route.view === 'deals' && !catalog.offers.length && <SourceStatus catalog={catalog} language={language} now={now}/>}
+        {route.view === 'deals' && !catalog.offers.length && <SourceStatus manualSourceIds={manualCatalog.records.filter(product => manualProductActive(product, now)).map(product => product.sourceId)} catalog={catalog} language={language} now={now}/>}
         {route.view === 'deals' && <SyndicatedDeals deals={catalog.syndication} language={language} filters={filters} now={now}/>}
       </main>
     </div>

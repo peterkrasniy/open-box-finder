@@ -73,9 +73,9 @@ export function usePreferences() {
     void mutateEntry(savedIdentity(pointer), pointer, true);
   }, [mutateEntry]);
   const removeSaved = useCallback((identity: string) => {setSaveError(null);void mutateEntry(identity, null);}, [mutateEntry]);
-  const toggleManualSaved = useCallback((product: ManualProduct, now: number) => {
+  const toggleManualSaved = useCallback((product: ManualProduct, now: number, records?: readonly ManualProduct[]) => {
     setSaveError(null);
-    const pointer = manualSavedPointer(product, now);
+    const pointer = manualSavedPointer(product, now, records);
     if (!pointer) { setSaveError('saveUnavailable'); return; }
     void mutateEntry(savedIdentity(pointer), pointer, true);
   }, [mutateEntry]);

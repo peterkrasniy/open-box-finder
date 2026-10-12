@@ -11,6 +11,8 @@ export interface SourceDefinition {
 
 /** Source-admission registry. No runtime fetch is enabled by a research observation. */
 export const SOURCES: readonly SourceDefinition[] = [
+  { id: 'cuckoo-manual', name: 'CUCKOO America', website: 'https://cuckooamerica.com/', catalogUrl: null, admission: 'manual-only', enabled: false, presentation: 'manual-curation' },
+  { id: 'epson-manual', name: 'Epson', website: 'https://epson.com/', catalogUrl: null, admission: 'manual-only', enabled: false, presentation: 'manual-curation' },
   { id: 'vitamix-manual', name: 'Vitamix', website: 'https://www.vitamix.com/', catalogUrl: null, admission: 'manual-only', enabled: false, presentation: 'manual-curation' },
   { id: 'target-manual', name: 'Target', website: 'https://www.target.com/', catalogUrl: null, admission: 'manual-only', enabled: false, presentation: 'manual-curation' },
   { id: 'newegg-manual', name: 'Newegg', website: 'https://www.newegg.com/', catalogUrl: null, admission: 'manual-only', enabled: false, presentation: 'manual-curation' },

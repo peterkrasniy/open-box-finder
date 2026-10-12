@@ -70,7 +70,7 @@ export function filterAndSort(offers: readonly Offer[], filters: Filters, sort: 
   return ranked.map(row => row.offer);
 }
 
-export function directionsUrl(offer: Offer): string | null {
+export function directionsUrl(offer: Pick<Offer, 'pickup'>): string | null {
   const store = offer.pickup;
   if (!store?.pickupVerified || !store.address.trim()) return null;
   const target = store.point && validPoint(store.point)
