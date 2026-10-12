@@ -294,3 +294,6 @@ legend { padding:0; margin-bottom:8px; font-weight:650; font-size:15px; }
 .delete-listing{color:#a42e35}.delete-listing:hover{color:#761c24;background:#fff2f3;border-radius:8px}
 .restore-listing,.deleted-listing-settings>button{color:var(--blue-dark);min-height:44px}
 .listing-undo>span{min-width:0}.listing-undo small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11px;color:var(--muted);margin-top:3px}
+.resale-new a{text-decoration:underline;text-underline-offset:3px}
+.resale-price-unknown{max-width:60%;text-align:right;color:var(--muted);font-size:12px;line-height:1.5}
+.resale-price-basis{font-size:12px;line-height:1.6;color:var(--muted);margin:8px 0}

@@ -232,12 +232,14 @@
     ],
     "newPriceReference": {
       "url": "https://www.breville.com/en-us/product/BES880",
-      "cents": 99995,
+      "cents": 79995,
       "basis": "current-new",
       "notes": {
-        "en": "Official BES880 new price $999.95; local model identity remains unverified. Do not label the local machine Impress or claim exact new-model equivalence.",
-        "ru": "Официальная цена нового BES880 $999,95; модель местной машины ещё не подтверждена. Не называйте её Impress и не заявляйте точное совпадение с новой моделью."
-      }
+        "en": "Official BES880 page displays a current new price of $799.95, with $999.95 crossed out, observed October 12 at 06:53 UTC. Exact model of this held private-sale unit remains unverified. This reference does not change the conservative used resale estimate.",
+        "ru": "На официальной странице BES880 показана текущая цена нового товара $799,95, прежняя $999,95 зачёркнута; просмотрено 12 октября в 06:53 UTC. Точная модель этого приостановленного частного объявления не подтверждена. Это сравнение не меняет осторожную оценку перепродажи б/у."
+      },
+      "checkedAt": "2026-10-12T06:53:00Z",
+      "match": "model-unverified"
     }
   },
   {
@@ -377,7 +379,9 @@
       "notes": {
         "en": "Official new price $599.99 for this published bundle; included accessories may differ from the local private-sale unit.",
         "ru": "Официальная цена нового опубликованного комплекта $599,99; аксессуары могут отличаться от комплекта местного частного продавца."
-      }
+      },
+      "checkedAt": "2026-10-12T06:53:00Z",
+      "match": "different-bundle"
     }
   },
   {
@@ -515,7 +519,9 @@
       "notes": {
         "en": "Official new Scarlett 2i2 price observed at the October 12 check: $189.99. Confirm current price and stock. New software/warranty benefits are not assumed transferable to this used unit.",
         "ru": "Официальная цена нового Scarlett 2i2, отмеченная при проверке 12 октября: $189,99. Уточните текущую цену и наличие. ПО и гарантия нового товара не предполагаются передаваемыми этому б/у экземпляру."
-      }
+      },
+      "checkedAt": "2026-10-12T05:45:00Z",
+      "match": "exact-model"
     }
   },
   {
@@ -636,6 +642,15 @@
       }
     ],
     "facebookComparisons": [],
-    "dimensionsSource": "https://www.mieleusa.com/product/10014520/canister-vacuum-cleaners-complete-c3-cat-and-dog-powerline-sgee0-lotus-white"
+    "dimensionsSource": "https://www.mieleusa.com/product/10014520/canister-vacuum-cleaners-complete-c3-cat-and-dog-powerline-sgee0-lotus-white",
+    "newPriceStatus": {
+      "status": "permanently-out-of-stock",
+      "url": "https://www.mieleusa.com/product/10014520/canister-vacuum-cleaners-complete-c3-cat-and-dog-powerline-sgee0-lotus-white",
+      "checkedAt": "2026-10-12T06:53:00Z",
+      "notes": {
+        "en": "The exact manufacturer Complete C3 Cat & Dog SGEE0 page says permanently out of stock and displays no current new price. No MSRP or replacement-model price is substituted. The local unit underside model still needs verification.",
+        "ru": "Официальная страница точной модели Complete C3 Cat & Dog SGEE0 сообщает о постоянном отсутствии в продаже и не показывает текущую цену нового товара. MSRP или цена другой модели не подставляются. Маркировку местного экземпляра снизу ещё надо проверить."
+      }
+    }
   }
 ]

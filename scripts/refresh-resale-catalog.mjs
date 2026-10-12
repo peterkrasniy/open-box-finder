@@ -25,7 +25,7 @@ if (!Array.isArray(previous) || !previous.every(validResaleRecord)
  || !Array.isArray(batch.failedSources) || !batch.failedSources.every(id => platforms.has(id))) throw new Error('Invalid checked batch');
 const clock = Date.now(), keys = new Set();
 for (const record of batch.records) {
-  if (keys.has(record.id) || Date.parse(record.checkedAt) > clock + 60_000 || record.facebookComparisons.some(sample => Date.parse(sample.checkedAt) > clock + 60_000)) throw new Error('Duplicate or future observation');
+  if (keys.has(record.id) || Date.parse(record.checkedAt) > clock + 60_000 || record.facebookComparisons.some(sample => Date.parse(sample.checkedAt) > clock + 60_000) || Date.parse(record.newPriceReference?.checkedAt ?? record.checkedAt) > clock + 60_000 || Date.parse(record.newPriceStatus?.checkedAt ?? record.checkedAt) > clock + 60_000) throw new Error('Duplicate or future observation');
   keys.add(record.id);
   if (batch.failedSources.includes(record.sourceId)) throw new Error('Failed source cannot supply replacement records');
 }

@@ -39,8 +39,10 @@ export interface ResaleListing {
     match: 'related-family' | 'regional' | 'different-bundle';
     notes: ResaleText;
   }[];
+  newPriceStatus?: { status: 'unverified' | 'permanently-out-of-stock' | 'discontinued'; url: string; checkedAt: string; notes: ResaleText };
   newPriceReference?: {
     url: string; cents: number; basis: 'current-new' | 'historical-catalog'; notes: ResaleText;
+    checkedAt?: string; match?: 'exact-model' | 'model-unverified' | 'different-bundle';
   };
 }
 
@@ -51,7 +53,7 @@ const sourceIds: Record<ResalePlatform, ResaleListing['sourceId']> = {
 const fields = ['id', 'sourceId', 'platform', 'title', 'category', 'currency', 'url', 'photos', 'askingCents',
   'resaleLowCents', 'resaleHighCents', 'reserveCents', 'location', 'checkedAt', 'status', 'archived',
   'exactMatchCount', 'comparisonStatus', 'notes', 'tests', 'dimensions', 'soldComparisons',
-  'facebookComparisons', 'newPriceReference', 'dimensionsSource'];
+  'facebookComparisons', 'newPriceReference', 'dimensionsSource', 'newPriceStatus'];
 const categories = ['appliances', 'tv', 'computers', 'phones', 'cameras', 'audio', 'smart-home', 'gaming', 'tools', 'home', 'other'];
 const object = (value: unknown): value is Record<string, unknown> => value !== null && typeof value === 'object' && !Array.isArray(value);
 const text = (value: unknown, limit = 1500): value is string => typeof value === 'string' && value.trim().length > 0 && value.length <= limit && !/[\u0000-\u001f]/.test(value);
@@ -126,9 +128,14 @@ export function validResaleRecord(value: unknown): value is ResaleListing {
       && facebookUrl(comp.url) && money(comp.askingCents) && text(comp.location, 160) && timestamp(comp.checkedAt)
       && ['related-family', 'regional', 'different-bundle'].includes(String(comp.match)) && bilingual(comp.notes))) return false;
   if (p.dimensionsSource !== undefined && (!parsedPublicUrl(p.dimensionsSource) || new URL(p.dimensionsSource as string).origin !== 'https://www.mieleusa.com' || !/^\/product\/\d+\//.test(new URL(p.dimensionsSource as string).pathname))) return false;
-  if (p.newPriceReference !== undefined && (!shape(p.newPriceReference, ['url', 'cents', 'basis', 'notes'])
+  if (p.newPriceReference !== undefined && (!shape(p.newPriceReference, ['url', 'cents', 'basis', 'notes', 'checkedAt', 'match'])
     || !parsedPublicUrl(p.newPriceReference.url) || !money(p.newPriceReference.cents)
+    || p.newPriceReference.checkedAt !== undefined && !timestamp(p.newPriceReference.checkedAt)
+    || p.newPriceReference.match !== undefined && !['exact-model', 'model-unverified', 'different-bundle'].includes(String(p.newPriceReference.match))
     || !['current-new', 'historical-catalog'].includes(String(p.newPriceReference.basis)) || !bilingual(p.newPriceReference.notes))) return false;
+  if (p.newPriceStatus !== undefined && (!shape(p.newPriceStatus, ['status', 'url', 'checkedAt', 'notes'])
+    || !['unverified', 'permanently-out-of-stock', 'discontinued'].includes(String(p.newPriceStatus.status))
+    || !parsedPublicUrl(p.newPriceStatus.url) || !timestamp(p.newPriceStatus.checkedAt) || !bilingual(p.newPriceStatus.notes))) return false;
   return true;
 }
 
@@ -158,4 +165,15 @@ export function resaleSavedPointer(record: ResaleListing, now: number, records: 
   return { offerId: `resale:${current.id}`, sourceId: current.sourceId, sourceOfferId: current.id,
     variantKey: current.id, storeId: null, condition: 'used', url: current.url,
     title: current.title.en, category: current.category, savedAt: new Date(now).toISOString() };
+}
+
+
+/** A current-new amount must never come from a historical price or an unavailable replacement. */
+export function resaleNewPriceSummary(listing: ResaleListing, now: number) {
+ const status = listing.newPriceStatus;
+ if (status && Number.isFinite(now) && now >= Date.parse(status.checkedAt) && now < Date.parse(status.checkedAt) + RESALE_REVIEW_WINDOW_MS) return { cents: null, status: status.status, url: status.url, checkedAt: status.checkedAt, notes: status.notes, match: null };
+ const reference = listing.newPriceReference;
+ const checkedAt = reference?.checkedAt ?? listing.checkedAt;
+ if (reference?.basis === 'current-new' && Number.isFinite(now) && now >= Date.parse(checkedAt) && now < Date.parse(checkedAt) + RESALE_REVIEW_WINDOW_MS) return { cents: reference.cents, status: 'observed' as const, url: reference.url, checkedAt, notes: reference.notes, match: reference.match ?? 'model-unverified' };
+ return { cents: null, status: 'unverified' as const, url: null, checkedAt: null, notes: null, match: null };
 }
